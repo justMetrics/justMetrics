@@ -1,6 +1,10 @@
 import { EC2Client, DescribeInstancesCommand } from '@aws-sdk/client-ec2';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { accessKey, secretKey, region } = req.body;
 
   if (!accessKey || !secretKey || !region) {
@@ -24,7 +28,7 @@ export default async function handler(req, res) {
     const ins = result.Reservations?.flatMap((el) => el.Instances) || [];
     res.status(200).json({ ins });
   } catch (err) {
-    console.error('AWS Error:', err);
-    res.status(400).json({ error: 'Failed to fetch EC2 instances' });
+    console.error('❌ AWS Error:', err);
+    res.status(500).json({ error: 'Failed to fetch EC2 instances' });
   }
 }
