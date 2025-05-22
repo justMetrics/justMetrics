@@ -34,8 +34,8 @@ const KeyInPut = ({ accessKeyHandler, setInsData }: KeyInPutProps) => {
       return;
     }
     // invoke function to POST keys
-    // sendApiKeys(url, awsAccessKey, secretAccessKet);
-    sendApiKeys(url, 'AKIASQVKXTE2JGCYRIXZ', 'ofZsnp6iDV1PVVM2dwEJTE9hEPnw4WYnqKIl/fR8');
+    sendApiKeys(url, awsAccessKey, secretAccessKet);
+
     // if error is returned
     if (error) {
       setFetchError(error);
