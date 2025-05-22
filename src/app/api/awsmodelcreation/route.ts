@@ -1,6 +1,8 @@
 import { EC2Client, DescribeInstancesCommand } from '@aws-sdk/client-ec2';
 import { NextRequest, NextResponse } from 'next/server';
 
+export let loggedInClient;
+
 export async function POST(req: NextRequest) {
   const { accessKey, secretKey } = await req.json();
 
@@ -22,13 +24,14 @@ export async function POST(req: NextRequest) {
   try {
     const ec2 = new EC2Client({
       //region:'us-west-1',
-      region: 'us-west-1',
+      region: 'us-east-2',
       //! region harded; need to be convered later
       credentials: {
         accessKeyId: accessKey,
         secretAccessKey: secretKey,
       },
     });
+    loggedInClient = ec2;
 
     const command = new DescribeInstancesCommand({});
     const result = await ec2.send(command);
@@ -41,7 +44,7 @@ export async function POST(req: NextRequest) {
       return {
         instanceId: el?.InstanceId,
         state: el?.State?.Name,
-        name: el?.Tags?.find((tag) => tag.Key === 'Name')?.Value,
+        name: el?.Tags?.find((tag) => tag.Key === 'Name')?.Value ,
         type: el?.InstanceType,
         launchTime: el?.LaunchTime,
         SecurityGroups: el?.SecurityGroups?.map((el) => ({
@@ -52,7 +55,7 @@ export async function POST(req: NextRequest) {
         PublicIpAddress: el?.PublicIpAddress,
       };
     });
-    console.log('👀 👀 👀 👀 TEST!!!!!!!', res);
+    //console.log('👀 👀 👀 👀 TEST!!!!!!!', res);
 
     return NextResponse.json({ res }, { status: 200 });
   } catch (err) {
