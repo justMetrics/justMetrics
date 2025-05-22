@@ -25,14 +25,20 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
   const { response, error, sendMetricsRequest } = useMetricsFetch();
 
   // handle fetch function
-  const handleFetch = () => {
+
+    const test = response?.MetricDataResults.map( (elem)=> {
+    return  elem.Label})
+    console.log("test", test)
+    const handleFetch = () => {
     // inititate fetch
     sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
     // only log if the data is not null
     if (response) console.log('metricResponse', response);
     if (error) console.log('metricError', error);
+     
   };
 
+  
   return (
     <div>
       <div>name: {name}</div>
@@ -48,7 +54,16 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
         Fetch Here
       </button>
       <h2>Cloud Watch Metrics</h2>
-    
+      <div>{test}
+        {/* Cloud Watch Metrics: {response.MetricDataResults.map( (elem)=> {
+     return  elem.Label})} */}
+    {/* response!.MetricDataResults[0].Timestamps} */}
+    </div>
+      {
+        // response. MetricDataResults.forEach((el)=>{
+        //  <div>{el}</div>
+        // })
+      }
     </div>
   );
 };
