@@ -19,6 +19,7 @@ const KeyInPut = ({ accessKeyHandler, setInsData }: KeyInPutProps) => {
     if (response) {
       accessKeyHandler();
       setInsData(response);
+      
     }
   }, [response]);
 

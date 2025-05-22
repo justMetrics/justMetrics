@@ -1,6 +1,6 @@
 import { EC2Client, DescribeInstancesCommand } from '@aws-sdk/client-ec2';
 import { NextRequest, NextResponse } from 'next/server';
-
+import { CloudWatchClient } from '@aws-sdk/client-cloudwatch';
 export let loggedInClient;
 
 export async function POST(req: NextRequest) {
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
-  console.log(accessKey, secretKey);
+  //console.log(accessKey, secretKey);
 
   try {
     const ec2 = new EC2Client({
@@ -31,13 +31,19 @@ export async function POST(req: NextRequest) {
         secretAccessKey: secretKey,
       },
     });
-    loggedInClient = ec2;
+
+    const cloudwatch = new CloudWatchClient({region: 'us-east-2',
+      credentials: {
+        accessKeyId: accessKey,
+        secretAccessKey: secretKey,
+      },})
+      loggedInClient = cloudwatch;
 
     const command = new DescribeInstancesCommand({});
     const result = await ec2.send(command);
 
     const instances = result.Reservations?.flatMap((el) => el.Instances);
-    // console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
+     //console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
     //console.log(JSON.stringify(instances, null, 2));
 
     const res = instances?.map((el) => {
