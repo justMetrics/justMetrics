@@ -1,4 +1,36 @@
+import Chart from './sharedcomponents/Chart'
 import Image from "next/image";
+//test actual responsecloudwatch metric response 
+
+const testTimestamps = [
+  "2025-05-21T08:55:00Z",
+  "2025-05-21T09:00:00Z",
+  "2025-05-21T09:05:00Z",
+  "2025-05-21T09:10:00Z",
+  "2025-05-21T09:15:00Z",
+  "2025-05-21T09:20:00Z",
+  "2025-05-21T09:25:00Z",
+  "2025-05-21T09:30:00Z"
+];
+
+const testValues = [
+  10.0,
+  17.5,
+  19.1,
+  18.6,
+  21.0,
+  22.3,
+  20.7,
+  19.4
+];
+
+const testLabel = 'CPU Utilization'
+
+const testLabel2 = 'behold my masterpiece...'
+
+const testLabel3 = 'multichart capability!'
+
+const nameTestArr=[testLabel,testLabel2,testLabel3]
 
 export default function Home() {
   return (
@@ -12,6 +44,9 @@ export default function Home() {
           height={38}
           priority
         />
+        {nameTestArr.map((elem, index)=> 
+        <Chart key={index} timestamps={testTimestamps} values = {testValues} label={elem}></Chart>)}
+
         <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{" "}

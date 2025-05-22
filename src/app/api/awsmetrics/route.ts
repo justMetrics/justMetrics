@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     console.log('awsmetrics POST running')
     const body = await request.json(); //get json object for use
     const { instanceIds, requestedMetrics } = body;
-    let metricQueries = [];
+    const metricQueries = [];
     for (let i = 0; i < instanceIds.length; i++) {
       //requested instances is i
       for (let j = 0; j < requestedMetrics.length; j++) {
@@ -33,6 +33,7 @@ export async function POST(request: Request) {
       //his is the actual object we will be sending in metric query
       return {
         Id: elem.queryId,
+        Label: elem.metricName,
         MetricStat: {
           Metric: {
             Namespace: 'AWS/EC2',
@@ -58,7 +59,7 @@ export async function POST(request: Request) {
   } catch (err) {
     console.log('error: cannot get aws metrics');
     return NextResponse.json(
-      { error: 'error in obtaining metrics from query' },
+      { error: `${err} error in obtaining metrics from query` },
       { status: 500 }
     );
   }

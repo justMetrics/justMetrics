@@ -10,10 +10,9 @@ export default function Navbar() {
 
     const isActive:boolean = pathname === currPath;
     return isActive
-      ? 'font-semibold text-black dark:text-white'
+      ? 'font-semibold text-black'
       : `text-black/60 transition duration-200 hover:text-black/80 hover:ease-in-out 
-      focus:text-black/80 active:text-black/80 motion-reduce:transition-none dark:text-white/60 dark:hover:text-white/80 dark:focus:text-white/80 
-      dark:active:text-white/80`//if false, hover
+      focus:text-black/80 motion-reduce:transition-none`//if false, hover
     }
 
   return (
