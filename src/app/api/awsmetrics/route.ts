@@ -8,12 +8,11 @@ import loggedInClient from '../awsmodelcreation/route';
 // }
 
 export async function POST(request: Request) {
-    
   try {
-    console.log('awsmetrics POST running')
+    console.log('awsmetrics POST running');
     const body = await request.json(); //get json object for use
     const { instanceIds, requestedMetrics } = body;
-    let metricQueries = [];
+    const metricQueries = [];
     for (let i = 0; i < instanceIds.length; i++) {
       //requested instances is i
       for (let j = 0; j < requestedMetrics.length; j++) {
@@ -54,11 +53,10 @@ export async function POST(request: Request) {
     const response = await loggedInClient.send(awsQuery);
 
     return NextResponse.json(response);
-
   } catch (err) {
     console.log('error: cannot get aws metrics');
     return NextResponse.json(
-      { error: 'error in obtaining metrics from query' },
+      { error: `${err} error in obtaining metrics from query` },
       { status: 500 }
     );
   }
