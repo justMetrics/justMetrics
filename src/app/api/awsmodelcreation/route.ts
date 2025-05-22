@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+  console.log(accessKey, secretKey);
 
   try {
     const ec2 = new EC2Client({
