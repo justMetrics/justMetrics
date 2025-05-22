@@ -1,8 +1,7 @@
 import { EC2Client, DescribeInstancesCommand } from '@aws-sdk/client-ec2';
 import { NextRequest, NextResponse } from 'next/server';
-import { CloudWatchClient } from '@aws-sdk/client-cloudwatch';
-export let loggedInClient;
 
+let loggedInClient;
 export async function POST(req: NextRequest) {
   const { accessKey, secretKey } = await req.json();
 
@@ -32,12 +31,6 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const cloudwatch = new CloudWatchClient({region: 'us-east-2',
-      credentials: {
-        accessKeyId: accessKey,
-        secretAccessKey: secretKey,
-      },})
-      loggedInClient = cloudwatch;
 
     const command = new DescribeInstancesCommand({});
     const result = await ec2.send(command);
@@ -72,3 +65,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+export { loggedInClient }

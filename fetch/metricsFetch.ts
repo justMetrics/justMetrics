@@ -12,11 +12,11 @@ const useMetricsFetch = () => {
   const sendMetricsRequest = useCallback(
     async ( //!change out the async function to support metric request
       url: string,
-      instanceMetricbody: any
+      instanceMetricbody: any,
     ): Promise<any> => {
       try {
         // deconstruct instanceMetricBody
-        const { metrics, instances } = instanceMetricbody;
+        const { metrics, instances, credentials } = instanceMetricbody;
         
         const res = await fetch(url, {
           method: 'POST',
@@ -25,15 +25,17 @@ const useMetricsFetch = () => {
           },
           body: JSON.stringify({ //!frontend to pass in instanceMetricbody object
             instanceIds: instances,
-            requestedMetrics: metrics
+            requestedMetrics: metrics,
+            awsAccessKey: credentials[0],
+            secretKey: credentials[1]
           }),
         });
 
         if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
 
         const data = await res.json();
+        
         setResponse(data.res);
-        // console.log(response);
       } catch (error: any) {
         setError(error.message);
       }
