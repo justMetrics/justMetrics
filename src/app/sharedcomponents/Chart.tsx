@@ -41,7 +41,7 @@ export default function Chart({
       {
         label: label,
         data: values.reverse(),
-        borderColor: 'rgb(0, 0, 0)',
+        borderColor: 'rgb(76, 139, 255)',
         fill: false,
         tension: 0.1,
       },
