@@ -2,15 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import useApiKeysFetch from '../fetch/apiKeysFetch';
-
+// type Credential = [accessKeyId: string, secretAccessKey: string];
 type KeyInPutProps = {
   accessKeyHandler: () => void;
   setInsData: React.Dispatch<React.SetStateAction<any[]>>;
+  setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-const KeyInPut = ({ accessKeyHandler, setInsData }: KeyInPutProps) => {
+const KeyInPut = ({
+  accessKeyHandler,
+  setInsData,
+  setCredentials,
+}: KeyInPutProps) => {
   const [awsAccessKey, setAwsAccessKey] = useState('');
-  const [secretAccessKet, setSecretAccessKey] = useState('');
+  const [secretAccessKey, setSecretAccessKey] = useState('');
   const [fetchError, setFetchError] = useState<string | null>(null);
   // custom hooks
   const { response, error, sendApiKeys } = useApiKeysFetch();
@@ -29,16 +34,20 @@ const KeyInPut = ({ accessKeyHandler, setInsData }: KeyInPutProps) => {
     // reset state
     setFetchError('');
     // throw error if missing keys
-    if (!awsAccessKey || !secretAccessKet) {
+    if (!awsAccessKey || !secretAccessKey) {
       setFetchError('Missing AWS Access Key or Secret Key');
       return;
     }
     // invoke function to POST keys
-    sendApiKeys(url, awsAccessKey, secretAccessKet);
+    sendApiKeys(url, awsAccessKey, secretAccessKey);
+
     // if error is returned
     if (error) {
       setFetchError(error);
     }
+    // save credentials to state
+    setCredentials([awsAccessKey, secretAccessKey]);
+
     // reset keys input
     setAwsAccessKey('');
     setSecretAccessKey('');
@@ -61,7 +70,7 @@ const KeyInPut = ({ accessKeyHandler, setInsData }: KeyInPutProps) => {
             className='secret-access-key-input bg-white rounded-2xl border-[1.5px] p-3 w-[500px] shadow-xl'
             placeholder='Secret Access Key'
             type='password'
-            value={secretAccessKet}
+            value={secretAccessKey}
             onChange={(e) => setSecretAccessKey(e.target.value)}
           ></input>
           <button

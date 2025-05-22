@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import KeyInPut from './KeyInPut';
 import Metrics from './Metrics';
+
 
 const ClientWapper = () => {
   const [insData, setInsData] = useState<any[]>([]);
   const [isAccessKey, setIsAccessKey] = useState(false);
-
+  const [credentials, setCredentials] = useState<string[]>([]);
+  
   const accessKeyHandler = () => {
     setIsAccessKey(true);
   };
@@ -20,9 +22,9 @@ const ClientWapper = () => {
   return (
     <div>
       {isAccessKey ? (
-        <Metrics insData={insData} />
+        <Metrics insData={insData} credentials={credentials} />
       ) : (
-        <KeyInPut accessKeyHandler={accessKeyHandler} setInsData={setInsData} />
+        <KeyInPut accessKeyHandler={accessKeyHandler} setInsData={setInsData} setCredentials={setCredentials} />
       )}
     </div>
   );
