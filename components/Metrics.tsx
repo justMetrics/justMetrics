@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import useMetricsFetch from '../fetch/metricsFetch';
+import ChartCPU from './chartCPU';
 
 type insdataProps = {
   insData: any[];
@@ -55,6 +56,7 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
       </select>
 
       <h2>Cloud Watch Metrics</h2>
+      <ChartCPU response={response} />
     </div>
   );
 };

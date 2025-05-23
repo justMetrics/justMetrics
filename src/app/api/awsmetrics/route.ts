@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
         finalResponse[instanceId] = instance;
       }
     }
-
+    console.log(finalResponse);
     return NextResponse.json({ res: finalResponse }, { status: 200 });
   } catch (err) {
     // console.log(err);
