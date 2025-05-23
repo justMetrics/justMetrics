@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const ec2 = new EC2Client({
-      //region:'us-west-1',
-      region: 'us-east-2',
+      region: 'us-west-1',
+      // region: 'us-east-2',
       //! region harded; need to be convered later
       credentials: {
         accessKeyId: accessKey,
@@ -31,19 +31,18 @@ export async function POST(req: NextRequest) {
       },
     });
 
-
     const command = new DescribeInstancesCommand({});
     const result = await ec2.send(command);
 
     const instances = result.Reservations?.flatMap((el) => el.Instances);
-     //console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
+    //console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
     //console.log(JSON.stringify(instances, null, 2));
 
     const res = instances?.map((el) => {
       return {
         instanceId: el?.InstanceId,
         state: el?.State?.Name,
-        name: el?.Tags?.find((tag) => tag.Key === 'Name')?.Value ,
+        name: el?.Tags?.find((tag) => tag.Key === 'Name')?.Value,
         type: el?.InstanceType,
         launchTime: el?.LaunchTime,
         SecurityGroups: el?.SecurityGroups?.map((el) => ({
@@ -65,4 +64,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-export { loggedInClient }
+export { loggedInClient };

@@ -4,16 +4,11 @@ import { useState, useEffect } from 'react';
 import useApiKeysFetch from '../fetch/apiKeysFetch';
 // type Credential = [accessKeyId: string, secretAccessKey: string];
 type KeyInPutProps = {
-  accessKeyHandler: () => void;
   setInsData: React.Dispatch<React.SetStateAction<any[]>>;
   setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-const KeyInPut = ({
-  accessKeyHandler,
-  setInsData,
-  setCredentials,
-}: KeyInPutProps) => {
+const KeyInPut = ({ setInsData, setCredentials }: KeyInPutProps) => {
   const [awsAccessKey, setAwsAccessKey] = useState('');
   const [secretAccessKey, setSecretAccessKey] = useState('');
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -22,8 +17,9 @@ const KeyInPut = ({
 
   useEffect(() => {
     if (response) {
-      accessKeyHandler();
       setInsData(response);
+      // save credentials to state
+      setCredentials([awsAccessKey, secretAccessKey]);
     }
   }, [response]);
 
@@ -45,12 +41,10 @@ const KeyInPut = ({
     if (error) {
       setFetchError(error);
     }
-    // save credentials to state
-    setCredentials([awsAccessKey, secretAccessKey]);
 
     // reset keys input
-    setAwsAccessKey('');
-    setSecretAccessKey('');
+    // setAwsAccessKey('');
+    // setSecretAccessKey('');
   };
   return (
     <div>
