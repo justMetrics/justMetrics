@@ -67,9 +67,37 @@ export async function POST(request: NextRequest) {
       MetricDataQueries: finalMetricQuery,
     });
 
-    const response = await cloudwatchClient.send(awsQuery);
-    console.log('RESPONSE FROM AWS', response);
-    return NextResponse.json({ res: response }, { status: 200 });
+    const response: any = await cloudwatchClient.send(awsQuery);
+    //loop through MetricDataResults
+    //and we have to look at each Label (MetricDataResults.Label)
+    //and we have to split that and save them in two other arrays (instances, metrics)
+
+    const finalResponse: any = {};
+    for (let i = 0; i < response.MetricDataResults?.length; i++) {
+      const labelArray = response.MetricDataResults[i]?.Label.split(' ');
+      //result in instanceid, metric
+      // console.log(labelArray);
+      const instanceId = labelArray[0];
+      const metric = labelArray[1];
+      const instance = {};
+
+      const metricsObject: any = {};
+      metricsObject[labelArray[1]] = {
+        Timestamps: response.MetricDataResults[i].Timestamps,
+        Values: response.MetricDataResults[i].Values,
+      };
+
+      if (finalResponse[instanceId]) {
+        //problem is here
+        finalResponse[instanceId].push(metricsObject);
+      } else {
+        const instance = [];
+        instance.push(metricsObject);
+        finalResponse[instanceId] = instance;
+      }
+    }
+
+    return NextResponse.json({ res: finalResponse }, { status: 200 });
   } catch (err) {
     // console.log(err);
     return NextResponse.json(
