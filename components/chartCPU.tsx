@@ -19,17 +19,19 @@ ChartJS.register(
   TimeScale
 );
 
-const ChartCPU = ({ response }) => {
-  if (!response) {
+const ChartCPU = ({ metricData }) => {
+  if (!metricData) {
     return <p>Loading...</p>;
   }
 
-  const instanceID = 'i-0d0415734a474f0c0'; //! Hard Code now!
-  console.log(response);
-  const x = response[instanceID].filter((el) => el.CPUUtilization)[0]
-    .CPUUtilization.Timestamps;
-  const y = response[instanceID].filter((el) => el.CPUUtilization)[0]
-    .CPUUtilization.Values;
+  const instanceID = 'i-02a29f2e459e18bf0'; //! Hard Code now!
+  console.log('metricData', metricData);
+  const x = metricData
+    .filter((el) => el.CPUUtilization)[0]
+    .CPUUtilization.Timestamps.reverse();
+  const y = metricData
+    .filter((el) => el.CPUUtilization)[0]
+    .CPUUtilization.Values.reverse();
 
   const chart = {
     labels: x,
