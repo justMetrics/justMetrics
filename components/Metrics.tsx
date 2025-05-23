@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import useMetricsFetch from '../fetch/metricsFetch';
 
 type insdataProps = {
@@ -11,9 +11,8 @@ type insdataProps = {
 //!connect metricsFetch to here
 const Metrics = ({ insData, credentials }: insdataProps) => {
   console.log('instance list from Metrics.tsx', insData);
-  const instance_1 = insData[0];
-  const { name, type, instanceId, state, launchTime, PublicIpAddress } =
-    instance_1;
+
+  const instanceIdList = insData.map((elem) => elem.instanceId);
   // const metrics = ['CPUUtilization'];
   // const instances = insData;
   const instanceMetricbody = {
@@ -26,39 +25,60 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
 
   // handle fetch function
 
-    const test = response?.MetricDataResults.map( (elem)=> {
-    return  elem.Label})
-    console.log("test", test)
-    const handleFetch = () => {
+  const test = response?.MetricDataResults.map((elem: any, index: number) => (
+    <li key={index} className='text-gray-800'>
+      {elem.Id} {elem.Label}
+    </li>
+  ));
+  console.log('test', test);
+  //! useEffect will show the Metrics Data when the page loaded
+  useEffect(() => {
     // inititate fetch
     sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
     // only log if the data is not null
     if (response) console.log('metricResponse', response);
     if (error) console.log('metricError', error);
-     
-  };
+  }, []);
+  //! handler function will show the Metrics Data after click the button
+  // const handleFetch = () => {
+  //   // inititate fetch
+  //   sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
+  //   // only log if the data is not null
+  //   if (response) console.log('metricResponse', response);
+  //   if (error) console.log('metricError', error);
+  // };
 
-  
   return (
     <div>
-      <div>name: {name}</div>
-      <div>instanceId: {instanceId}</div>
-      <div>type: {type}</div>
-      <div>state: {state}</div>
-      <div>launchTime: {launchTime}</div>
-      <div>PublicIpAddress: {PublicIpAddress}</div>
+      <label htmlFor='instanceSelect' className='font-bold'>
+        Select EC2 Instance:
+      </label>
+      <select
+        id='instanceSelect'
+        className='border rounded p-2'
+        onChange={(e) => {
+          console.log('Selected instance:', e.target.value);
+        }}
+      >
+        {instanceIdList.map((id) => (
+          <option key={id} value={id}>
+            {id}
+          </option>
+        ))}
+      </select>
       <button
         className='border-3 rounded-xl hover:bg-blue-300 bg-blue-200 m-4 p-4'
-        onClick={handleFetch}
+        // onClick={handleFetch}
       >
         Fetch Here
       </button>
       <h2>Cloud Watch Metrics</h2>
-      <div>{test}
+      <div>
+        {test}
         {/* Cloud Watch Metrics: {response.MetricDataResults.map( (elem)=> {
      return  elem.Label})} */}
-    {/* response!.MetricDataResults[0].Timestamps} */}
-    </div>
+        {/* response!.MetricDataResults[0].Timestamps} */}
+      </div>
       {
         // response. MetricDataResults.forEach((el)=>{
         //  <div>{el}</div>

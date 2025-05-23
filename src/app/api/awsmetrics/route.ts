@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CloudWatchClient, GetMetricDataCommand } from '@aws-sdk/client-cloudwatch';
+import {
+  CloudWatchClient,
+  GetMetricDataCommand,
+} from '@aws-sdk/client-cloudwatch';
 // import { loggedInClient } from '../awsmodelcreation/route';
 //assume body is from post request and has an object with instanceIds and requestedMetrics:
 //{
@@ -10,20 +13,18 @@ import { CloudWatchClient, GetMetricDataCommand } from '@aws-sdk/client-cloudwat
 
 export async function POST(request: NextRequest) {
   try {
-   
     const { requestedMetrics, instanceIds, awsAccessKey, secretKey } =
       await request.json();
     // console.log('KEYS', awsAccessKey, secretKey);
 
     const cloudwatchClient = new CloudWatchClient({
-      region: 'us-east-2', //make util function and call inside
+      region: 'us-west-1', //make util function and call inside
       credentials: {
         accessKeyId: awsAccessKey,
         secretAccessKey: secretKey,
       },
     });
 
-   
     const metricQueries = [];
     // console.log(instanceIds.length)
     for (let i = 0; i < instanceIds.length; i++) {
@@ -52,7 +53,6 @@ export async function POST(request: NextRequest) {
             Namespace: 'AWS/EC2',
             MetricName: elem.metricName,
             Dimensions: elem.dimensions,
-
           },
           Period: 300,
           Stat: 'Average',
@@ -66,11 +66,10 @@ export async function POST(request: NextRequest) {
       EndTime: new Date(),
       MetricDataQueries: finalMetricQuery,
     });
-    
+
     const response = await cloudwatchClient.send(awsQuery);
-    console.log("RESPONSE FROM AWS", response);
+    console.log('RESPONSE FROM AWS', response);
     return NextResponse.json({ res: response }, { status: 200 });
-    
   } catch (err) {
     // console.log(err);
     return NextResponse.json(
