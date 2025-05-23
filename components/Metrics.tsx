@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import useMetricsFetch from '../fetch/metricsFetch';
+import InstanceMetaData from './InstanceMetaData';
 
 type insdataProps = {
   insData: any[];
@@ -10,8 +11,20 @@ type insdataProps = {
 //credentials 0 access key 1 secret accesskey
 //!connect metricsFetch to here
 const Metrics = ({ insData, credentials }: insdataProps) => {
-  console.log('instance list from Metrics.tsx', insData);
+  // console.log('instance list from Metrics.tsx', insData);
+  const [instanceMetaData, setInstanceMetaData] = useState();
+  const [instanceMetrics, setInstanceMetrics] = useState();
 
+  const handleSelectInstance = (instanceId: string) => {
+    const instanceMetaData = insData.filter(
+      (el) => instanceId === el.instanceId
+    );
+
+    setInstanceMetaData(instanceMetaData[0]);
+    const selectedInstanceMetrics = response![instanceId];
+    setInstanceMetrics(selectedInstanceMetrics);
+  };
+  // console.log(instanceMetaData);
   const instanceIdList = insData.map((elem) => elem.instanceId);
 
   const instanceMetricbody = {
@@ -34,7 +47,7 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
   }, []);
   //! handler function will show the Metrics Data after click the button
 
-  console.log('final res', response);
+  console.log('instanceMetrics', instanceMetrics);
   return (
     <div>
       <label htmlFor='instanceSelect' className='font-bold'>
@@ -43,9 +56,7 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
       <select
         id='instanceSelect'
         className='border rounded p-2'
-        onChange={(e) => {
-          console.log('Selected instance:', e.target.value);
-        }}
+        onChange={(e) => handleSelectInstance(e.target.value)}
       >
         {instanceIdList.map((id) => (
           <option key={id} value={id}>
@@ -53,6 +64,11 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
           </option>
         ))}
       </select>
+      {instanceMetaData ? (
+        <InstanceMetaData instanceMetaData={instanceMetaData} />
+      ) : (
+        <div>Select a instance</div>
+      )}
 
       <h2>Cloud Watch Metrics</h2>
     </div>
