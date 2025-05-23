@@ -14,7 +14,7 @@ const KeyInPut = ({ setInsData, setCredentials }: KeyInPutProps) => {
   const [fetchError, setFetchError] = useState<string | null>(null);
   // custom hooks
   const { response, error, sendApiKeys } = useApiKeysFetch();
-
+  
   useEffect(() => {
     if (response) {
       setInsData(response);
@@ -48,7 +48,7 @@ const KeyInPut = ({ setInsData, setCredentials }: KeyInPutProps) => {
   };
   return (
     <div>
-      <div className='h-full flex flex-col items-center rounded-3xl border-2 m-4 bg-gray-200 '>
+      <div className='h-screen flex flex-col items-center rounded-3xl border-2 m-4 bg-gray-200 '>
         <header className='h-[15%] flex flex-row items-center text-5xl font-serif'>
           <h1>Just Metrics</h1>
         </header>
