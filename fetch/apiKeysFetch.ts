@@ -33,6 +33,7 @@ const useApiKeysFetch = () => {
         setResponse(data.res);
       } catch (error: any) {
         setError(error.message);
+        
       }
     },
     []
