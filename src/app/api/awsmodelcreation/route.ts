@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
         PublicIpAddress: el?.PublicIpAddress,
       };
     });
-    //console.log('👀 👀 👀 👀 TEST!!!!!!!', res);
+    // console.log('👀 👀 👀 👀 TEST!!!!!!!', res);
 
     return NextResponse.json({ res }, { status: 200 });
   } catch (err) {

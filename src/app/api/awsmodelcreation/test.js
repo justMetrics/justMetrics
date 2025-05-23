@@ -103,3 +103,30 @@ const res = {
     },
   ],
 };
+
+ 
+
+{
+  'i-0d0415734a474f0c0': [
+    { CPUUtilization: {
+      Timestamps:['2025-05-23T19:34:00.000Z',...], 
+      Values:[0.20116699083079342, ...]
+    } 
+  },
+
+   
+
+    { NetworkIn: [Object] },
+    { DiskWriteOps: [Object] }
+  ],
+  'i-082dfd7d331d68492': [
+    { CPUUtilization: [Object] },
+    { NetworkIn: [Object] },
+    { DiskWriteOps: [Object] }
+  ],
+  'i-00df2f423731a9178': [
+    { CPUUtilization: [Object] },
+    { NetworkIn: [Object] },
+    { DiskWriteOps: [Object] }
+  ]
+}
