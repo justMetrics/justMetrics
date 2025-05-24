@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import useMetricsFetch from '../fetch/metricsFetch';
-import ChartCPU from './chartCPU';
+import { ChartCPU } from './chartCPU';
 import InstanceMetaData from './InstanceMetaData';
-
+import Test from './Test';
 type insdataProps = {
   insData: any[];
   credentials: string[];
@@ -47,6 +47,12 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
     if (error) console.log('metricError', error);
   }, []);
   //! handler function will show the Metrics Data after click the button
+
+  const charts = instanceMetrics?.map((metricData, index: number) => {
+    console.log('congratulations, this is rendering', instanceMetrics);
+
+    <ChartCPU key={index} metricData={metricData}></ChartCPU>;
+  });
 
   console.log('instanceMetrics', instanceMetrics);
   return (
@@ -102,25 +108,39 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
             <div>Select a instance</div>
           )}
         </section>
-        <section className='h-[58%] w-[98%] flex flex-row text-2xl font-serif'>
-          <div className='h-[100%] w-[32.6%] p-3 m-2 mt-2 border-2 rounded-3xl bg-gray-50 flex flex-col items-center'>
-            {/* 
+
+        {/* 
               instanceMetrics
               [{cpu},{network},{disk}]
             
             */}
 
-            {instanceMetaData ? (
-              instanceMetrics?.map((metricData) => {
-                // console.log('test', metricData);
-                <ChartCPU metricData={metricData} />;
-                // console.log(123);
-              })
-            ) : (
-              <div>Select a instance</div>
-            )}
-          </div>
-        </section>
+        {instanceMetrics ? (
+          // <ChartCPU metricData={instanceMetrics[0]} />
+          // charts
+          instanceMetrics?.map((metricData, index) => {
+            // console.log('metricData', metricData);
+            // console.log(
+            //   'congratulations, this is rendering',
+            //   metricData
+            // );
+            // <div>{metricData}</div>
+            // <ChartCPU key={index} metricData={metricData}/>
+            return (
+              <section
+                key={index}
+                className='h-[58%] w-[98%] flex flex-row text-2xl font-serif'
+              >
+                <div className='h-[100%] w-[32.6%] p-3 m-2 mt-2 border-2 rounded-3xl bg-gray-50 flex flex-col items-center'>
+                  <ChartCPU key={index} metricData={metricData} />
+                </div>
+              </section>
+            );
+            //   // console.log(123);
+          })
+        ) : (
+          <div>Select a instance</div>
+        )}
       </main>
     </div>
   );
