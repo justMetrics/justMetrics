@@ -112,8 +112,8 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
 
             {instanceMetaData ? (
               instanceMetrics?.map((metricData) => {
-                console.log('test', metricData);
-                // <ChartCPU metricData={metricData} />;
+                // console.log('test', metricData);
+                <ChartCPU metricData={metricData} />;
                 // console.log(123);
               })
             ) : (
