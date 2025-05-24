@@ -19,31 +19,34 @@ ChartJS.register(
   TimeScale
 );
 
-const ChartCPU = ({ metricData }) => {
+export function ChartCPU({ metricData }) {
+  console.log('metricDataProp', metricData);
   if (!metricData) {
     return <p>Loading...</p>;
   }
 
-  const instanceID = 'i-02a29f2e459e18bf0'; //! Hard Code now!
-  console.log('metricData', metricData);
-  const x = metricData
-    .filter((el) => el.CPUUtilization)[0]
-    .CPUUtilization.Timestamps.reverse();
-  const y = metricData
-    .filter((el) => el.CPUUtilization)[0]
-    .CPUUtilization.Values.reverse();
-
-  const chart = {
-    labels: x,
-    datasets: [
-      {
-        label: 'CPU Utilization(%)',
-        data: y,
-      },
-    ],
-  };
+  // const instanceID = 'i-06099a5a414309d0e'; //! Hard Code now!
+  const metricKeyArr = Object.keys(metricData);
+  const metricKey=metricKeyArr[0]
+  console.log(metricKey);
+console.log (metricData[metricKey].Timestamps.reverse())
+    const x = metricData[metricKey].Timestamps.reverse()
+  //   //   .filter((el) => el.CPUUtilization)[0]
+  //   //   .CPUUtilization.Timestamps.reverse();
+  //   // const y = metricData
+  //   //   .filter((el) => el.CPUUtilization)[0]
+  //   //   .CPUUtilization.Values.reverse();
+  const y = metricData[metricKey].Values.reverse()
+    const chart = {
+      labels: x,
+      datasets: [
+        {
+          label: 'CPU Utilization(%)',
+          data: y,
+        },
+      ],
+    };
 
   return <Line data={chart} />;
-};
-
-export default ChartCPU;
+  
+}
