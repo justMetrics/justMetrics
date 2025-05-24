@@ -42,6 +42,17 @@ export async function POST(request: NextRequest) {
         metricQueries.push(metricQuery);
       }
     }
+    function bestStatType(metricName:string){
+      const bestMetric={
+        CPUUtilization:'Average',
+        NetworkIn: 'Average',
+        NetworkOut:'Average',
+        DiskWriteOps: 'Sum'
+      }
+
+      return bestMetric[metricName]
+    }
+
 
     const finalMetricQuery = metricQueries.map((elem, index) => {
       //his is the actual object we will be sending in metric query
@@ -54,8 +65,8 @@ export async function POST(request: NextRequest) {
             MetricName: elem.metricName,
             Dimensions: elem.dimensions,
           },
-          Period: 300,
-          Stat: 'Average',
+          Period: 300*12,
+          Stat: bestStatType(elem.metricName), //!needs to be changed based on what is most appropriate for each metric
         },
         ReturnData: true,
       };
@@ -71,7 +82,7 @@ export async function POST(request: NextRequest) {
     //loop through MetricDataResults
     //and we have to look at each Label (MetricDataResults.Label)
     //and we have to split that and save them in two other arrays (instances, metrics)
-
+    console.log(response)
     const finalResponse: any = {};
     for (let i = 0; i < response.MetricDataResults?.length; i++) {
       const labelArray = response.MetricDataResults[i]?.Label.split(' ');
@@ -96,7 +107,7 @@ export async function POST(request: NextRequest) {
         finalResponse[instanceId] = instance;
       }
     }
-    console.log(finalResponse);
+    // console.log(finalResponse);
     return NextResponse.json({ res: finalResponse }, { status: 200 });
   } catch (err) {
     // console.log(err);

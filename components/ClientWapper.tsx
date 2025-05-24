@@ -7,7 +7,7 @@ import Metrics from './Metrics';
 const ClientWapper = () => {
   const [insData, setInsData] = useState<any[]>([]);
   const [credentials, setCredentials] = useState<string[]>([]);
-
+  console.log('clientwrapperRerender')
   return (
     <div>
       {credentials.length !== 0 ? (
