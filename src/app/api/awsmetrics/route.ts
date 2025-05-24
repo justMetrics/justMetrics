@@ -42,6 +42,17 @@ export async function POST(request: NextRequest) {
         metricQueries.push(metricQuery);
       }
     }
+    function bestStatType(metricName:string){
+      const bestMetric={
+        CPUUtilization:'Average',
+        NetworkIn: 'Average',
+        NetworkOut:'Average',
+        DiskWriteOps: 'Sum'
+      }
+
+      return bestMetric[metricName]
+    }
+
 
     const finalMetricQuery = metricQueries.map((elem, index) => {
       //his is the actual object we will be sending in metric query
@@ -54,8 +65,8 @@ export async function POST(request: NextRequest) {
             MetricName: elem.metricName,
             Dimensions: elem.dimensions,
           },
-          Period: 300,
-          Stat: 'Average',
+          Period: 300*12,
+          Stat: bestStatType(elem.metricName), //!needs to be changed based on what is most appropriate for each metric
         },
         ReturnData: true,
       };

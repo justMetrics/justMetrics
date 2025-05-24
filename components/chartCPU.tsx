@@ -33,6 +33,7 @@ export function ChartCPU({ metricData }) {
   const metrics={
     CPUUtilization: '%',
   NetworkIn: 'Bytes',
+  NetworkOut:'Bytes',
   DiskWriteOps: 'Operations',
   }
   const yAxisTitle = metrics[metricKey] as string

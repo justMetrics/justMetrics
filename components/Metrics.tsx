@@ -11,10 +11,12 @@ type insdataProps = {
 };
 //credentials 0 access key 1 secret accesskey
 //!connect metricsFetch to here
+
 const Metrics = ({ insData, credentials }: insdataProps) => {
   // console.log('instance list from Metrics.tsx', insData);
   const [instanceMetaData, setInstanceMetaData] = useState();
   const [instanceMetrics, setInstanceMetrics] = useState();
+  console.log("Things to Discuss: Summary page component, adding region to login page, test suite, front end design, best form of data visualisation (including which metrics should be request and how many")
 
   const handleSelectInstance = (instanceId: string) => {
     const selectedInstanceMetaData = insData.filter(
@@ -29,7 +31,7 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
   const instanceIdList = insData.map((elem) => elem.instanceId);
   // console.log(instanceIdList);
   const instanceMetricbody = {
-    metrics: ['CPUUtilization', 'NetworkIn', 'DiskWriteOps'],
+    metrics: ['CPUUtilization', 'NetworkIn', 'NetworkOut'],
     instances: insData,
     credentials: credentials,
   };
