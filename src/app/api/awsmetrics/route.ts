@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     const { requestedMetrics, instanceIds, awsAccessKey, secretKey, region } =
       await request.json();
     // console.log('KEYS', awsAccessKey, secretKey);
-
+    // console.log('region', region)
     // create default region, because on render the region comes back as null and will break the code.
     let regionFetch: string;
     if (region) {
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
         secretAccessKey: secretKey,
       },
     });
-
+    console.log('instanceIds', instanceIds)
     const metricQueries = [];
     // console.log(instanceIds.length)
     for (let i = 0; i < instanceIds.length; i++) {
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
 
       return bestMetric[metricName]
     }
-
+    console.log('metricQueries', metricQueries);
 
     const finalMetricQuery = metricQueries.map((elem, index) => {
       //his is the actual object we will be sending in metric query
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
         finalResponse[instanceId] = instance;
       }
     }
-    console.log(finalResponse);
+    console.log('final response', finalResponse);
     return NextResponse.json({ res: finalResponse }, { status: 200 });
   } catch (err) {
     // console.log(err);

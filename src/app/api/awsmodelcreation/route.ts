@@ -41,8 +41,8 @@ export async function POST(req: NextRequest) {
     const result = await ec2.send(command);
 
     const instances = result.Reservations?.flatMap((el) => el.Instances);
-    //console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
-    //console.log(JSON.stringify(instances, null, 2));
+    // console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
+    // console.log(JSON.stringify(instances, null, 2));
 
      res.allInstances = instances?.map((el) => {
       return {

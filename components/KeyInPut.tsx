@@ -19,8 +19,8 @@ const KeyInPut = ({ setInsData, setCredentials, setAllRegions }: KeyInPutProps) 
   useEffect(() => {
     if (response) {
       // save state for regions and instances
+      setAllRegions(response.regions);
       setInsData(response.allInstances);
-      setAllRegions(response.regions)
       // save credentials to state
       setCredentials([awsAccessKey, secretAccessKey]);
     }
