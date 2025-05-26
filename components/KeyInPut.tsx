@@ -6,9 +6,10 @@ import useApiKeysFetch from '../fetch/apiKeysFetch';
 type KeyInPutProps = {
   setInsData: React.Dispatch<React.SetStateAction<any[]>>;
   setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
+  setAllRegions: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-const KeyInPut = ({ setInsData, setCredentials }: KeyInPutProps) => {
+const KeyInPut = ({ setInsData, setCredentials, setAllRegions }: KeyInPutProps) => {
   const [awsAccessKey, setAwsAccessKey] = useState('');
   const [secretAccessKey, setSecretAccessKey] = useState('');
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -17,7 +18,9 @@ const KeyInPut = ({ setInsData, setCredentials }: KeyInPutProps) => {
   
   useEffect(() => {
     if (response) {
-      setInsData(response);
+      // save state for regions and instances
+      setInsData(response.allInstances);
+      setAllRegions(response.regions)
       // save credentials to state
       setCredentials([awsAccessKey, secretAccessKey]);
     }

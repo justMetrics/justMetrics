@@ -13,12 +13,21 @@ import {
 
 export async function POST(request: NextRequest) {
   try {
-    const { requestedMetrics, instanceIds, awsAccessKey, secretKey } =
+    const { requestedMetrics, instanceIds, awsAccessKey, secretKey, region } =
       await request.json();
     // console.log('KEYS', awsAccessKey, secretKey);
 
+    // create default region, because on render the region comes back as null and will break the code.
+    let regionFetch: string;
+    if (region) {
+      regionFetch = region;
+    } else {
+      regionFetch = 'us-west-1';
+    };
+
     const cloudwatchClient = new CloudWatchClient({
-      region: 'us-west-1', //make util function and call inside
+      // region: 'us-west-1', //make util function and call inside
+      region: regionFetch,
       credentials: {
         accessKeyId: awsAccessKey,
         secretAccessKey: secretKey,
@@ -82,7 +91,7 @@ export async function POST(request: NextRequest) {
     //loop through MetricDataResults
     //and we have to look at each Label (MetricDataResults.Label)
     //and we have to split that and save them in two other arrays (instances, metrics)
-    console.log(response)
+    // console.log(response)
     const finalResponse: any = {};
     for (let i = 0; i < response.MetricDataResults?.length; i++) {
       const labelArray = response.MetricDataResults[i]?.Label.split(' ');
@@ -107,7 +116,7 @@ export async function POST(request: NextRequest) {
         finalResponse[instanceId] = instance;
       }
     }
-    // console.log(finalResponse);
+    console.log(finalResponse);
     return NextResponse.json({ res: finalResponse }, { status: 200 });
   } catch (err) {
     // console.log(err);

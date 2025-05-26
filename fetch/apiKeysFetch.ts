@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 // api keys POST request
 const useApiKeysFetch = () => {
   // create usestats
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState<any>(null);
   const [error, setError] = useState(null);
 
   // create POST request for api keys

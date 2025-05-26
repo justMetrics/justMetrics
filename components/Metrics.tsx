@@ -8,16 +8,19 @@ import Test from './Test';
 type insdataProps = {
   insData: any[];
   credentials: string[];
+  allRegions: string[];
 };
 //credentials 0 access key 1 secret accesskey
 //!connect metricsFetch to here
 
-const Metrics = ({ insData, credentials }: insdataProps) => {
+const Metrics = ({ insData, credentials, allRegions }: insdataProps) => {
   // console.log('instance list from Metrics.tsx', insData);
   const [instanceMetaData, setInstanceMetaData] = useState();
   const [instanceMetrics, setInstanceMetrics] = useState();
+  const [region, setRegion] = useState('');
   console.log("Things to Discuss: Summary page component, adding region to login page, test suite, front end design, best form of data visualisation (including which metrics should be request and how many")
 
+  // change charts according to the instance selected
   const handleSelectInstance = (instanceId: string) => {
     const selectedInstanceMetaData = insData.filter(
       (el) => instanceId === el.instanceId
@@ -28,12 +31,18 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
     setInstanceMetrics(selectedInstanceMetrics);
   };
 
+  // change instances according to region selected 
+  const handleSelectRegion = (region: string) => {
+    setRegion(region);
+  }
+
   const instanceIdList = insData.map((elem) => elem.instanceId);
   // console.log(instanceIdList);
   const instanceMetricbody = {
     metrics: ['CPUUtilization', 'NetworkIn', 'NetworkOut'],
     instances: insData,
     credentials: credentials,
+    region: region
   };
   // deconstruct custom hook
   const { response, error, sendMetricsRequest } = useMetricsFetch();
@@ -47,7 +56,7 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
     // only log if the data is not null
     if (response) console.log('metricResponse', response);
     if (error) console.log('metricError', error);
-  }, []);
+  }, [region]);
   //! handler function will show the Metrics Data after click the button
 
   const charts = instanceMetrics?.map((metricData, index: number) => {
@@ -71,13 +80,8 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
           <select
             id='regionSelect'
             className='border rounded-3xl p-2 m-2 mr-7 bg-gray-100'
-          >
-            <option>US West 1</option>
-            <option>US West 2</option>
-            <option>US West 3</option>
-            <option>US East 1</option>
-            <option>US East 2</option>
-            <option>US East 3</option>
+            onChange={(e) => handleSelectRegion(e.target.value)}>
+            {allRegions.map((region, i) => (<option key={i} value={region}>{region}</option>))}  
           </select>
         </div>
         <div>
