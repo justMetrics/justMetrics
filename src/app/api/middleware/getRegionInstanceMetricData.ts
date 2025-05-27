@@ -1,0 +1,123 @@
+import { NextRequest, NextResponse } from 'next/server';
+import {
+  CloudWatchClient,
+  GetMetricDataCommand,
+} from '@aws-sdk/client-cloudwatch';
+
+//! instanceIds: [instance1, instance2],
+//! requestedMetrics: [cpuUsage,networkin]
+
+
+export async function getRegionInstanceMetricData(request: NextRequest) {
+  try {
+    const { requestedMetrics, instanceIds, awsAccessKey, secretKey, region } =
+      await request.json();
+    // console.log('KEYS', awsAccessKey, secretKey);
+    // console.log('region', region)
+    // create default region, because on render the region comes back as null and will break the code.
+    let regionFetch: string;
+    if (region) {
+      regionFetch = region;
+    } else {
+      regionFetch = 'us-west-1';
+    };
+
+    const cloudwatchClient = new CloudWatchClient({
+      // region: 'us-west-1', //make util function and call inside
+      region: regionFetch,
+      credentials: {
+        accessKeyId: awsAccessKey,
+        secretAccessKey: secretKey,
+      },
+    });
+    console.log('instanceIds', instanceIds)
+    const metricQueries = [];
+    // console.log(instanceIds.length)
+    for (let i = 0; i < instanceIds.length; i++) {
+      //requested instances is i
+
+      for (let j = 0; j < requestedMetrics.length; j++) {
+        //requested metrics is j
+
+        const queryId = String(i) + String(j);
+        const metricName = requestedMetrics[j] as string;
+        const dimensions = [
+          { Name: 'InstanceId', Value: instanceIds[i].instanceId },
+        ];
+        const metricQuery = { queryId, metricName, dimensions };
+        metricQueries.push(metricQuery);
+      }
+    }
+    function bestStatType(metricName:string){
+      const bestMetric={
+        CPUUtilization:'Average',
+        NetworkIn: 'Average',
+        NetworkOut:'Average',
+        DiskWriteOps: 'Sum'
+      }
+
+      return bestMetric[metricName]
+    }
+    console.log('metricQueries', metricQueries);
+
+    const finalMetricQuery = metricQueries.map((elem, index) => {
+      //his is the actual object we will be sending in metric query
+      return {
+        // Id: elem.queryId as string,
+        Id: 'test' + index,
+        MetricStat: {
+          Metric: {
+            Namespace: 'AWS/EC2',
+            MetricName: elem.metricName,
+            Dimensions: elem.dimensions,
+          },
+          Period: 300*12,
+          Stat: bestStatType(elem.metricName), //!needs to be changed based on what is most appropriate for each metric
+        },
+        ReturnData: true,
+      };
+    });
+
+    const awsQuery = new GetMetricDataCommand({
+      StartTime: new Date(Date.now() - 24 * 60 * 60 * 1000),
+      EndTime: new Date(),
+      MetricDataQueries: finalMetricQuery,
+    });
+
+    const response: any = await cloudwatchClient.send(awsQuery);
+    //loop through MetricDataResults
+    //and we have to look at each Label (MetricDataResults.Label)
+    //and we have to split that and save them in two other arrays (instances, metrics)
+    // console.log(response)
+    const finalResponse: any = {};
+    for (let i = 0; i < response.MetricDataResults?.length; i++) {
+      const labelArray = response.MetricDataResults[i]?.Label.split(' ');
+      //result in instanceid, metric
+      // console.log(labelArray);
+      const instanceId = labelArray[0];
+      const metric = labelArray[1];
+      const instance = {};
+
+      const metricsObject: any = {};
+      metricsObject[labelArray[1]] = {
+        Timestamps: response.MetricDataResults[i].Timestamps,
+        Values: response.MetricDataResults[i].Values,
+      };
+
+      if (finalResponse[instanceId]) {
+        //problem is here
+        finalResponse[instanceId].push(metricsObject);
+      } else {
+        const instance = [];
+        instance.push(metricsObject);
+        finalResponse[instanceId] = instance;
+      }
+    }
+    console.log('final response', finalResponse);
+    // return NextResponse.json({ res: finalResponse }, { status: 200 });
+    return finalResponse
+  } catch (err) {
+    // console.log(err);
+    return { error: `${err} error in obtaining metrics from query` ,  status: 500};
+  }
+}

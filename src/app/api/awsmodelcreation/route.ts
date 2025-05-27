@@ -1,10 +1,10 @@
-import { EC2Client, DescribeInstancesCommand } from '@aws-sdk/client-ec2';
+import fetchEC2Instances from '../middleware/getInstanceList'
 import { NextRequest, NextResponse } from 'next/server';
-import getAllRegions from './getAllRegions';
 
-let loggedInClient;
+
+
 export async function POST(req: NextRequest) {
-  const { accessKey, secretKey } = await req.json();
+  const { accessKey, secretKey,region } = await req.json();
 
   // const { accessKey, secretKey, region } = await req.json();
   //! region harded; need to be convered later
@@ -22,44 +22,10 @@ export async function POST(req: NextRequest) {
   //console.log(accessKey, secretKey);
 
   try {
-    // create response obkect
-    const res: Record<string, any> = {};
-    // get all active regions using helper function
-    res.regions = await getAllRegions(accessKey, secretKey);
 
-    const ec2 = new EC2Client({
-      region: 'us-west-1',
-      // region: 'us-east-2',
-      //! region harded; need to be convered later
-      credentials: {
-      accessKeyId: accessKey,
-      secretAccessKey: secretKey,
-      },
-    });
 
-    const command = new DescribeInstancesCommand({});
-    const result = await ec2.send(command);
-
-    const instances = result.Reservations?.flatMap((el) => el.Instances);
-    // console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
-    // console.log(JSON.stringify(instances, null, 2));
-
-     res.allInstances = instances?.map((el) => {
-      return {
-        instanceId: el?.InstanceId,
-        state: el?.State?.Name,
-        name: el?.Tags?.find((tag) => tag.Key === 'Name')?.Value,
-        type: el?.InstanceType,
-        launchTime: el?.LaunchTime,
-        SecurityGroups: el?.SecurityGroups?.map((el) => ({
-          groupId: el.GroupId,
-          groupName: el.GroupName,
-        })),
-        PrivateIpAddress: el?.PrivateIpAddress,
-        PublicIpAddress: el?.PublicIpAddress,
-      };
-    });
-    // console.log('👀 👀 👀 👀 TEST!!!!!!!', res);
+    const res = await fetchEC2Instances({ accessKey, secretKey, region });
+   
 
     return NextResponse.json({ res }, { status: 200 });
   } catch (err) {
@@ -70,4 +36,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-export { loggedInClient };
+

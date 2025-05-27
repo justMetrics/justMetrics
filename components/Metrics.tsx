@@ -52,9 +52,12 @@ const Metrics = ({ insData, credentials, allRegions }: insdataProps) => {
   //! useEffect will show the Metrics Data when the page loaded
   useEffect(() => {
     // inititate fetch
-    sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
+    sendMetricsRequest('/api/regionChange', instanceMetricbody);
     // only log if the data is not null
-    if (response) console.log('metricResponse', response);
+    //! updated line58
+    if (response) {
+      
+      console.log('metricResponse', response);}
     if (error) console.log('metricError', error);
   }, [region]);
   //! handler function will show the Metrics Data after click the button
