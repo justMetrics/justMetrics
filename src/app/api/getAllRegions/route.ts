@@ -2,7 +2,7 @@ import { EC2Client, DescribeInstancesCommand } from '@aws-sdk/client-ec2';
 import { NextRequest, NextResponse } from 'next/server';
 import getAllRegions from './getAllRegions';
 
-let loggedInClient;
+
 export async function POST(req: NextRequest) {
   const { accessKey, secretKey } = await req.json();
 
@@ -70,4 +70,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-export { loggedInClient };
+

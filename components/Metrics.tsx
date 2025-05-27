@@ -9,17 +9,19 @@ type insdataProps = {
   insData: any[];
   credentials: string[];
   allRegions: string[];
+  selectedRegion:string;
 };
 //credentials 0 access key 1 secret accesskey
 //!connect metricsFetch to here
-
-const Metrics = ({ insData, credentials, allRegions }: insdataProps) => {
+//we add selectedRegions
+const Metrics = ({ insData, credentials, allRegions, selectedRegion}: insdataProps) => {
   // console.log('instance list from Metrics.tsx', insData);
   const [instanceMetaData, setInstanceMetaData] = useState();
   const [instanceMetrics, setInstanceMetrics] = useState();
-  const [region, setRegion] = useState('');
-  console.log("Things to Discuss: Summary page component, adding region to login page, test suite, front end design, best form of data visualisation (including which metrics should be request and how many")
-
+  const [region, setRegion] = useState(selectedRegion); //for now reusing existing state, but we can work on it
+//   console.log("Things to Discuss: Summary page component, adding region to login page, test suite, front end design, best form of data visualisation (including which metrics should be request and how many")
+// con
+console.log('SELECTED REGION', selectedRegion)
   // change charts according to the instance selected
   const handleSelectInstance = (instanceId: string) => {
     const selectedInstanceMetaData = insData.filter(
@@ -42,7 +44,7 @@ const Metrics = ({ insData, credentials, allRegions }: insdataProps) => {
     metrics: ['CPUUtilization', 'NetworkIn', 'NetworkOut'],
     instances: insData,
     credentials: credentials,
-    region: region
+    region: selectedRegion
   };
   // deconstruct custom hook
   const { response, error, sendMetricsRequest } = useMetricsFetch();

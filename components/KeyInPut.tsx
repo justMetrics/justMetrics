@@ -28,7 +28,7 @@ const KeyInPut = ({ setInsData, setCredentials, setAllRegions }: KeyInPutProps) 
 
   // invoke fetch function
   const sendApi = () => {
-    const url = '/api/awsmodelcreation';
+    const url = '/api/getAllRegions';
 
     // reset state
     setFetchError('');
