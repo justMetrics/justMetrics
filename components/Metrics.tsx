@@ -10,15 +10,16 @@ type insdataProps = {
   credentials: string[];
   allRegions: string[];
   selectedRegion:string;
+  setSelectedRegion: React.Dispatch<React.SetStateAction<string>>;
 };
 //credentials 0 access key 1 secret accesskey
 //!connect metricsFetch to here
 //we add selectedRegions
-const Metrics = ({ insData, credentials, allRegions, selectedRegion}: insdataProps) => {
+const Metrics = ({ insData, credentials, allRegions, selectedRegion, setSelectedRegion}: insdataProps) => {
   // console.log('instance list from Metrics.tsx', insData);
   const [instanceMetaData, setInstanceMetaData] = useState();
   const [instanceMetrics, setInstanceMetrics] = useState();
-  const [region, setRegion] = useState(selectedRegion); //for now reusing existing state, but we can work on it
+  // const [region, setRegion] = useState(selectedRegion); //for now reusing existing state, but we can work on it
 //   console.log("Things to Discuss: Summary page component, adding region to login page, test suite, front end design, best form of data visualisation (including which metrics should be request and how many")
 // con
 console.log('SELECTED REGION', selectedRegion)
@@ -35,17 +36,12 @@ console.log('SELECTED REGION', selectedRegion)
 
   // change instances according to region selected 
   const handleSelectRegion = (region: string) => {
-    setRegion(region);
+    setSelectedRegion(region);
   }
 
   const instanceIdList = insData.map((elem) => elem.instanceId);
   // console.log(instanceIdList);
-  const instanceMetricbody = {
-    metrics: ['CPUUtilization', 'NetworkIn', 'NetworkOut'],
-    instances: insData,
-    credentials: credentials,
-    region: selectedRegion
-  };
+
   // deconstruct custom hook
   const { response, error, sendMetricsRequest } = useMetricsFetch();
   console.log('instanceMetaData', response);
@@ -54,15 +50,23 @@ console.log('SELECTED REGION', selectedRegion)
   //! useEffect will show the Metrics Data when the page loaded
   useEffect(() => {
     // inititate fetch
+
+      const instanceMetricbody = {
+    metrics: ['CPUUtilization', 'NetworkIn', 'NetworkOut'],
+    instances: insData,
+    credentials: credentials,
+    region: selectedRegion
+  };
+      console.log('INSTANCEMETRICBODY FROM METRICS.TSX', instanceMetricbody)
     sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
     // only log if the data is not null
     if (response) console.log('metricResponse', response);
     if (error) console.log('metricError', error);
-  }, [region]);
+  }, [selectedRegion]);
   //! handler function will show the Metrics Data after click the button
 
   const charts = instanceMetrics?.map((metricData, index: number) => {
-    console.log('congratulations, this is rendering', instanceMetrics);
+    // console.log('congratulations, this is rendering', instanceMetrics);
 
     <ChartCPU key={index} metricData={metricData}></ChartCPU>;
   });

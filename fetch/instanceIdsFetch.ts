@@ -19,23 +19,24 @@ const useInstanceIDsFetch = () => {
     ): Promise<any> => {
       try {
         // deconstruct instanceMetricBody
-
+        console.log('keys', url, awsAccessKey, secretAccessKey, region)
+        console.log('instanceIdsFetch called')
         const res = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            awsAccessKey: awsAccessKey,
+            accessKey: awsAccessKey,
             secretKey: secretAccessKey,
             region: region,
           }),
         });
-
+        console.log(res)
         if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
 
         const data = await res.json();
-
+        console.log(data)
         setResponse(data.res);
       } catch (error: any) {
         setError(error.message);

@@ -17,8 +17,9 @@ const useMetricsFetch = () => {
     ): Promise<any> => {
       try {
         // deconstruct instanceMetricBody
-        const { metrics, instances, credentials, region } = instanceMetricbody;
 
+        const { metrics, instances, credentials, region } = instanceMetricbody;
+        console.log('region', region)
         const res = await fetch(url, {
           method: 'POST',
           headers: {

@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
   try {
     const { requestedMetrics, instanceIds, awsAccessKey, secretKey, region } =
       await request.json();
+    console.log('instanceIds', instanceIds);
     // console.log('KEYS', awsAccessKey, secretKey);
     // console.log('region', region)
     // create default region, because on render the region comes back as null and will break the code.
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
       regionFetch = region;
     } else {
       regionFetch = 'us-west-1';
-    };
+    }
 
     const cloudwatchClient = new CloudWatchClient({
       // region: 'us-west-1', //make util function and call inside
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
         secretAccessKey: secretKey,
       },
     });
-    console.log('instanceIds', instanceIds)
+    console.log('instanceIds', instanceIds);
     const metricQueries = [];
     // console.log(instanceIds.length)
     for (let i = 0; i < instanceIds.length; i++) {
@@ -51,17 +52,17 @@ export async function POST(request: NextRequest) {
         metricQueries.push(metricQuery);
       }
     }
-    function bestStatType(metricName:string){
-      const bestMetric={
-        CPUUtilization:'Average',
+    function bestStatType(metricName: string) {
+      const bestMetric = {
+        CPUUtilization: 'Average',
         NetworkIn: 'Average',
-        NetworkOut:'Average',
-        DiskWriteOps: 'Sum'
-      }
+        NetworkOut: 'Average',
+        DiskWriteOps: 'Sum',
+      };
 
-      return bestMetric[metricName]
+      return bestMetric[metricName];
     }
-    console.log('metricQueries', metricQueries);
+    // console.log('metricQueries', metricQueries);
 
     const finalMetricQuery = metricQueries.map((elem, index) => {
       //his is the actual object we will be sending in metric query
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
             MetricName: elem.metricName,
             Dimensions: elem.dimensions,
           },
-          Period: 300*12,
+          Period: 300 * 12,
           Stat: bestStatType(elem.metricName), //!needs to be changed based on what is most appropriate for each metric
         },
         ReturnData: true,
@@ -116,7 +117,7 @@ export async function POST(request: NextRequest) {
         finalResponse[instanceId] = instance;
       }
     }
-    console.log('final response', finalResponse);
+    // console.log('final response', finalResponse);
     return NextResponse.json({ res: finalResponse }, { status: 200 });
   } catch (err) {
     // console.log(err);

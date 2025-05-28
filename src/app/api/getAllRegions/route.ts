@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     res.regions = await getAllRegions(accessKey, secretKey);
 
     const ec2 = new EC2Client({
-      region: 'us-west-1',
+      region: 'us-west-2',
       // region: 'us-east-2',
       //! region harded; need to be convered later
       credentials: {

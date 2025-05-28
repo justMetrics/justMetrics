@@ -7,6 +7,7 @@ type KeyInPutProps = {
   setInsData: React.Dispatch<React.SetStateAction<any[]>>;
   setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
   setAllRegions: React.Dispatch<React.SetStateAction<string[]>>;
+    selectedRegion: string;
 };
 
 const KeyInPut = ({ setInsData, setCredentials, setAllRegions }: KeyInPutProps) => {
@@ -20,7 +21,7 @@ const KeyInPut = ({ setInsData, setCredentials, setAllRegions }: KeyInPutProps) 
     if (response) {
       // save state for regions and instances
       setAllRegions(response.regions);
-      setInsData(response.allInstances);
+      //setInsData(response.allInstances);
       // save credentials to state
       setCredentials([awsAccessKey, secretAccessKey]);
     }
