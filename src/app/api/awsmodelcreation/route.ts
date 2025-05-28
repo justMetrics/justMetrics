@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 let loggedInClient;
 export async function POST(req: NextRequest) {
-  const { accessKey, secretKey } = await req.json();
+  const { accessKey, secretKey, region } = await req.json();
 
   // const { accessKey, secretKey, region } = await req.json();
   //! region harded; need to be convered later
@@ -18,11 +18,11 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
-  //console.log(accessKey, secretKey);
+  console.log('KEYS', accessKey, secretKey, region);
 
   try {
     const ec2 = new EC2Client({
-      region: 'us-west-1',
+      region: region,
       // region: 'us-east-2',
       //! region harded; need to be convered later
       credentials: {
@@ -35,8 +35,8 @@ export async function POST(req: NextRequest) {
     const result = await ec2.send(command);
 
     const instances = result.Reservations?.flatMap((el) => el.Instances);
-    //console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
-    //console.log(JSON.stringify(instances, null, 2));
+    // console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
+    // console.log(JSON.stringify(instances, null, 2));
 
     const res = instances?.map((el) => {
       return {
