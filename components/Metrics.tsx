@@ -11,10 +11,14 @@ type insdataProps = {
 };
 //credentials 0 access key 1 secret accesskey
 //!connect metricsFetch to here
+
 const Metrics = ({ insData, credentials }: insdataProps) => {
   // console.log('instance list from Metrics.tsx', insData);
   const [instanceMetaData, setInstanceMetaData] = useState();
   const [instanceMetrics, setInstanceMetrics] = useState();
+  console.log(
+    'Things to Discuss: Summary page component, adding region to login page, test suite, front end design, best form of data visualisation (including which metrics should be request and how many'
+  );
 
   const handleSelectInstance = (instanceId: string) => {
     const selectedInstanceMetaData = insData.filter(
@@ -25,17 +29,17 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
     const selectedInstanceMetrics = response![instanceId];
     setInstanceMetrics(selectedInstanceMetrics);
   };
-  console.log('instanceMetaData', instanceMetaData);
+
   const instanceIdList = insData.map((elem) => elem.instanceId);
   // console.log(instanceIdList);
   const instanceMetricbody = {
-    metrics: ['CPUUtilization', 'NetworkIn', 'DiskWriteOps'],
+    metrics: ['CPUUtilization', 'NetworkIn', 'NetworkOut'],
     instances: insData,
     credentials: credentials,
   };
   // deconstruct custom hook
   const { response, error, sendMetricsRequest } = useMetricsFetch();
-
+  console.log('instanceMetaData', response);
   // handle fetch function
 
   //! useEffect will show the Metrics Data when the page loaded
@@ -54,7 +58,7 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
     <ChartCPU key={index} metricData={metricData}></ChartCPU>;
   });
 
-  console.log('instanceMetrics', instanceMetrics);
+  // console.log('instanceMetrics', instanceMetrics);
   return (
     <div className='h-screen flex flex-col items-center rounded-3xl border-2 m-4 bg-gray-200 '>
       <header className='h-[15%] flex flex-row items-center text-5xl font-serif'>
@@ -115,32 +119,32 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
             
             */}
 
-        {instanceMetrics ? (
-          // <ChartCPU metricData={instanceMetrics[0]} />
-          // charts
-          instanceMetrics?.map((metricData, index) => {
-            // console.log('metricData', metricData);
-            // console.log(
-            //   'congratulations, this is rendering',
-            //   metricData
-            // );
-            // <div>{metricData}</div>
-            // <ChartCPU key={index} metricData={metricData}/>
-            return (
-              <section
-                key={index}
-                className='h-[58%] w-[98%] flex flex-row text-2xl font-serif'
-              >
-                <div className='h-[100%] w-[32.6%] p-3 m-2 mt-2 border-2 rounded-3xl bg-gray-50 flex flex-col items-center'>
+        <section className='h-[58%] w-[98%] flex flex-row text-2xl font-serif'>
+          {instanceMetrics ? (
+            // <ChartCPU metricData={instanceMetrics[0]} />
+            // charts
+            instanceMetrics?.map((metricData, index: number) => {
+              // console.log('metricData', metricData);
+              // console.log(
+              //   'congratulations, this is rendering',
+              //   metricData
+              // );
+              // <div>{metricData}</div>
+              // <ChartCPU key={index} metricData={metricData}/>
+              return (
+                <div
+                  key={index}
+                  className='h-[100%] w-[32.6%] p-3 m-2 mt-2 border-2 rounded-3xl bg-gray-50 flex flex-col items-center justify-end'
+                >
                   <ChartCPU key={index} metricData={metricData} />
                 </div>
-              </section>
-            );
-            //   // console.log(123);
-          })
-        ) : (
-          <div>Select a instance</div>
-        )}
+              );
+              //   // console.log(123);
+            })
+          ) : (
+            <div>Select a instance</div>
+          )}
+        </section>
       </main>
     </div>
   );

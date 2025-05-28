@@ -79,8 +79,8 @@ for (let i = 0; i < data.MetricDataResults.length; i++) {
   }
 }
 
-console.log('finalResponse', finalResponse);
-console.log('cpuusage', finalResponse['i-02a29f2e459e18bf0'][0].CPUUtilization);
+// console.log('finalResponse', finalResponse);
+// console.log('cpuusage', finalResponse['i-02a29f2e459e18bf0'][0].CPUUtilization);
 const res = {
   'i-02a29f2e459e18bf0': [
     {
