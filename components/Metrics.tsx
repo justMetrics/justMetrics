@@ -69,8 +69,8 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
   // console.log('instanceMetrics', instanceMetrics);
   return (
     <div className='h-screen p-4 box-border'>
-    <div className='min-h-full flex flex-col items-center rounded-3xl border-2 m-4 bg-gray-200 '>
-      <header className='h-[15%] flex flex-row items-center text-5xl font-serif'>
+    <div className='min-h-full flex flex-col items-center rounded-3xl border-2 bg-gray-200 '>
+      <header className='h-[15%] flex flex-row items-center text-5xl font-serif p-7'>
         <h1>Just Metrics</h1>
       </header>
 
@@ -109,7 +109,7 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
         Cloud Watch Metrics
       </h2>
 
-      <main className='h-[70%] w-[97%] flex flex-col items-center rounded-3xl border-4 m-4'>
+      <main className='h-[80%] w-[97%] flex flex-col items-center rounded-3xl border-4 m-4'>
         <section className='h-[32%] w-[98%] p-3 m-4 mb-2 border-2 rounded-3xl bg-gray-50 flex flex-col flex-wrap overflow-hidden'>
           {instanceMetaData ? (
             <InstanceMetaData instanceMetaData={instanceMetaData} />
@@ -139,7 +139,7 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
               return (
                 <div
                   key={index}
-                  className='h-[100%] w-[32.6%] p-3 m-2 mt-2 border-2 rounded-3xl bg-gray-50 flex flex-col items-center justify-end'
+                  className='h-[36vh] w-[32.6%] p-3 m-2 mt-2 border-2 rounded-3xl bg-gray-50 flex flex-col items-center justify-end'
                 >
                   <ChartCPU key={index} metricData={metricData} />
                 </div>
