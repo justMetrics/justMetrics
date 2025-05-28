@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 // api keys POST request
 const useInstanceIDsFetch = () => {
   // create usestats
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState<any>(null);
   const [error, setError] = useState(null);
 
   // create POST request for api keys
@@ -32,12 +32,14 @@ const useInstanceIDsFetch = () => {
             region: region,
           }),
         });
-        console.log(res)
+        // console.log(res)
+        console.log()
         if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
 
         const data = await res.json();
-        console.log(data)
-        setResponse(data.res);
+        console.log('instanceIDs fetch', data)
+        setResponse(data);
+        return data;
       } catch (error: any) {
         setError(error.message);
       }

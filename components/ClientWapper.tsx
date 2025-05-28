@@ -22,11 +22,11 @@ const ClientWapper = () => {
   return (
     <div>
       {credentials.length !== 0 ? 
-      selectedRegion !=='placeholder' ?
+      selectedRegion !=='' ?
        (
         <Metrics setSelectedRegion={setSelectedRegion} insData={insData} credentials={credentials} allRegions={allRegions} selectedRegion={selectedRegion} /> //3rd second component on if selectedRegion is falsy
       ): //put our actual component for selecting region
-      <RegionSelector setSelectedRegion={setSelectedRegion} allRegions ={allRegions} setInsData={setInsData} selectedRegion={selectedRegion} credentials={credentials}/> //2nd
+      <RegionSelector insData={insData} setSelectedRegion={setSelectedRegion} allRegions ={allRegions} setInsData={setInsData} selectedRegion={selectedRegion} credentials={credentials}/> //2nd
       : (
         <KeyInPut setInsData={setInsData} setCredentials={setCredentials} setAllRegions={setAllRegions} selectedRegion={selectedRegion}/> //1st
       )}

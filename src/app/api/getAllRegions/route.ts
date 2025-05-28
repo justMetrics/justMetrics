@@ -27,38 +27,38 @@ export async function POST(req: NextRequest) {
     // get all active regions using helper function
     res.regions = await getAllRegions(accessKey, secretKey);
 
-    const ec2 = new EC2Client({
-      region: 'us-west-2',
-      // region: 'us-east-2',
-      //! region harded; need to be convered later
-      credentials: {
-      accessKeyId: accessKey,
-      secretAccessKey: secretKey,
-      },
-    });
+    // const ec2 = new EC2Client({
+    //   region: 'us-west-2',
+    //   // region: 'us-east-2',
+    //   //! region harded; need to be convered later
+    //   credentials: {
+    //   accessKeyId: accessKey,
+    //   secretAccessKey: secretKey,
+    //   },
+    // });
 
-    const command = new DescribeInstancesCommand({});
-    const result = await ec2.send(command);
+    // const command = new DescribeInstancesCommand({});
+    // const result = await ec2.send(command);
 
-    const instances = result.Reservations?.flatMap((el) => el.Instances);
-    // console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
-    // console.log(JSON.stringify(instances, null, 2));
+    // const instances = result.Reservations?.flatMap((el) => el.Instances);
+    // // console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
+    // // console.log(JSON.stringify(instances, null, 2));
 
-     res.allInstances = instances?.map((el) => {
-      return {
-        instanceId: el?.InstanceId,
-        state: el?.State?.Name,
-        name: el?.Tags?.find((tag) => tag.Key === 'Name')?.Value,
-        type: el?.InstanceType,
-        launchTime: el?.LaunchTime,
-        SecurityGroups: el?.SecurityGroups?.map((el) => ({
-          groupId: el.GroupId,
-          groupName: el.GroupName,
-        })),
-        PrivateIpAddress: el?.PrivateIpAddress,
-        PublicIpAddress: el?.PublicIpAddress,
-      };
-    });
+    //  res.allInstances = instances?.map((el) => {
+    //   return {
+    //     instanceId: el?.InstanceId,
+    //     state: el?.State?.Name,
+    //     name: el?.Tags?.find((tag) => tag.Key === 'Name')?.Value,
+    //     type: el?.InstanceType,
+    //     launchTime: el?.LaunchTime,
+    //     SecurityGroups: el?.SecurityGroups?.map((el) => ({
+    //       groupId: el.GroupId,
+    //       groupName: el.GroupName,
+    //     })),
+    //     PrivateIpAddress: el?.PrivateIpAddress,
+    //     PublicIpAddress: el?.PublicIpAddress,
+    //   };
+    // });
     // console.log('👀 👀 👀 👀 TEST!!!!!!!', res);
 
     return NextResponse.json({ res }, { status: 200 });

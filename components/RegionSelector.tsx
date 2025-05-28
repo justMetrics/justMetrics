@@ -3,6 +3,7 @@ import Select from 'react-select';
 import useInstanceIdsFetch from '../fetch/instanceIdsFetch'
 
 type RegionSelector = {
+  insData: any;
   setSelectedRegion: React.Dispatch<React.SetStateAction<string>>;
   allRegions: string[];
   setInsData: React.Dispatch<React.SetStateAction<string[]>>;
@@ -10,51 +11,22 @@ type RegionSelector = {
   selectedRegion: string;
 };
 
-export default function RegionSelector({ setSelectedRegion, allRegions, setInsData, credentials, selectedRegion}: RegionSelector) {
+export default function RegionSelector({ insData, setSelectedRegion, allRegions, setInsData, credentials, selectedRegion}: RegionSelector) {
   // custom hooks
   const { response, error, sendInstanceIDsRequest } = useInstanceIdsFetch();
 
   // state hooks
   const [fetchError, setFetchError] = useState(null);
 
-   useEffect(() => {
-    if (response) {//!problem is with setInsData
-      // save state for regions and instances
-      console.log('response', response)
-      //are we setting insData to the new instancess successfully (isntead of the hardcoded value)
-      //AND IF WE ARE ARE WE UPDATING STATE PROPERLY ACROSS RELEVANT COMPONENTS
-      // console.log(InsData)
-      setInsData(response)
-      // save credentials to state
-    }
-  }, [response]);
+  console.log('InsData', insData)
 
-  // handle drop down list change
-  let x = 'hi'
-  const handleSelectRegion = (region: string) => {
-    console.log('region', region)
-    x = region
-    setSelectedRegion(region);
-    sendApi()
-    
-  }
-
-  // invoke fetch function
-  const sendApi = () => {
-    const url = '/api/awsinstances';
-
-    // invoke function to POST keys
-    sendInstanceIDsRequest(url, credentials[0], credentials[1], x);
-    // sendInstanceIDsRequest(url, credentials[0], credentials[1], selectedRegion);
-    // add data to setInsatnceIds
-
-    // if error is returned
-    if (error) {
-      setFetchError(error);
-    };
+  // handle drop down list change and set region
+  const handleSelectRegion = async(region: string) => {
+      await setSelectedRegion(region);
+      const url = '/api/awsinstances';
+      const response2 = await sendInstanceIDsRequest(url, credentials[0], credentials[1], region);
+      if (response2) console.log('response2', response2);
   };
-  //now, we need to do metrics fetch request
-  //we need credentials, instance array and hardcoded metrics
 
 
   // map all the regions for react select

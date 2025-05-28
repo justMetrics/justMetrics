@@ -44,7 +44,7 @@ console.log('SELECTED REGION', selectedRegion)
 
   // deconstruct custom hook
   const { response, error, sendMetricsRequest } = useMetricsFetch();
-  console.log('instanceMetaData', response);
+  // console.log('instanceMetaData', response);
   // handle fetch function
 
   //! useEffect will show the Metrics Data when the page loaded
