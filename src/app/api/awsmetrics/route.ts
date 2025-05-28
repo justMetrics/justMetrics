@@ -13,12 +13,13 @@ import {
 
 export async function POST(request: NextRequest) {
   try {
-    const { requestedMetrics, instanceIds, awsAccessKey, secretKey } =
+    const { requestedMetrics, instanceIds, awsAccessKey, secretKey, region } =
       await request.json();
-    // console.log('KEYS', awsAccessKey, secretKey);
+    console.log('awsmetrics KEYS', awsAccessKey, secretKey, region);
+    console.log('modelCreationtestRegion', region)
 
     const cloudwatchClient = new CloudWatchClient({
-      region: 'us-west-1', //make util function and call inside
+      region: region, //make util function and call inside
       credentials: {
         accessKeyId: awsAccessKey,
         secretAccessKey: secretKey,

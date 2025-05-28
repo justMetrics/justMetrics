@@ -27,12 +27,37 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Hide scrollbar but allow scrolling */
-.hide-scrollbar {
-  scrollbar-width: none;          /* Firefox */
-  -ms-overflow-style: none;       /* Internet Explorer 10+ */
+.instancesList__control {
+  border-radius: 1.5rem !important; /* rounded-3xl */
+  border: 1px solid black; 
+  overflow: hidden;      /* clip children */
+  padding: 0.5rem;
+  margin: 0.5rem;
+  margin-right: 1.75rem;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  box-shadow: none;
+  min-height: 20px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;                  /* Chrome, Safari, Opera */
+.instancesList__menu {
+  @apply bg-white border border-gray-200 rounded-xl shadow-md mt-1 z-20;
+}
+
+.instancesList__option {
+  @apply px-4 py-2 cursor-pointer hover:bg-gray-100;
+}
+
+.instancesList__single-value {
+  @apply text-gray-800;
+}
+
+.instancesList__indicator-separator {
+  display: none;
+}
+
+.instancesList__dropdown-indicator {
+  @apply text-gray-500;
 }

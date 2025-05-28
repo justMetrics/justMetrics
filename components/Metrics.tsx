@@ -5,24 +5,26 @@ import useMetricsFetch from '../fetch/metricsFetch';
 import { ChartCPU } from './chartCPU';
 import InstanceMetaData from './InstanceMetaData';
 import Test from './Test';
+import Select from 'react-select';
+
 type insdataProps = {
   insData: any[];
   credentials: string[];
+  selectedRegion:string;
 };
 //credentials 0 access key 1 secret accesskey
 //!connect metricsFetch to here
 
-const Metrics = ({ insData, credentials }: insdataProps) => {
+const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
   // console.log('instance list from Metrics.tsx', insData);
   const [instanceMetaData, setInstanceMetaData] = useState();
   const [instanceMetrics, setInstanceMetrics] = useState();
-  console.log("Things to Discuss: Summary page component, adding region to login page, test suite, front end design, best form of data visualisation (including which metrics should be request and how many")
-
+  // console.log("MetricsStuff", insData, region)
   const handleSelectInstance = (instanceId: string) => {
     const selectedInstanceMetaData = insData.filter(
       (el) => instanceId === el.instanceId
     );
-
+    console.log('handleSelectMetadata',selectedInstanceMetaData)
     setInstanceMetaData(selectedInstanceMetaData[0]);
     const selectedInstanceMetrics = response![instanceId];
     setInstanceMetrics(selectedInstanceMetrics);
@@ -34,7 +36,9 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
     metrics: ['CPUUtilization', 'NetworkIn', 'NetworkOut'],
     instances: insData,
     credentials: credentials,
+    region:selectedRegion
   };
+  console.log(instanceMetricbody,'instancemetricbody')
   // deconstruct custom hook
   const { response, error, sendMetricsRequest } = useMetricsFetch();
   console.log('instanceMetaData', response);
@@ -55,6 +59,12 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
 
     <ChartCPU key={index} metricData={metricData}></ChartCPU>;
   });
+
+  // create drop down list for react option
+   const instancesList = instanceIdList.map((id) => ({
+    value: id,
+    label: id,
+  }));
 
   // console.log('instanceMetrics', instanceMetrics);
   return (
@@ -80,21 +90,17 @@ const Metrics = ({ insData, credentials }: insdataProps) => {
             <option>US East 3</option>
           </select>
         </div>
-        <div>
+        <div className='flex mr-7 items-center' >
           <label htmlFor='instanceSelect' className='font-bold p-2 text-xl'>
             Select EC2 Instance:
           </label>
-          <select
-            id='instanceSelect'
-            className='border rounded-3xl p-2 m-2 mr-7 bg-gray-100'
-            onChange={(e) => handleSelectInstance(e.target.value)}
-          >
-            {instanceIdList.map((id) => (
-              <option key={id} value={id}>
-                {id}
-              </option>
-            ))}
-          </select>
+          <Select
+          classNamePrefix="instancesList"
+          options={instancesList}
+          onChange={(selected) => handleSelectInstance(selected!.value)}
+          placeholder="Select an instance..."
+          isSearchable={false}
+          />
         </div>
       </nav>
 

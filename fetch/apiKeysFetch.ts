@@ -13,7 +13,8 @@ const useApiKeysFetch = () => {
     async (
       url: string,
       awsAccessKey: string | number,
-      secretAccessKey: string | number
+      secretAccessKey: string | number,
+      region:string,
     ): Promise<any> => {
       try {
         const res = await fetch(url, {
@@ -24,6 +25,7 @@ const useApiKeysFetch = () => {
           body: JSON.stringify({
             accessKey: awsAccessKey,
             secretKey: secretAccessKey,
+            region:region
           }),
         });
 
