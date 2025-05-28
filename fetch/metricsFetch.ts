@@ -17,7 +17,7 @@ const useMetricsFetch = () => {
     ): Promise<any> => {
       try {
         // deconstruct instanceMetricBody
-        const { metrics, instances, credentials } = instanceMetricbody;
+        const { metrics, instances, credentials, region } = instanceMetricbody;
 
         const res = await fetch(url, {
           method: 'POST',
@@ -30,6 +30,7 @@ const useMetricsFetch = () => {
             requestedMetrics: metrics,
             awsAccessKey: credentials[0],
             secretKey: credentials[1],
+            region:region
           }),
         });
 

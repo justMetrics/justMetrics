@@ -2,26 +2,39 @@
 
 import { useState, useEffect } from 'react';
 import useApiKeysFetch from '../fetch/apiKeysFetch';
+import Select from 'react-select';
+
 // type Credential = [accessKeyId: string, secretAccessKey: string];
 type KeyInPutProps = {
   setInsData: React.Dispatch<React.SetStateAction<any[]>>;
   setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedRegion: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const KeyInPut = ({ setInsData, setCredentials }: KeyInPutProps) => {
+const KeyInPut = ({ setInsData, setCredentials, setSelectedRegion }: KeyInPutProps) => {
   const [awsAccessKey, setAwsAccessKey] = useState('');
   const [secretAccessKey, setSecretAccessKey] = useState('');
+  const [testRegion, setTestRegion] = useState('');
   const [fetchError, setFetchError] = useState<string | null>(null);
   // custom hooks
   const { response, error, sendApiKeys } = useApiKeysFetch();
-  
+
   useEffect(() => {
     if (response) {
+      console.log('useEffectResponse', response)
       setInsData(response);
       // save credentials to state
       setCredentials([awsAccessKey, secretAccessKey]);
+      setSelectedRegion(testRegion);
+      console.log('testRegionfromuseEffect',testRegion)
     }
   }, [response]);
+
+  const handleSelectRegion = (selectRegion: string) => {
+    console.log('Select Region from dropdown list on main page', selectRegion);
+    setTestRegion(selectRegion)
+    // setRegion(selectRegion)
+  };
 
   // invoke fetch function
   const sendApi = () => {
@@ -35,25 +48,26 @@ const KeyInPut = ({ setInsData, setCredentials }: KeyInPutProps) => {
       return;
     }
     // invoke function to POST keys
-    sendApiKeys(url, awsAccessKey, secretAccessKey);
+    sendApiKeys(url, awsAccessKey, secretAccessKey, testRegion);
 
     // if error is returned
     if (error) {
       setFetchError(error);
     }
+    //'us-west-1'
 
     // reset keys input
     // setAwsAccessKey('');
     // setSecretAccessKey('');
   };
   return (
-    <div>
-      <div className='h-screen flex flex-col items-center rounded-3xl border-2 m-4 bg-gray-200 '>
-        <header className='h-[15%] flex flex-row items-center text-5xl font-serif'>
+    <div className='h-screen p-4 box-border'>
+      <div className='min-h-full flex flex-col items-center rounded-3xl border-2 bg-gray-200'>
+        <header className='h-[25vh] flex flex-row items-center text-5xl font-serif p-7'>
           <h1>Just Metrics</h1>
         </header>
 
-        <main className='h-[50%] flex flex-col justify-end gap-7'>
+        <main className='h-[60vh] flex flex-col justify-end gap-7 p-7'>
           <input
             className='aws-access-key-input bg-white rounded-2xl border-[1.5px] p-3 w-[500px] shadow-xl'
             placeholder='AWS Access Key'
@@ -67,8 +81,19 @@ const KeyInPut = ({ setInsData, setCredentials }: KeyInPutProps) => {
             value={secretAccessKey}
             onChange={(e) => setSecretAccessKey(e.target.value)}
           ></input>
+          <select
+            id='regionSelect'
+            className='border rounded-xl p-2 m-2 mt-7 bg-gray-100 w-[115px] self-center text-center'
+            onChange={(e) => setTestRegion(e.target.value)}
+            // onChange={(e) => setTestRegion('us-west-2')}
+          >
+            <option>us-west-1</option>
+            <option>us-west-2</option>
+            <option>us-east-1</option>
+            <option>us-east-2</option>
+          </select>
           <button
-            className='connect-button bg-white hover:bg-gray-100 rounded-3xl border-[2.25px] p-1 w-[200px] shadow-xl self-center mt-10'
+            className='connect-button bg-white hover:bg-gray-100 rounded-3xl border-[2.25px] p-1 w-[200px] shadow-xl self-center m-10'
             onClick={sendApi}
           >
             Connect
