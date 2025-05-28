@@ -68,13 +68,14 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
 
   // console.log('instanceMetrics', instanceMetrics);
   return (
-    <div className='h-screen flex flex-col items-center rounded-3xl border-2 m-4 bg-gray-200 '>
+    <div className='h-screen p-4 box-border'>
+    <div className='min-h-full flex flex-col items-center rounded-3xl border-2 m-4 bg-gray-200 '>
       <header className='h-[15%] flex flex-row items-center text-5xl font-serif'>
         <h1>Just Metrics</h1>
       </header>
 
       <nav className='self-end flex flex-col items-end'>
-        <div>
+        {/* <div>
           <label htmlFor='instanceSelect' className='font-bold p-2 text-xl'>
             Select Region:
           </label>
@@ -89,7 +90,7 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
             <option>US East 2</option>
             <option>US East 3</option>
           </select>
-        </div>
+        </div> */}
         <div className='flex mr-7 items-center' >
           <label htmlFor='instanceSelect' className='font-bold p-2 text-xl'>
             Select EC2 Instance:
@@ -104,7 +105,7 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
         </div>
       </nav>
 
-      <h2 className='font-bold text-xl p-2 rounded-3xl border-2 bg-gray-100'>
+      <h2 className='font-bold text-xl m-2 p-2 rounded-3xl border-2 bg-gray-100'>
         Cloud Watch Metrics
       </h2>
 
@@ -150,6 +151,7 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
           )}
         </section>
       </main>
+    </div>
     </div>
   );
 };
