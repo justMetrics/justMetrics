@@ -3,7 +3,7 @@ import {
   CloudWatchClient,
   GetMetricDataCommand,
 } from '@aws-sdk/client-cloudwatch';
-// import { loggedInClient } from '../awsmodelcreation/route';
+
 //assume body is from post request and has an object with instanceIds and requestedMetrics:
 //{
 //! instanceIds: [instance1, instance2],
@@ -59,9 +59,9 @@ export async function POST(request: NextRequest) {
         NetworkIn: 'Average',
         NetworkOut: 'Average',
         DiskWriteOps: 'Sum',
-        CPUCreditBalance: 'Minimum', 
+        CPUCreditBalance: 'Minimum',
         CPUCreditUsage: 'Average',
-        StatusCheckFailed: 'Average'
+        StatusCheckFailed: 'Average',
       };
 
       return bestMetric[metricName];

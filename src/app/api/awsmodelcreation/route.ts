@@ -1,43 +1,42 @@
 import { EC2Client, DescribeInstancesCommand } from '@aws-sdk/client-ec2';
 import { NextRequest, NextResponse } from 'next/server';
 
-let loggedInClient;
 export async function POST(req: NextRequest) {
+  // Extract credentials and region from the request body
   const { accessKey, secretKey, region } = await req.json();
 
-  // const { accessKey, secretKey, region } = await req.json();
-  //! region harded; need to be convered later
-
-  if (!accessKey || !secretKey) {
-    //if (!accessKey || !secretKey || !region) {
-    //! need to sync up with frontend for namings
-    //! need to add !region back , curretnly hard-coded
-
+  // Validate required parameters
+  if (!accessKey || !secretKey || !region) {
     return NextResponse.json(
-      { error: 'Missing AWS AccessKey or SecretKey' },
+      { error: 'Missing AWS AccessKey or SecretKey or Region' },
       { status: 400 }
     );
   }
-  console.log('KEYS', accessKey, secretKey, region);
+
+  // * For debugging: Uncomment to verify received credentials and region
+  // console.log('👀 👀 👀 👀 Received AWS credentials:', { accessKey, secretKey, region })
 
   try {
+    // Initialize EC2 client with recieved credentials and region
     const ec2 = new EC2Client({
       region: region,
-      // region: 'us-east-2',
-      //! region harded; need to be convered later
       credentials: {
         accessKeyId: accessKey,
         secretAccessKey: secretKey,
       },
     });
 
+    // Fetch all EC2 instances
     const command = new DescribeInstancesCommand({});
     const result = await ec2.send(command);
 
+    // Extract instance data from reservations
     const instances = result.Reservations?.flatMap((el) => el.Instances);
-    // console.log('👀 👀 👀 👀 TEST!!!!!!!', instances);
-    // console.log(JSON.stringify(instances, null, 2));
 
+    //* For debugging: Uncomment to inspect instances data
+    // console.log('👀 👀 👀 👀 instances data:', instances);
+
+    // Transform instances data for client-side consumption
     const res = instances?.map((el) => {
       return {
         instanceId: el?.InstanceId,
@@ -53,8 +52,11 @@ export async function POST(req: NextRequest) {
         PublicIpAddress: el?.PublicIpAddress,
       };
     });
-    // console.log('👀 👀 👀 👀 TEST!!!!!!!', res);
 
+    //* For debugging: Uncomment to check formatted/final instanece data
+    // console.log('👀 👀 👀 👀 formatted/final instance data:', res);
+
+    // Return formatted instance data
     return NextResponse.json({ res }, { status: 200 });
   } catch (err) {
     console.error('❌ AWS Error:', err);
@@ -64,4 +66,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-export { loggedInClient };
