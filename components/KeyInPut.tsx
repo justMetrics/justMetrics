@@ -48,7 +48,7 @@ const KeyInPut = ({
     setTestRegion(selectRegion);
   };
 
-  // invoke fetch function
+  // Handle connect button click
   const sendApi = () => {
     const url = '/api/awsmodelcreation';
 
