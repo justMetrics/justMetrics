@@ -6,11 +6,12 @@ import { ChartCPU } from './chartCPU';
 import InstanceMetaData from './InstanceMetaData';
 import Test from './Test';
 import Select from 'react-select';
+import Sidebar from './Sidebar';
 
 type insdataProps = {
   insData: any[];
   credentials: string[];
-  selectedRegion:string;
+  selectedRegion: string;
 };
 //credentials 0 access key 1 secret accesskey
 //!connect metricsFetch to here
@@ -19,7 +20,12 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
   // console.log('instance list from Metrics.tsx', insData);
   const [instanceMetaData, setInstanceMetaData] = useState();
   const [instanceMetrics, setInstanceMetrics] = useState();
+  const [isSidebarActive, setIsSidebarActive] = useState(false);
   // console.log("MetricsStuff", insData, region)
+  const handleToggleSidebar = () => {
+    setIsSidebarActive(!isSidebarActive);
+  };
+
   const handleSelectInstance = (instanceId: string) => {
     const selectedInstanceMetaData = insData.filter(
       (el) => instanceId === el.instanceId
@@ -33,12 +39,19 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
   const instanceIdList = insData.map((elem) => elem.instanceId);
   // console.log(instanceIdList);
   const instanceMetricbody = {
-    metrics: ['CPUUtilization', 'NetworkIn', 'NetworkOut', 'CPUCreditBalance', 'CPUCreditUsage', 'StatusCheckFailed'],
+    metrics: [
+      'CPUUtilization',
+      'NetworkIn',
+      'NetworkOut',
+      'CPUCreditBalance',
+      'CPUCreditUsage',
+      'StatusCheckFailed',
+    ],
     instances: insData,
     credentials: credentials,
-    region:selectedRegion
+    region: selectedRegion,
   };
-  console.log(instanceMetricbody,'instancemetricbody')
+  console.log(instanceMetricbody, 'instancemetricbody');
   // deconstruct custom hook
   const { response, error, sendMetricsRequest } = useMetricsFetch();
   console.log('instanceMetaData', response);
@@ -61,97 +74,72 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
   });
 
   // create drop down list for react option
-   const instancesList = instanceIdList.map((id) => ({
+  const instancesList = instanceIdList.map((id) => ({
     value: id,
     label: id,
   }));
 
   // console.log('instanceMetrics', instanceMetrics);
   return (
-    <div className='h-screen max-w-screen p-4 box-border'>
-    <div className='min-h-full min-w-full flex flex-col items-center rounded-3xl border-2 bg-gray-200 '>
-      <header className='h-[15vh] flex flex-row items-center text-5xl font-serif p-7'>
-        <h1>Just Metrics</h1>
-      </header>
+    <div className=' min-h-screen max-w-screen p-10 box-border flex flex-col'>
+      <div className='flex-1 min-w-full flex flex-col items-center rounded-3xl  bg-gradient-to-br from-gray-200 to-blue-200  shadow-2xl relative overflow-hidden p-5'>
+        <Sidebar
+          isSidebarActive={isSidebarActive}
+          handleToggleSidebar={handleToggleSidebar}
+        />
+        <nav className='w-full h-20 flex items-center justify-between mb-10'>
+          <div className='flex items-center'>
+            <div
+              className='logo w-14 h-20 flex items-center ml-6 cursor-pointer hover:scale-110 transition-all'
+              onClick={() => handleToggleSidebar()}
+            >
+              <img className='w-full' src='./logo.png' alt='' />
+            </div>
+            <div className='name h-20 flex items-center ml-4'>
+              <h1 className='text-2xl font-bold leading-tight'>
+                Just <br /> Metrics
+              </h1>
+            </div>
+          </div>
 
-      <nav className='h-[10vh] self-end flex flex-col items-end'>
-        {/* <div>
-          <label htmlFor='instanceSelect' className='font-bold p-2 text-xl'>
-            Select Region:
-          </label>
-          <select
-            id='regionSelect'
-            className='border rounded-3xl p-2 m-2 mr-7 bg-gray-100'
-          >
-            <option>US West 1</option>
-            <option>US West 2</option>
-            <option>US West 3</option>
-            <option>US East 1</option>
-            <option>US East 2</option>
-            <option>US East 3</option>
-          </select>
-        </div> */}
-        <div className='flex mr-7 items-center' >
-          <label htmlFor='instanceSelect' className='font-bold p-2 text-xl'>
-            Select EC2 Instance:
-          </label>
-          <Select
-          classNamePrefix="instancesList"
-          options={instancesList}
-          onChange={(selected) => handleSelectInstance(selected!.value)}
-          placeholder="Select an instance..."
-          isSearchable={false}
-          />
-        </div>
-      </nav>
+          <div className='flex items-center mr-7'>
+            <Select
+              classNamePrefix='instancesList'
+              options={instancesList}
+              onChange={(selected) => handleSelectInstance(selected!.value)}
+              placeholder='Select an instance...'
+              isSearchable={false}
+            />
+          </div>
+        </nav>
 
-      <h2 className=' h-[5vh] flex items-center font-bold text-xl m-2 p-2 rounded-3xl border-2 bg-gray-100'>
-        Cloud Watch Metrics
-      </h2>
+        <main className=' w-full flex flex-col items-center'>
+          <section className='h-[260px] w-[800px] rounded-3xl bg-white/70 flex flex-col shadow-lg mb-10 p-10'>
+            {instanceMetaData ? (
+              <InstanceMetaData instanceMetaData={instanceMetaData} />
+            ) : (
+              <div>Select a instance</div>
+            )}
+          </section>
 
-      <main className='h-[60vh] w-[95vw] flex flex-col items-center rounded-3xl border-4 m-4'>
-        <section className='h-[32%] w-[98%] p-3 m-4 mb-2 border-2 rounded-3xl bg-gray-50 flex flex-col flex-wrap overflow-hidden'>
-          {instanceMetaData ? (
-            <InstanceMetaData instanceMetaData={instanceMetaData} />
-          ) : (
-            <div>Select a instance</div>
-          )}
-        </section>
-
-        {/* 
-              instanceMetrics
-              [{cpu},{network},{disk}]
-            
-            */}
-
-        <section className='h-[58%] w-[98%] flex flex-row text-2xl font-serif'>
-          {instanceMetrics ? (
-            // <ChartCPU metricData={instanceMetrics[0]} />
-            // charts
-            instanceMetrics?.map((metricData, index: number) => {
-              // console.log('metricData', metricData);
-              // console.log(
-              //   'congratulations, this is rendering',
-              //   metricData
-              // );
-              // <div>{metricData}</div>
-              // <ChartCPU key={index} metricData={metricData}/>
-              return (
-                <div
-                  key={index}
-                  className='h-[36vh] w-[32.6%] p-3 m-2 mt-2 border-2 rounded-3xl bg-gray-50 flex flex-col items-center justify-end'
-                >
-                  <ChartCPU key={index} metricData={metricData} />
-                </div>
-              );
-              //   // console.log(123);
-            })
-          ) : (
-            <div>Select a instance</div>
-          )}
-        </section>
-      </main>
-    </div>
+          <section className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-10'>
+            {instanceMetrics ? (
+              instanceMetrics?.map((metricData, index: number) => {
+                return (
+                  <div
+                    key={index}
+                    className=' w-full p-3 h-[400px] rounded-3xl bg-white/70 flex-wrap shadow-lg items-center justify-end'
+                  >
+                    <ChartCPU key={index} metricData={metricData} />
+                  </div>
+                );
+              })
+            ) : (
+              <div></div>
+            )}
+          </section>
+        </main>
+      </div>
     </div>
   );
 };

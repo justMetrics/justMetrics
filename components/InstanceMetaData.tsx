@@ -1,4 +1,14 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faHashtag,
+  faMicrochip,
+  faCircle,
+  faClock,
+  faGlobe,
+  faLock,
+  faShieldAlt,
+} from '@fortawesome/free-solid-svg-icons';
 
 type SecurityGroup = {
   groupId: string;
@@ -33,36 +43,54 @@ const InstanceMetaData: React.FC<Props> = ({ instanceMetaData }) => {
   } = instanceMetaData;
 
   return (
-    <div className=''>
-      <h2 className='font-bold text-lg mb-2 text-center'>
-        Instance Name: {name}
+    <div>
+      <h2 className='text-2xl font-bold  mb-6 text-gray-800'>
+        <FontAwesomeIcon icon={faMicrochip} className='mr-2 text-blue-500' />
+        Instance: <span className='text-black'>{name}</span>
       </h2>
-      <ul className='text-sm space-y-1 flex justify-center items-center'>
-        <div>
+
+      <div className='grid grid-cols-2 gap-8 text-sm text-gray-700'>
+        {/* Left column */}
+        <ul className='space-y-3'>
           <li>
+            <FontAwesomeIcon icon={faHashtag} className='mr-2 text-blue-400' />
             <strong>Instance ID:</strong> {instanceId}
           </li>
           <li>
+            <FontAwesomeIcon
+              icon={faMicrochip}
+              className='mr-2 text-blue-400'
+            />
             <strong>Type:</strong> {type}
           </li>
           <li>
+            <FontAwesomeIcon icon={faCircle} className='mr-2 text-green-500' />
             <strong>State:</strong> {state}
           </li>
           <li>
+            <FontAwesomeIcon icon={faClock} className='mr-2 text-blue-400' />
             <strong>Launch Time:</strong>{' '}
             {new Date(launchTime).toLocaleString()}
           </li>
-        </div>
-        <div className='ml-10'>
+        </ul>
+
+        {/* Right column */}
+        <ul className='space-y-3'>
           <li>
+            <FontAwesomeIcon icon={faGlobe} className='mr-2 text-blue-400' />
             <strong>Public IP:</strong> {PublicIpAddress}
           </li>
           <li>
+            <FontAwesomeIcon icon={faLock} className='mr-2 text-blue-400' />
             <strong>Private IP:</strong> {PrivateIpAddress}
           </li>
           <li>
+            <FontAwesomeIcon
+              icon={faShieldAlt}
+              className='mr-2 text-blue-400'
+            />
             <strong>Security Groups:</strong>
-            <ul className='ml-4 list-disc'>
+            <ul className='ml-6 list-disc'>
               {SecurityGroups.map((group) => (
                 <li key={group.groupId}>
                   {group.groupName} ({group.groupId})
@@ -70,8 +98,8 @@ const InstanceMetaData: React.FC<Props> = ({ instanceMetaData }) => {
               ))}
             </ul>
           </li>
-        </div>
-      </ul>
+        </ul>
+      </div>
     </div>
   );
 };
