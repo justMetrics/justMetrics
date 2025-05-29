@@ -11,6 +11,9 @@
   "dependencies": {
     "@aws-sdk/client-cloudwatch": "^3.816.0",
     "@aws-sdk/client-ec2": "^3.814.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "chart.js": "^4.4.9",
     "chartjs-adapter-date-fns": "^3.0.0",
     "next": "15.3.2",
