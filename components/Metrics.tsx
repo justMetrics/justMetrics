@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import useMetricsFetch from '../fetch/metricsFetch';
 import { ChartCPU } from './chartCPU';
 import InstanceMetaData from './InstanceMetaData';
-import Test from './Test';
 import Select from 'react-select';
 import Sidebar from './Sidebar';
 
@@ -12,11 +11,17 @@ type insdataProps = {
   insData: any[];
   credentials: string[];
   selectedRegion: string;
+  setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
 };
 //credentials 0 access key 1 secret accesskey
 //!connect metricsFetch to here
 
-const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
+const Metrics = ({
+  insData,
+  credentials,
+  selectedRegion,
+  setCredentials,
+}: insdataProps) => {
   // console.log('instance list from Metrics.tsx', insData);
   const [instanceMetaData, setInstanceMetaData] = useState();
   const [instanceMetrics, setInstanceMetrics] = useState();
@@ -86,6 +91,7 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
         <Sidebar
           isSidebarActive={isSidebarActive}
           handleToggleSidebar={handleToggleSidebar}
+          setCredentials={setCredentials}
         />
         <nav className='w-full h-20 flex items-center justify-between mb-10'>
           <div className='flex items-center'>
@@ -116,13 +122,21 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
         <main className=' w-full flex flex-col items-center'>
           <section className='h-[260px] w-[800px] rounded-3xl bg-white/70 flex flex-col shadow-lg mb-10 p-10'>
             {instanceMetaData ? (
-              <InstanceMetaData instanceMetaData={instanceMetaData} />
+              <InstanceMetaData
+                instanceMetaData={instanceMetaData}
+                selectedRegion={selectedRegion}
+              />
             ) : (
-              <div>Select a instance</div>
+              <div>
+                <h2>
+                  <strong>Region:</strong> {selectedRegion}
+                </h2>
+                <h2>Please select an instance.</h2>
+              </div>
             )}
           </section>
 
-          <section className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-10'>
+          <section className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-10'>
             {instanceMetrics ? (
               instanceMetrics?.map((metricData, index: number) => {
                 return (

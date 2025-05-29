@@ -8,6 +8,7 @@ import {
   faGlobe,
   faLock,
   faShieldAlt,
+  faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
 
 type SecurityGroup = {
@@ -28,9 +29,13 @@ type InstanceMetadataType = {
 
 type Props = {
   instanceMetaData: InstanceMetadataType;
+  selectedRegion: string;
 };
 
-const InstanceMetaData: React.FC<Props> = ({ instanceMetaData }) => {
+const InstanceMetaData: React.FC<Props> = ({
+  instanceMetaData,
+  selectedRegion,
+}) => {
   const {
     name,
     type,
@@ -45,13 +50,20 @@ const InstanceMetaData: React.FC<Props> = ({ instanceMetaData }) => {
   return (
     <div>
       <h2 className='text-2xl font-bold  mb-6 text-gray-800'>
-        <FontAwesomeIcon icon={faMicrochip} className='mr-2 text-blue-500' />
-        Instance: <span className='text-black'>{name}</span>
+        <FontAwesomeIcon icon={faMicrochip} className='mr-2 text-blue-400' />
+        Instance: <span className='text-black font-medium'>{name}</span>
       </h2>
 
       <div className='grid grid-cols-2 gap-8 text-sm text-gray-700'>
         {/* Left column */}
         <ul className='space-y-3'>
+          <li>
+            <FontAwesomeIcon
+              icon={faLocationDot}
+              className='mr-2 text-blue-400'
+            />
+            <strong>Region:</strong> {selectedRegion}
+          </li>
           <li>
             <FontAwesomeIcon icon={faHashtag} className='mr-2 text-blue-400' />
             <strong>Instance ID:</strong> {instanceId}
@@ -67,15 +79,15 @@ const InstanceMetaData: React.FC<Props> = ({ instanceMetaData }) => {
             <FontAwesomeIcon icon={faCircle} className='mr-2 text-green-500' />
             <strong>State:</strong> {state}
           </li>
+        </ul>
+
+        {/* Right column */}
+        <ul className='space-y-3'>
           <li>
             <FontAwesomeIcon icon={faClock} className='mr-2 text-blue-400' />
             <strong>Launch Time:</strong>{' '}
             {new Date(launchTime).toLocaleString()}
           </li>
-        </ul>
-
-        {/* Right column */}
-        <ul className='space-y-3'>
           <li>
             <FontAwesomeIcon icon={faGlobe} className='mr-2 text-blue-400' />
             <strong>Public IP:</strong> {PublicIpAddress}

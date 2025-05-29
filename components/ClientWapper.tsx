@@ -7,14 +7,23 @@ import Metrics from './Metrics';
 const ClientWapper = () => {
   const [insData, setInsData] = useState<any[]>([]);
   const [credentials, setCredentials] = useState<string[]>([]);
-  const [selectedRegion, setSelectedRegion] = useState<string>('')
-  console.log('clientwrapperRerender')
+  const [selectedRegion, setSelectedRegion] = useState<string>('');
+  console.log('clientwrapperRerender');
   return (
     <div>
       {credentials.length !== 0 ? (
-        <Metrics insData={insData} credentials={credentials} selectedRegion={selectedRegion} />
+        <Metrics
+          insData={insData}
+          credentials={credentials}
+          selectedRegion={selectedRegion}
+          setCredentials={setCredentials}
+        />
       ) : (
-        <KeyInPut setSelectedRegion={setSelectedRegion}setInsData={setInsData} setCredentials={setCredentials} />
+        <KeyInPut
+          setSelectedRegion={setSelectedRegion}
+          setInsData={setInsData}
+          setCredentials={setCredentials}
+        />
       )}
     </div>
   );
