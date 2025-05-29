@@ -8,8 +8,11 @@ import Test from './Test';
 import Select from 'react-select';
 import Sidebar from './Sidebar';
 
+// import custom types
+import{ insData } from '../types/componentsTypes'
+
 type insdataProps = {
-  insData: any[];
+  insData: insData[];
   credentials: string[];
   selectedRegion: string;
 };
@@ -17,20 +20,21 @@ type insdataProps = {
 //!connect metricsFetch to here
 
 const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
-  // console.log('instance list from Metrics.tsx', insData);
+  
   const [instanceMetaData, setInstanceMetaData] = useState();
-  const [instanceMetrics, setInstanceMetrics] = useState();
+  const [instanceMetrics, setInstanceMetrics] = useState<insData | null>(null);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
-  // console.log("MetricsStuff", insData, region)
+
   const handleToggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
   };
 
   const handleSelectInstance = (instanceId: string) => {
     const selectedInstanceMetaData = insData.filter(
-      (el) => instanceId === el.instanceId
+      (el: insData) => instanceId === el.instanceId
     );
-    // console.log('handleSelectMetadata',selectedInstanceMetaData)
+    console.log('handleSelectMetadata',selectedInstanceMetaData[0])
+    
     setInstanceMetaData(selectedInstanceMetaData[0]);
     const selectedInstanceMetrics = response![instanceId];
     setInstanceMetrics(selectedInstanceMetrics);
@@ -51,10 +55,10 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
     credentials: credentials,
     region: selectedRegion,
   };
-  console.log(instanceMetricbody, 'instancemetricbody');
+
   // deconstruct custom hook
   const { response, error, sendMetricsRequest } = useMetricsFetch();
-  console.log('instanceMetaData', response);
+ 
   // handle fetch function
 
   //! useEffect will show the Metrics Data when the page loaded
@@ -68,7 +72,7 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
   //! handler function will show the Metrics Data after click the button
 
   const charts = instanceMetrics?.map((metricData, index: number) => {
-    console.log('congratulations, this is rendering', instanceMetrics);
+ 
 
     <ChartCPU key={index} metricData={metricData}></ChartCPU>;
   });
