@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
             MetricName: elem.metricName,
             Dimensions: elem.dimensions,
           },
-          Period: 300 * 12,
+          Period: 300*2,
           Stat: bestStatType(elem.metricName), //!needs to be changed based on what is most appropriate for each metric
         },
         ReturnData: true,
