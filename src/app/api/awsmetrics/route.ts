@@ -48,7 +48,10 @@ export async function POST(request: NextRequest) {
         CPUUtilization:'Average',
         NetworkIn: 'Average',
         NetworkOut:'Average',
-        DiskWriteOps: 'Sum'
+        DiskWriteOps: 'Sum',
+        CPUCreditBalance: 'Minimum', 
+        CPUCreditUsage: 'Average',
+        StatusCheckFailed: 'Average'
       }
 
       return bestMetric[metricName]

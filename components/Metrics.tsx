@@ -24,7 +24,7 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
     const selectedInstanceMetaData = insData.filter(
       (el) => instanceId === el.instanceId
     );
-    console.log('handleSelectMetadata',selectedInstanceMetaData)
+    // console.log('handleSelectMetadata',selectedInstanceMetaData)
     setInstanceMetaData(selectedInstanceMetaData[0]);
     const selectedInstanceMetrics = response![instanceId];
     setInstanceMetrics(selectedInstanceMetrics);
@@ -33,7 +33,7 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
   const instanceIdList = insData.map((elem) => elem.instanceId);
   // console.log(instanceIdList);
   const instanceMetricbody = {
-    metrics: ['CPUUtilization', 'NetworkIn', 'NetworkOut'],
+    metrics: ['CPUUtilization', 'NetworkIn', 'NetworkOut', 'CPUCreditBalance', 'CPUCreditUsage', 'StatusCheckFailed'],
     instances: insData,
     credentials: credentials,
     region:selectedRegion
