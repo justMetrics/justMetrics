@@ -30,13 +30,27 @@ export function ChartCPU({ metricData }) {
   // const instanceID = 'i-06099a5a414309d0e'; //! Hard Code now!
   const metricKeyArr = Object.keys(metricData);
   const metricKey = metricKeyArr[0];
-  const metrics={
+  const metrics = {
     CPUUtilization: '%',
-  NetworkIn: 'Bytes',
-  NetworkOut:'Bytes',
-  DiskWriteOps: 'Operations',
-  }
-  const yAxisTitle = metrics[metricKey] as string
+    NetworkIn: 'Bytes',
+    NetworkOut: 'Bytes',
+    DiskWriteOps: 'Operations',
+    CPUCreditBalance: 'Credits Balance',
+    CPUCreditUsage: 'Credits Used',
+    StatusCheckFailed: 'Failed Checks',
+  };
+
+  const chartTitles = {
+    CPUUtilization: 'CPU Utilization',
+    NetworkIn: 'Network In',
+    NetworkOut: 'Network Out',
+    DiskWriteOps: 'Disk Writing Operations',
+    CPUCreditBalance: 'EC2 CPU Credit Balance',
+    CPUCreditUsage: 'EC2 CPU Credits Used',
+    StatusCheckFailed: 'Failed Status Checks',
+  };
+  const yAxisTitle = metrics[metricKey] as string;
+  const chartTitle = chartTitles[metricKey] as string;
   // console.log(metricKey);
   // console.log (metricData[metricKey].Timestamps.reverse())
   const x = metricData[metricKey].Timestamps.reverse();
@@ -52,28 +66,47 @@ export function ChartCPU({ metricData }) {
     labels: x,
     datasets: [
       {
-        data: y,//if numers in y are greater than 100,000 change axis to 100k
+        label:'hello',
+
+        data: y, //if numers in y are greater than 100,000 change axis to 100k
         borderColor: 'rgb(76, 139, 255)',
         fill: false,
         tension: 0.1,
+        pointRadius: 0,
       },
     ],
   };
 
+  const precisionValue = chartTitle === 'Failed Status Checks' ? 0 : undefined;
+
   const options = {
     maintainAspectRatio: false,
     responsive: true,
+    hover: {
+      mode: 'nearest',
+      intersect: false,
+    },
     plugins: {
       legend: {
         position: 'top' as const,
       },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        bodyColor:'rgb(255, 118, 76)',
+        // callbacks:{
+        //   label: (context)=>{
+        //     console.log(CONTEXT, context)
+        //     return `Y: ${context.parsed.y}` }
+        // }
+      },
+
       title: {
         display: true,
-        text: metricKey,
-        color:'rgb(46, 50, 56)',
+        text: chartTitle,
+        color: 'rgb(46, 50, 56)',
         font: {
           size: 17,
-  
         },
       },
     },
@@ -86,25 +119,28 @@ export function ChartCPU({ metricData }) {
         // align: 'center',
         // },
         time: {
-        displayFormats: {hour: 'HH:mm'},
+          displayFormats: { hour: 'HH:mm' },
           unit: 'hour' as const,
         },
       },
       y: {
         //   ticks: {
         // callback: function(value) {
-          
-          
+
         //   return String(value%1000) +'K';}},
-        title:{
-          display: true,
-        text: yAxisTitle,
-        align: 'center',
-        color: 'rgb(47, 50, 55)',
-        font: {
-          size: 13,
+        ticks: {
+          precision: precisionValue,
         },
-        }
+
+        title: {
+          display: true,
+          text: yAxisTitle,
+          align: 'center',
+          color: 'rgb(47, 50, 55)',
+          font: {
+            size: 13,
+          },
+        },
       },
     },
   };

@@ -24,7 +24,7 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
     const selectedInstanceMetaData = insData.filter(
       (el) => instanceId === el.instanceId
     );
-    console.log('handleSelectMetadata', selectedInstanceMetaData);
+    // console.log('handleSelectMetadata',selectedInstanceMetaData)
     setInstanceMetaData(selectedInstanceMetaData[0]);
     const selectedInstanceMetrics = response![instanceId];
     setInstanceMetrics(selectedInstanceMetrics);
@@ -33,7 +33,14 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
   const instanceIdList = insData.map((elem) => elem.instanceId);
   // console.log(instanceIdList);
   const instanceMetricbody = {
-    metrics: ['CPUUtilization', 'NetworkIn', 'NetworkOut'],
+    metrics: [
+      'CPUUtilization',
+      'NetworkIn',
+      'NetworkOut',
+      'CPUCreditBalance',
+      'CPUCreditUsage',
+      'StatusCheckFailed',
+    ],
     instances: insData,
     credentials: credentials,
     region: selectedRegion,
@@ -68,13 +75,13 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
 
   // console.log('instanceMetrics', instanceMetrics);
   return (
-    <div className='h-screen p-4 box-border'>
-      <div className='min-h-full flex flex-col items-center rounded-3xl border-2 bg-gray-200 '>
-        <header className='h-[15%] flex flex-row items-center text-5xl font-serif p-7'>
+    <div className='h-screen max-w-screen p-4 box-border'>
+      <div className='min-h-full min-w-full flex flex-col items-center rounded-3xl border-2 bg-gray-200 '>
+        <header className='h-[15vh] flex flex-row items-center text-5xl font-serif p-7'>
           <h1>Just Metrics</h1>
         </header>
 
-        <nav className='self-end flex flex-col items-end'>
+        <nav className='h-[10vh] self-end flex flex-col items-end'>
           {/* <div>
           <label htmlFor='instanceSelect' className='font-bold p-2 text-xl'>
             Select Region:
@@ -105,11 +112,11 @@ const Metrics = ({ insData, credentials, selectedRegion }: insdataProps) => {
           </div>
         </nav>
 
-        <h2 className='font-bold text-xl m-2 p-2 rounded-3xl border-2 bg-gray-100'>
+        <h2 className=' h-[5vh] flex items-center font-bold text-xl m-2 p-2 rounded-3xl border-2 bg-gray-100'>
           Cloud Watch Metrics
         </h2>
 
-        <main className='h-[80%] w-[97%] flex flex-col items-center rounded-3xl border-4 m-4'>
+        <main className='h-[60vh] w-[95vw] flex flex-col items-center rounded-3xl border-4 m-4'>
           <section className='h-[32%] w-[98%] p-3 m-4 mb-2 border-2 rounded-3xl bg-gray-50 flex flex-col flex-wrap overflow-hidden'>
             {instanceMetaData ? (
               <InstanceMetaData instanceMetaData={instanceMetaData} />

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import useApiKeysFetch from '../fetch/apiKeysFetch';
-import Select from 'react-select';
+import dynamic from 'next/dynamic';
+const Select = dynamic(() => import('react-select'), { ssr: false });
 
 // type Credential = [accessKeyId: string, secretAccessKey: string];
 type KeyInPutProps = {
@@ -30,7 +31,7 @@ const KeyInPut = ({ setInsData, setCredentials, setSelectedRegion }: KeyInPutPro
     }
   }, [response]);
 
-  const handleSelectRegion = (selectRegion: string) => {
+  const handleSelectRegion = (selectRegion) => {
     console.log('Select Region from dropdown list on main page', selectRegion);
     setTestRegion(selectRegion)
     // setRegion(selectRegion)
@@ -54,12 +55,16 @@ const KeyInPut = ({ setInsData, setCredentials, setSelectedRegion }: KeyInPutPro
     if (error) {
       setFetchError(error);
     }
-    //'us-west-1'
-
-    // reset keys input
-    // setAwsAccessKey('');
-    // setSecretAccessKey('');
   };
+
+  // create an array with all us regions
+    const regions = [{value: 'us-west-1', label: 'US West 1'}, {value: 'us-west-2', label: 'US West 2'}, {value: 'us-east-1', label: 'US East 1'}, {value: 'us-east-2', label: 'US East 2'}];
+    // create drop down list for react option
+  //  const regionLists = regions.map((region: string) => ({
+  //   value: region,
+  //   label: region,
+  // }));
+
   return (
     <div className='h-screen p-4 box-border'>
       <div className='min-h-full flex flex-col items-center rounded-3xl border-2 bg-gray-200'>
@@ -67,7 +72,7 @@ const KeyInPut = ({ setInsData, setCredentials, setSelectedRegion }: KeyInPutPro
           <h1>Just Metrics</h1>
         </header>
 
-        <main className='h-[60vh] flex flex-col justify-end gap-7 p-7'>
+        <main className='h-[60vh] flex flex-col justify-end gap-8 p-7'>
           <input
             className='aws-access-key-input bg-white rounded-2xl border-[1.5px] p-3 w-[500px] shadow-xl'
             placeholder='AWS Access Key'
@@ -81,17 +86,13 @@ const KeyInPut = ({ setInsData, setCredentials, setSelectedRegion }: KeyInPutPro
             value={secretAccessKey}
             onChange={(e) => setSecretAccessKey(e.target.value)}
           ></input>
-          <select
-            id='regionSelect'
-            className='border rounded-xl p-2 m-2 mt-7 bg-gray-100 w-[115px] self-center text-center'
-            onChange={(e) => setTestRegion(e.target.value)}
-            // onChange={(e) => setTestRegion('us-west-2')}
-          >
-            <option>us-west-1</option>
-            <option>us-west-2</option>
-            <option>us-east-1</option>
-            <option>us-east-2</option>
-          </select>
+          <Select
+          classNamePrefix="regionLists"
+          options={regions}
+          onChange={(selected) => handleSelectRegion(selected?.value)}
+          placeholder="Select a region..."
+          isSearchable={false}
+          />
           <button
             className='connect-button bg-white hover:bg-gray-100 rounded-3xl border-[2.25px] p-1 w-[200px] shadow-xl self-center m-10'
             onClick={sendApi}
