@@ -15,8 +15,17 @@ export async function POST(request: NextRequest) {
   try {
     const { requestedMetrics, instanceIds, awsAccessKey, secretKey, region } =
       await request.json();
-    console.log('awsmetrics KEYS', awsAccessKey, secretKey, region);
-    console.log('modelCreationtestRegion', region)
+    // console.log(
+    //   '    👀 👀 👀 👀 all here??',
+    //   requestedMetrics,
+    //   instanceIds,
+    //   awsAccessKey,
+    //   secretKey,
+    //   region
+    // );
+    //console.log('awsmetrics KEYS', awsAccessKey, secretKey, region);
+
+    // console.log('modelCreationtestRegion', region);
 
     const cloudwatchClient = new CloudWatchClient({
       region: region, //make util function and call inside
@@ -35,6 +44,7 @@ export async function POST(request: NextRequest) {
         //requested metrics is j
 
         const queryId = String(i) + String(j);
+
         const metricName = requestedMetrics[j] as string;
         const dimensions = [
           { Name: 'InstanceId', Value: instanceIds[i].instanceId },
@@ -43,30 +53,30 @@ export async function POST(request: NextRequest) {
         metricQueries.push(metricQuery);
       }
     }
-    function bestStatType(metricName:string){
-      const bestMetric={
-        CPUUtilization:'Average',
+    function bestStatType(metricName: string) {
+      const bestMetric = {
+        CPUUtilization: 'Average',
         NetworkIn: 'Average',
-        NetworkOut:'Average',
-        DiskWriteOps: 'Sum'
-      }
+        NetworkOut: 'Average',
+        DiskWriteOps: 'Sum',
+      };
 
-      return bestMetric[metricName]
+      return bestMetric[metricName];
     }
-
 
     const finalMetricQuery = metricQueries.map((elem, index) => {
       //his is the actual object we will be sending in metric query
       return {
         // Id: elem.queryId as string,
         Id: 'test' + index,
+        Label: `${elem.dimensions[0].Value} ${elem.metricName}`,
         MetricStat: {
           Metric: {
             Namespace: 'AWS/EC2',
             MetricName: elem.metricName,
             Dimensions: elem.dimensions,
           },
-          Period: 300*12,
+          Period: 300 * 12,
           Stat: bestStatType(elem.metricName), //!needs to be changed based on what is most appropriate for each metric
         },
         ReturnData: true,
@@ -79,11 +89,13 @@ export async function POST(request: NextRequest) {
       MetricDataQueries: finalMetricQuery,
     });
 
+    //console.log('    👀 👀 👀 👀 all here??', awsQuery);
+
     const response: any = await cloudwatchClient.send(awsQuery);
     //loop through MetricDataResults
     //and we have to look at each Label (MetricDataResults.Label)
     //and we have to split that and save them in two other arrays (instances, metrics)
-    console.log(response)
+    //console.log('👀 👀 👀 👀 TEST!!!!!!!', response);
     const finalResponse: any = {};
     for (let i = 0; i < response.MetricDataResults?.length; i++) {
       const labelArray = response.MetricDataResults[i]?.Label.split(' ');
@@ -108,7 +120,7 @@ export async function POST(request: NextRequest) {
         finalResponse[instanceId] = instance;
       }
     }
-    // console.log(finalResponse);
+    console.log(finalResponse);
     return NextResponse.json({ res: finalResponse }, { status: 200 });
   } catch (err) {
     // console.log(err);
