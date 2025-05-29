@@ -9,16 +9,23 @@ import {
   faCog,
   faUser,
   faArrowLeft,
+  faBell,
+  faFileAlt,
+  faCreditCard,
+  faLifeRing,
+  faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
 
 type isSidebarActiveProps = {
   isSidebarActive: boolean;
-  handleToggleSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+  handleToggleSidebar: () => void;
+  setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 const Sidebar = ({
   isSidebarActive,
   handleToggleSidebar,
+  setCredentials,
 }: isSidebarActiveProps) => {
   return (
     <div
@@ -34,24 +41,54 @@ const Sidebar = ({
     >
       <div className='p-4'>
         <h2
-          className='text-xl font-bold mb-4 rounded-xl  text-black p-2 hover:bg-blue-500 hover:text-white hover:shadow-md transition-all duration-300 cursor-pointer'
+          className='text-xl font-bold mb-4 rounded-xl text-black p-2 hover:bg-blue-500 hover:text-white hover:shadow-md transition-all duration-300 cursor-pointer flex items-center space-x-2'
           onClick={() => handleToggleSidebar()}
         >
-          <FontAwesomeIcon icon={faArrowLeft} className=' w-4 h-4' />
-          <span> Just Metrics</span>
+          <FontAwesomeIcon icon={faArrowLeft} className='w-4 h-4' />
+          <span>Just Metrics</span>
         </h2>
-        <ul className='text-black'>
-          <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white hover:shadow-md transition-all duration-300 cursor-pointer'>
+
+        <ul className='text-black space-y-1'>
+          <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer'>
             <FontAwesomeIcon icon={faTachometerAlt} className='w-4 h-4' />
             <span>Dashboard</span>
           </li>
-          <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white hover:shadow-md transition-all duration-300 cursor-pointer'>
+          <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer'>
             <FontAwesomeIcon icon={faCog} className='w-4 h-4' />
             <span>Settings</span>
           </li>
-          <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white hover:shadow-md transition-all duration-300 cursor-pointer'>
+          <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer'>
             <FontAwesomeIcon icon={faUser} className='w-4 h-4' />
             <span>Profile</span>
+          </li>
+
+          <hr className='my-3 border-gray-300' />
+
+          <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer'>
+            <FontAwesomeIcon icon={faBell} className='w-4 h-4' />
+            <span>Notifications</span>
+          </li>
+          <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer'>
+            <FontAwesomeIcon icon={faFileAlt} className='w-4 h-4' />
+            <span>Logs</span>
+          </li>
+          <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer'>
+            <FontAwesomeIcon icon={faCreditCard} className='w-4 h-4' />
+            <span>Billing</span>
+          </li>
+
+          <hr className='my-3 border-gray-300' />
+
+          <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer'>
+            <FontAwesomeIcon icon={faLifeRing} className='w-4 h-4' />
+            <span>Help Center</span>
+          </li>
+          <li
+            className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer'
+            onClick={() => setCredentials([])}
+          >
+            <FontAwesomeIcon icon={faSignOutAlt} className='w-4 h-4' />
+            <span>Log Out</span>
           </li>
         </ul>
       </div>
