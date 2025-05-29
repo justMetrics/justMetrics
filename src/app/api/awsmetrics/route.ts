@@ -236,8 +236,8 @@ console.log('response', response)
         instance.push(metricsObject);
         finalResponse[instanceId] = instance;
       }
-    }
-    console.log('finalresponse', finalResponse['i-0496221bea4f57fe4'][0].CPUUtilization);
+    }    // console.log('finalresponse', finalResponse['i-0496221bea4f57fe4'][0].CPUUtilization);
+
 
     return NextResponse.json({ res: finalResponse }, { status: 200 }); //send created finalResponse object to frontEnd
   } }
