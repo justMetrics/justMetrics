@@ -5,10 +5,10 @@ import KeyInPut from './KeyInPut';
 import Metrics from './Metrics';
 
 const ClientWapper = () => {
-  const [insData, setInsData] = useState<any[]>([]);
+  const [insData, setInsData] = useState<string[]>([]);
   const [credentials, setCredentials] = useState<string[]>([]);
-  const [selectedRegion, setSelectedRegion] = useState<string>('');
-  console.log('clientwrapperRerender');
+  const [selectedRegion, setSelectedRegion] = useState<string>('')
+  
   return (
     <div>
       {credentials.length !== 0 ? (
