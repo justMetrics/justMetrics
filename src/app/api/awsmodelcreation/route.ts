@@ -2,7 +2,7 @@ import { EC2Client, DescribeInstancesCommand, DescribeInstancesCommandOutput } f
 import { NextRequest, NextResponse } from 'next/server';
 
 // import types
-import { awsModelCreationReq } from '../../../../types/componentsTypes'
+import { awsModelCreationReq } from '../../../../types/apiTypes'
 
 
 export async function POST(req: NextRequest) {
