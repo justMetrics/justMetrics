@@ -7,7 +7,7 @@ const Select = dynamic(() => import('react-select'), { ssr: false });
 
 // type Credential = [accessKeyId: string, secretAccessKey: string];
 type KeyInPutProps = {
-  setInsData: React.Dispatch<React.SetStateAction<any[]>>;
+  setInsData: React.Dispatch<React.SetStateAction<string[]>>;
   setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
   setSelectedRegion: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -26,7 +26,6 @@ const KeyInPut = ({
 
   useEffect(() => {
     if (response) {
-      console.log('useEffectResponse', response);
       setInsData(response);
       // save credentials to state
       setCredentials([awsAccessKey, secretAccessKey]);
