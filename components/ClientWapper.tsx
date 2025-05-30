@@ -4,8 +4,11 @@ import React, { useState } from 'react';
 import KeyInPut from './KeyInPut';
 import Metrics from './Metrics';
 
+// import types
+import { insData } from '../types/componentsTypes';
+
 const ClientWapper = () => {
-  const [insData, setInsData] = useState<string[]>([]);
+  const [insData, setInsData] = useState<insData[]>([]);
   const [credentials, setCredentials] = useState<string[]>([]);
   const [selectedRegion, setSelectedRegion] = useState<string>('')
   

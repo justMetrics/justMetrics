@@ -5,12 +5,8 @@ import useApiKeysFetch from '../fetch/apiKeysFetch';
 import dynamic from 'next/dynamic';
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
-// type Credential = [accessKeyId: string, secretAccessKey: string];
-type KeyInPutProps = {
-  setInsData: React.Dispatch<React.SetStateAction<string[]>>;
-  setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
-  setSelectedRegion: React.Dispatch<React.SetStateAction<string>>;
-};
+// import types
+import { regions, KeyInPutProps } from '../types/componentsTypes';
 
 const KeyInPut = ({
   setInsData,
@@ -61,17 +57,12 @@ const KeyInPut = ({
   };
 
   // create an array with all us regions
-  const regions = [
+  const regions: regions = [
     { value: 'us-west-1', label: 'US West 1' },
     { value: 'us-west-2', label: 'US West 2' },
     { value: 'us-east-1', label: 'US East 1' },
     { value: 'us-east-2', label: 'US East 2' },
   ];
-  // create drop down list for react option
-  //  const regionLists = regions.map((region: string) => ({
-  //   value: region,
-  //   label: region,
-  // }));
 
   return (
     <div className='h-screen p-10 box-border'>

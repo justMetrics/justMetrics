@@ -6,7 +6,7 @@ import { useCallback, useState } from 'react';
 const useApiKeysFetch = () => {
   // create usestats
   const [response, setResponse] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   // create POST request for api keys
   const sendApiKeys = useCallback(
@@ -15,7 +15,7 @@ const useApiKeysFetch = () => {
       awsAccessKey: string | number,
       secretAccessKey: string | number,
       region:string,
-    ): Promise<any> => {
+    ): Promise<void> => {
       try {
         const res = await fetch(url, {
           method: 'POST',
@@ -33,9 +33,12 @@ const useApiKeysFetch = () => {
 
         const data = await res.json();
         setResponse(data.res);
-      } catch (error: any) {
-        setError(error.message);
-        
+      } catch (error: unknown) {
+         if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('An unknown error occurred');
+        }
       }
     },
     []

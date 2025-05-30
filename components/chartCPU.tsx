@@ -13,6 +13,9 @@ import {
 import 'chartjs-adapter-date-fns';
 import { Line } from 'react-chartjs-2';
 
+// import custom types
+import { } from '../types/componentsTypes';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,

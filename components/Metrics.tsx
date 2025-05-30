@@ -8,26 +8,18 @@ import Select from 'react-select';
 import Sidebar from './Sidebar';
 
 // import custom types
-import{ insData } from '../types/componentsTypes'
+import{ insData, metricsProps, instanceMetricbody } from '../types/componentsTypes'
 
-type insdataProps = {
-  insData: insData[];
-  credentials: string[];
-  selectedRegion: string;
-  setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
-};
-//credentials 0 access key 1 secret accesskey
-//!connect metricsFetch to here
-
+// create Metrics component
 const Metrics = ({
   insData,
   credentials,
   selectedRegion,
   setCredentials,
-}: insdataProps) => {
-  // console.log('instance list from Metrics.tsx', insData);
-  const [instanceMetaData, setInstanceMetaData] = useState();
-  const [instanceMetrics, setInstanceMetrics] = useState<insData | null>(null);
+}: metricsProps) => {
+  // create use states
+  const [instanceMetaData, setInstanceMetaData] =  useState<insData | null>(null);
+  const [instanceMetrics, setInstanceMetrics] = useState<insData[] | null>(null);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
 
   const handleToggleSidebar = () => {
@@ -38,7 +30,6 @@ const Metrics = ({
     const selectedInstanceMetaData = insData.filter(
       (el: insData) => instanceId === el.instanceId
     );
-    console.log('handleSelectMetadata',selectedInstanceMetaData[0])
     
     setInstanceMetaData(selectedInstanceMetaData[0]);
     const selectedInstanceMetrics = response![instanceId];
@@ -47,7 +38,7 @@ const Metrics = ({
 
   const instanceIdList = insData.map((elem) => elem.instanceId);
   // console.log(instanceIdList);
-  const instanceMetricbody = {
+  const instanceMetricbody: instanceMetricbody = {
     metrics: [
       'CPUUtilization',
       'NetworkIn',
@@ -65,8 +56,6 @@ const Metrics = ({
   const { response, error, sendMetricsRequest } = useMetricsFetch();
  
   // handle fetch function
-
-  //! useEffect will show the Metrics Data when the page loaded
   useEffect(() => {
     // inititate fetch
     sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
@@ -74,13 +63,6 @@ const Metrics = ({
     if (response) console.log('metricResponse', response);
     if (error) console.log('metricError', error);
   }, []);
-  //! handler function will show the Metrics Data after click the button
-
-  const charts = instanceMetrics?.map((metricData, index: number) => {
- 
-
-    <ChartCPU key={index} metricData={metricData}></ChartCPU>;
-  });
 
   // create drop down list for react option
   const instancesList = instanceIdList.map((id) => ({
@@ -88,7 +70,6 @@ const Metrics = ({
     label: id,
   }));
 
-  // console.log('instanceMetrics', instanceMetrics);
   return (
     <div className=' min-h-screen max-w-screen p-10 box-border flex flex-col'>
       <div className='flex-1 min-w-full flex flex-col items-center rounded-3xl  bg-gradient-to-br from-gray-200 to-blue-200  shadow-2xl relative overflow-hidden p-5'>
