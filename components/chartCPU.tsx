@@ -8,6 +8,7 @@ import {
   LineElement,
   Title,
   TimeScale,
+  Tooltip,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { Line } from 'react-chartjs-2';
@@ -18,7 +19,8 @@ ChartJS.register(
   PointElement,
   Title,
   LineElement,
-  TimeScale
+  TimeScale,
+  Tooltip
 );
 
 export function ChartCPU({ metricData }) {
@@ -49,8 +51,19 @@ export function ChartCPU({ metricData }) {
     CPUCreditUsage: 'EC2 CPU Credits Used',
     StatusCheckFailed: 'Failed Status Checks',
   };
+
+    const roundY = {
+    CPUUtilization: 2,
+    NetworkIn: 0,
+    NetworkOut: 0,
+    CPUCreditBalance: 1,
+    CPUCreditUsage: 3,
+    StatusCheckFailed: 0,
+  };
+
   const yAxisTitle = metrics[metricKey] as string;
   const chartTitle = chartTitles[metricKey] as string;
+  const yAxisRounding=roundY[metricKey]
   // console.log(metricKey);
   // console.log (metricData[metricKey].Timestamps.reverse())
   const x = metricData[metricKey].Timestamps.reverse();
@@ -66,7 +79,7 @@ export function ChartCPU({ metricData }) {
     labels: x,
     datasets: [
       {
-        label:'hello',
+        label:chartTitle,
 
         data: y, //if numers in y are greater than 100,000 change axis to 100k
         borderColor: 'rgb(76, 139, 255)',
@@ -82,23 +95,23 @@ export function ChartCPU({ metricData }) {
   const options = {
     maintainAspectRatio: false,
     responsive: true,
-    hover: {
-      mode: 'nearest',
-      intersect: false,
-    },
+    // hover: {
+    //   mode: 'ne',
+    //   intersect: false,
+    // },
     plugins: {
       legend: {
         position: 'top' as const,
       },
       tooltip: {
-        mode: 'index',
+        mode: 'nearest',
         intersect: false,
-        bodyColor:'rgb(255, 118, 76)',
-        // callbacks:{
-        //   label: (context)=>{
-        //     console.log(CONTEXT, context)
-        //     return `Y: ${context.parsed.y}` }
-        // }
+        bodyColor:'rgb(76, 204, 255)',
+  callbacks: {
+    label: (context) => 
+      {return `Y: ${context.parsed.y.toFixed(yAxisRounding)} ${yAxisTitle}`}
+  }
+
       },
 
       title: {
