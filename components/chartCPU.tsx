@@ -24,12 +24,10 @@ ChartJS.register(
 );
 
 export function ChartCPU({ metricData }) {
-  
   if (!metricData) {
     return <p>Loading...</p>;
   }
 
-  // const instanceID = 'i-06099a5a414309d0e'; //! Hard Code now!
   const metricKeyArr = Object.keys(metricData);
   const metricKey = metricKeyArr[0];
   const metrics = {
@@ -52,7 +50,7 @@ export function ChartCPU({ metricData }) {
     StatusCheckFailed: 'Failed Status Checks',
   };
 
-    const roundY = {
+  const roundY = {
     CPUUtilization: 2,
     NetworkIn: 0,
     NetworkOut: 0,
@@ -63,7 +61,7 @@ export function ChartCPU({ metricData }) {
 
   const yAxisTitle = metrics[metricKey] as string;
   const chartTitle = chartTitles[metricKey] as string;
-  const yAxisRounding=roundY[metricKey]
+  const yAxisRounding = roundY[metricKey];
   // console.log(metricKey);
   // console.log (metricData[metricKey].Timestamps.reverse())
   const x = metricData[metricKey].Timestamps.reverse();
@@ -79,7 +77,7 @@ export function ChartCPU({ metricData }) {
     labels: x,
     datasets: [
       {
-        label:chartTitle,
+        label: chartTitle,
 
         data: y, //if numers in y are greater than 100,000 change axis to 100k
         borderColor: 'rgb(76, 139, 255)',
@@ -106,12 +104,14 @@ export function ChartCPU({ metricData }) {
       tooltip: {
         mode: 'nearest',
         intersect: false,
-        bodyColor:'rgb(76, 204, 255)',
-  callbacks: {
-    label: (context) => 
-      {return `Y: ${context.parsed.y.toFixed(yAxisRounding)} ${yAxisTitle}`}
-  }
-
+        bodyColor: 'rgb(76, 204, 255)',
+        callbacks: {
+          label: (context) => {
+            return `Y: ${context.parsed.y.toFixed(
+              yAxisRounding
+            )} ${yAxisTitle}`;
+          },
+        },
       },
 
       title: {

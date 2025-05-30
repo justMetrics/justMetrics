@@ -14,7 +14,7 @@ type KeyInPutProps = {
   setSelectedRegion: React.Dispatch<React.SetStateAction<string>>;
 };
 
-//? KeyInPut Component: Handles AWS credential input and region selection
+// KeyInPut Component: Handles AWS credential input and region selection
 
 const KeyInPut = ({
   setInsData,
