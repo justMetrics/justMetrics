@@ -224,8 +224,8 @@ console.log('response', response)
 
       const metricsObject: any = {};
       metricsObject[labelArray[1]] = {
-        Timestamps: response.MetricDataResults[i].Timestamps,
-        Values: response.MetricDataResults[i].Values,
+        Timestamps: response.MetricDataResults![i].Timestamps,
+        Values: response.MetricDataResults![i].Values,
       };
 
       if (finalResponse[instanceId]) {
