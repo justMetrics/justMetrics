@@ -1,9 +1,17 @@
-import { EC2Client, DescribeInstancesCommand } from '@aws-sdk/client-ec2';
+import {
+  EC2Client,
+  DescribeInstancesCommand,
+  DescribeInstancesCommandOutput,
+} from '@aws-sdk/client-ec2';
 import { NextRequest, NextResponse } from 'next/server';
+
+// import types
+import { awsModelCreationReq } from '../../../../types/apiTypes';
 
 export async function POST(req: NextRequest) {
   // Extract credentials and region from the request body
-  const { accessKey, secretKey, region } = await req.json();
+  const { accessKey, secretKey, region }: awsModelCreationReq =
+    await req.json();
 
   // Validate required parameters
   if (!accessKey || !secretKey || !region) {
@@ -18,7 +26,7 @@ export async function POST(req: NextRequest) {
 
   try {
     // Initialize EC2 client with recieved credentials and region
-    const ec2 = new EC2Client({
+    const ec2: EC2Client = new EC2Client({
       region: region,
       credentials: {
         accessKeyId: accessKey,
@@ -27,8 +35,8 @@ export async function POST(req: NextRequest) {
     });
 
     // Fetch all EC2 instances
-    const command = new DescribeInstancesCommand({});
-    const result = await ec2.send(command);
+    const command: DescribeInstancesCommand = new DescribeInstancesCommand({});
+    const result: DescribeInstancesCommandOutput = await ec2.send(command);
 
     // Extract instance data from reservations
     const instances = result.Reservations?.flatMap((el) => el.Instances);

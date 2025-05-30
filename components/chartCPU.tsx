@@ -24,7 +24,7 @@ ChartJS.register(
 );
 
 export function ChartCPU({ metricData }) {
-  console.log('metricDataProp', metricData);
+  
   if (!metricData) {
     return <p>Loading...</p>;
   }
