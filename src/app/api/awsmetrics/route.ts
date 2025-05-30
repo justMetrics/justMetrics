@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
     const finalMetricQuery: MetricDataQuery[] = metricQueries.map(
       (elem, index) => {
         //the final transformation of the metricQueries object to finalMetricQuery.
-        //note that this is inefficient-we could merge the below query object into the work above to not have two separate functions required to 
+        //note that this is inefficient-we could merge the below query object into the function above to not have two separate functions required to 
         // make the finalMetricQuery.
         //this was done primarily so we could test the two functions separately and confirm they were working as intended. A potential refactoring option.
 

@@ -39,7 +39,7 @@ const Metrics = ({
       (el: insData) => instanceId === el.instanceId
     );
     console.log('handleSelectMetadata',selectedInstanceMetaData[0])
-    
+    console.log('insData', insData)
     setInstanceMetaData(selectedInstanceMetaData[0]);
     const selectedInstanceMetrics = response![instanceId];
     setInstanceMetrics(selectedInstanceMetrics);
