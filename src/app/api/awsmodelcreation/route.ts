@@ -1,24 +1,31 @@
-import { EC2Client, DescribeInstancesCommand, DescribeInstancesCommandOutput } from '@aws-sdk/client-ec2';
+import {
+  EC2Client,
+  DescribeInstancesCommand,
+  DescribeInstancesCommandOutput,
+} from '@aws-sdk/client-ec2';
 import { NextRequest, NextResponse } from 'next/server';
 
 // import types
-import { awsModelCreationReq } from '../../../../types/apiTypes'
-
+import { awsModelCreationReq } from '../../../../types/apiTypes';
 
 export async function POST(req: NextRequest) {
-  const { accessKey, secretKey, region }: awsModelCreationReq = await req.json();
+  // Extract credentials and region from the request body
+  const { accessKey, secretKey, region }: awsModelCreationReq =
+    await req.json();
 
-  if (!accessKey || !secretKey) {
-    //! need to sync up with frontend for namings
-    //! need to add !region back , curretnly hard-coded
-
+  // Validate required parameters
+  if (!accessKey || !secretKey || !region) {
     return NextResponse.json(
-      { error: 'Missing AWS AccessKey or SecretKey' },
+      { error: 'Missing AWS AccessKey or SecretKey or Region' },
       { status: 400 }
     );
   }
 
+  // * For debugging: Uncomment to verify received credentials and region
+  // console.log('👀 👀 👀 👀 Received AWS credentials:', { accessKey, secretKey, region })
+
   try {
+    // Initialize EC2 client with recieved credentials and region
     const ec2: EC2Client = new EC2Client({
       region: region,
       credentials: {
@@ -27,12 +34,17 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Fetch all EC2 instances
     const command: DescribeInstancesCommand = new DescribeInstancesCommand({});
     const result: DescribeInstancesCommandOutput = await ec2.send(command);
 
+    // Extract instance data from reservations
     const instances = result.Reservations?.flatMap((el) => el.Instances);
 
-    
+    //* For debugging: Uncomment to inspect instances data
+    // console.log('👀 👀 👀 👀 instances data:', instances);
+
+    // Transform instances data for client-side consumption
     const res = instances?.map((el) => {
       return {
         instanceId: el?.InstanceId,
@@ -49,6 +61,10 @@ export async function POST(req: NextRequest) {
       };
     });
 
+    //* For debugging: Uncomment to check formatted/final instanece data
+    // console.log('👀 👀 👀 👀 formatted/final instance data:', res);
+
+    // Return formatted instance data
     return NextResponse.json({ res }, { status: 200 });
   } catch (err) {
     console.error('❌ AWS Error:', err);
@@ -58,4 +74,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
