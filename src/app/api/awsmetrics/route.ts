@@ -22,8 +22,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    const metricQueries = [];  //Request object will provide list of requested instanceIds and requestedMetrics.
-    // To prepare Cloudwatch query request, we must iterate through both arrays and create unique request objects combining each unique 
+    const metricQueries = []; //Request object will provide list of requested instanceIds and requestedMetrics.
+    // To prepare Cloudwatch query request, we must iterate through both arrays and create unique request objects combining each unique
     // instance/metric and package them into a specific metric request (which goes into our metricQueries variablecale).
 
     for (let i = 0; i < instanceIds.length; i++) {
@@ -46,10 +46,9 @@ export async function POST(request: NextRequest) {
     }
 
     function bestStatType(metricName: string): string {
-        //each metricQuery in the metricQueries array will require a specific metric type to be requested for it, which we are selecting based on this table.
-        //we use this function below.
+      //each metricQuery in the metricQueries array will require a specific metric type to be requested for it, which we are selecting based on this table.
+      //we use this function below.
       const bestMetric: Record<string, string> = {
-
         CPUUtilization: 'Average',
         NetworkIn: 'Average',
         NetworkOut: 'Average',
@@ -61,12 +60,13 @@ export async function POST(request: NextRequest) {
 
       return bestMetric[metricName];
     }
-      //to prepare the finalMetricquery object that is ultimately sent to Cloudwatch,
-      // we must further transform the metricQueries array made above.
+    //to prepare the finalMetricquery object that is ultimately sent to Cloudwatch,
+    // we must further transform the metricQueries array made above.
     const finalMetricQuery: MetricDataQuery[] = metricQueries.map(
       (elem, index) => {
         //the final transformation of the metricQueries object to finalMetricQuery.
-        //note that this is inefficient-we could merge the below query object into the work above to not have two separate functions required to make the finalMetricQuery.
+        //note that this is inefficient-we could merge the below query object into the work above to not have two separate functions required to 
+        // make the finalMetricQuery.
         //this was done primarily so we could test the two functions separately and confirm they were working as intended. A potential refactoring option.
 
         return {
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
           Label: `${elem.dimensions[0].Value} ${elem.metricName}`,
           MetricStat: {
             Metric: {
-              Namespace: 'AWS/EC2', //The name of the metric
+              Namespace: 'AWS/EC2', 
               MetricName: elem.metricName,
               Dimensions: elem.dimensions,
             },
@@ -99,11 +99,9 @@ export async function POST(request: NextRequest) {
       awsQuery
     ); //send the prepared awsQuery to Cloudwatch and save the response in the response variable
 
-
-
     //once we have the response object (refer to https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-cloudwatch/Interface/GetMetricDataCommandOutput/
     //to see what it looks like
-     //we want to transform the data so our frontend to have a nice, clean array of data, broken up by each instance. 
+    //we want to transform the data so our frontend to have a nice, clean array of data, broken up by each instance.
     //This makes it easy to work with for the frontend page (and related engineer). This will be our finalResponse object.
     const finalResponse: frontendMetricsObject = {}; //we will talk about the type below.
 
@@ -127,7 +125,7 @@ export async function POST(request: NextRequest) {
     //   ]
     // }
     // Each instance should be an object, with a single property of an array, and in that array, there are objects each of which correspond to a single metric.
-    //each of these objects have key of the metric name and the value is another object, comprised of two properties: 
+    //each of these objects have key of the metric name and the value is another object, comprised of two properties:
     // Values, with the values from AWS, and Timestamps, from AWS.
     //Note that the [Object] in the above nested objects will be an object with two properties: Value and Timestamps
     //The length of Timestamps and Values will always be the same if this is working properly.
@@ -137,22 +135,22 @@ export async function POST(request: NextRequest) {
     type FrontendMetricsByInstance = {
       //Each Instance will have a FrontendMetricsObjectInstance for EACH METRIC REQUESTED.
       // For example, 3 metrics requested, 3 FrontendMetricsByInstance objects
-      //!Note: each of these objects WILL NOT HAVE THE INSTANCE ID ATTACHED, YOU MUST READ THAT FROM THE FRONTENDMETRICSOBJECT BELOW
-      [metricName: string]: { 
+      // Note: each of these objects WILL NOT HAVE THE INSTANCE ID ATTACHED, YOU MUST READ THAT FROM THE FRONTENDMETRICSOBJECT BELOW
+      [metricName: string]: {
         Values: number[];
         Timestamps: Date[];
       };
     };
 
-    type frontendMetricsObject = { //ultimate type of finalResponse object sent to frontend. you should have 1 for each instance.
+    type frontendMetricsObject = {
+      //ultimate type of finalResponse object sent to frontend. you should have 1 for each instance.
       //These objects are what are ultimately leveraged to create the charts seen on the frontend.
-      [instanceId: string]: FrontendMetricsByInstance[];//you will have an array of FrontendMetricsByInstance
+      [instanceId: string]: FrontendMetricsByInstance[]; //you will have an array of FrontendMetricsByInstance
     };
 
-
-
-    for (let i = 0; i < response!.MetricDataResults!.length; i++) {//Creation of finalResponse object
-      const labelArray = response!.MetricDataResults![i].Label!.split(' ');//Labels from AWS will be instance and metricsname, separated by a space.
+    for (let i = 0; i < response!.MetricDataResults!.length; i++) {
+      //Creation of finalResponse object
+      const labelArray = response!.MetricDataResults![i].Label!.split(' '); //Labels from AWS will be instance and metricsname, separated by a space.
 
       const instanceId = labelArray[0];
 
@@ -162,7 +160,8 @@ export async function POST(request: NextRequest) {
         Values: response.MetricDataResults![i].Values as number[],
       };
 
-      if (finalResponse[instanceId]) {//if instance is already in our finalResponse object, just push there. if not, create it.
+      if (finalResponse[instanceId]) {
+        //if instance is already in our finalResponse object, just push there. if not, create it.
         finalResponse[instanceId].push(metricsObject);
       } else {
         const instance = [];
@@ -171,10 +170,9 @@ export async function POST(request: NextRequest) {
       }
     }
 
-
     return NextResponse.json({ res: finalResponse }, { status: 200 }); //send created finalResponse object to frontEnd
   } catch (err) {
-    console.log('err',err)
+    console.log('err', err);
     return NextResponse.json(
       //error on if the try above fails.
       // Note that right now, really this is a very vague error message as it encompasses ALL the above steps. Might need to break up errors in the future.
