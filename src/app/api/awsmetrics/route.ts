@@ -23,8 +23,8 @@ export async function POST(request: NextRequest) {
     });
 
     const metricQueries = []; //Request object will provide list of requested instanceIds and requestedMetrics.
-    // To prepare Cloudwatch query request, we must iterate through both arrays and create unique request objects combining each unique instance/metric and
-    // package them into a specific metric request.
+    // To prepare Cloudwatch query request, we must iterate through both arrays and create unique request objects combining each unique
+    // instance/metric and package them into a specific metric request (which goes into our metricQueries variablecale).
 
     for (let i = 0; i < instanceIds.length; i++) {
       //Iterate through instanceIds array
@@ -46,10 +46,9 @@ export async function POST(request: NextRequest) {
     }
 
     function bestStatType(metricName: string): string {
-      //to prepare the finalMetricquery object that is ultimately sent to Cloudwatch,
-      // we must further transform the metricQueries array made above.
+      //each metricQuery in the metricQueries array will require a specific metric type to be requested for it, which we are selecting based on this table.
+      //we use this function below.
       const bestMetric: Record<string, string> = {
-        //each metricQuery in the metricQueries array will require a specific metric type to be requested for it, which we are selecting based on this table.
         CPUUtilization: 'Average',
         NetworkIn: 'Average',
         NetworkOut: 'Average',
@@ -61,19 +60,21 @@ export async function POST(request: NextRequest) {
 
       return bestMetric[metricName];
     }
-
+    //to prepare the finalMetricquery object that is ultimately sent to Cloudwatch,
+    // we must further transform the metricQueries array made above.
     const finalMetricQuery: MetricDataQuery[] = metricQueries.map(
       (elem, index) => {
         //the final transformation of the metricQueries object to finalMetricQuery.
-        //note that this is inefficient-we could merge the below query object into the work above to not have two separate functions required to make the finalMetricQuery.
-        //this was done primarily so we could test the two functions separately and confirm they were working as intended. A potential refactoring option
+        //note that this is inefficient-we could merge the below query object into the work above to not have two separate functions required to
+        // make the finalMetricQuery.
+        //this was done primarily so we could test the two functions separately and confirm they were working as intended. A potential refactoring option.
 
         return {
           Id: 'test' + index,
           Label: `${elem.dimensions[0].Value} ${elem.metricName}`,
           MetricStat: {
             Metric: {
-              Namespace: 'AWS/EC2', //The name of the metric
+              Namespace: 'AWS/EC2',
               MetricName: elem.metricName,
               Dimensions: elem.dimensions,
             },
@@ -97,162 +98,88 @@ export async function POST(request: NextRequest) {
     const response: GetMetricDataCommandOutput = await cloudwatchClient.send(
       awsQuery
     ); //send the prepared awsQuery to Cloudwatch and save the response in the response variable
-    console.log('response', response);
-    const finalResponse: any = {}; //we want our frontend to have a nice, clean array of data, broken up by each instance.
 
-    //but this is the AWS response we could get:
+    //once we have the response object (refer to https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-cloudwatch/Interface/GetMetricDataCommandOutput/
+    //to see what it looks like
+    //we want to transform the data so our frontend to have a nice, clean array of data, broken up by each instance.
+    //This makes it easy to work with for the frontend page (and related engineer). This will be our finalResponse object.
+    const finalResponse: frontendMetricsObject = {}; //we will talk about the type below.
 
-    //      {
-    //   '$metadata': {
-    //     httpStatusCode: 200,
-    //     requestId: 'bb4413b6-a5c5-471c-aab9-e616d5a0b726',
-    //     extendedRequestId: undefined,
-    //     cfId: undefined,
-    //     attempts: 1,
-    //     totalRetryDelay: 0
-    //   },
-    //   MetricDataResults: [
-    //     {
-    //       Id: 'test0',
-    //       Label: 'i-0496221bea4f57fe4 CPUUtilization',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     },
-    //     {
-    //       Id: 'test1',
-    //       Label: 'i-0496221bea4f57fe4 NetworkIn',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     },
-    //     {
-    //       Id: 'test2',
-    //       Label: 'i-0496221bea4f57fe4 NetworkOut',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     },
-    //     {
-    //       Id: 'test3',
-    //       Label: 'i-0496221bea4f57fe4 CPUCreditBalance',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     },
-    //     {
-    //       Id: 'test4',
-    //       Label: 'i-0496221bea4f57fe4 CPUCreditUsage',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     },
-    //     {
-    //       Id: 'test5',
-    //       Label: 'i-0496221bea4f57fe4 StatusCheckFailed',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     },
-    //     {
-    //       Id: 'test6',
-    //       Label: 'i-025ef7fc42f691bc4 CPUUtilization',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     },
-    //     {
-    //       Id: 'test7',
-    //       Label: 'i-025ef7fc42f691bc4 NetworkIn',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     },
-    //     {
-    //       Id: 'test8',
-    //       Label: 'i-025ef7fc42f691bc4 NetworkOut',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     },
-    //     {
-    //       Id: 'test9',
-    //       Label: 'i-025ef7fc42f691bc4 CPUCreditBalance',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     },
-    //     {
-    //       Id: 'test10',
-    //       Label: 'i-025ef7fc42f691bc4 CPUCreditUsage',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     },
-    //     {
-    //       Id: 'test11',
-    //       Label: 'i-025ef7fc42f691bc4 StatusCheckFailed',
-    //       Timestamps: [Array],
-    //       Values: [Array],
-    //       StatusCode: 'Complete'
-    //     }
+    //  the structure of finalResponse:
+    // {
+    // 'i-0496221beb4f27fe4': [
+    //     { CPUUtilization: [Object] },
+    //     { NetworkIn: [Object] },
+    //     { NetworkOut: [Object] },
+    //     { CPUCreditBalance: [Object] },
+    //     { CPUCreditUsage: [Object] },
+    //     { StatusCheckFailed: [Object] }
     //   ],
-    //   Messages: []
+    //   'i-025ef9fc42f692bc4': [
+    //     { CPUUtilization: [Object] },
+    //     { NetworkIn: [Object] },
+    //     { NetworkOut: [Object] },
+    //     { CPUCreditBalance: [Object] },
+    //     { CPUCreditUsage: [Object] },
+    //     { StatusCheckFailed: [Object] }
+    //   ]
     // }
-    //note how MetricDataQuery is structured: it is an array of objects with the information we need
+    // Each instance should be an object, with a single property of an array, and in that array, there are objects each of which correspond to a single metric.
+    //each of these objects have key of the metric name and the value is another object, comprised of two properties:
+    // Values, with the values from AWS, and Timestamps, from AWS.
+    //Note that the [Object] in the above nested objects will be an object with two properties: Value and Timestamps
+    //The length of Timestamps and Values will always be the same if this is working properly.
 
-    //therefore, the loop below transforms the data from Cloudwatch's response into a way that is easy
-    // for the frontend page (and related engineer) to work with.
+    //The pieces below are the types for the different objects in the finalResponse object.
 
-    //  this is what finalResponse should look like after transforming the initial response object we receive from Cloudwatch.
-    {
-      //   'i-0496221beb4f27fe4': [
-      //     { CPUUtilization: [Object] },
-      //     { NetworkIn: [Object] },
-      //     { NetworkOut: [Object] },
-      //     { CPUCreditBalance: [Object] },
-      //     { CPUCreditUsage: [Object] },
-      //     { StatusCheckFailed: [Object] }
-      //   ],
-      //   'i-025ef9fc42f692bc4': [
-      //     { CPUUtilization: [Object] },
-      //     { NetworkIn: [Object] },
-      //     { NetworkOut: [Object] },
-      //     { CPUCreditBalance: [Object] },
-      //     { CPUCreditUsage: [Object] },
-      //     { StatusCheckFailed: [Object] }
-      //   ]
-      // }
+    type FrontendMetricsByInstance = {
+      //Each Instance will have a FrontendMetricsObjectInstance for EACH METRIC REQUESTED.
+      // For example, 3 metrics requested, 3 FrontendMetricsByInstance objects
+      // Note: each of these objects WILL NOT HAVE THE INSTANCE ID ATTACHED, YOU MUST READ THAT FROM THE FRONTENDMETRICSOBJECT BELOW
+      [metricName: string]: {
+        Values: number[];
+        Timestamps: Date[];
+      };
+    };
 
-      //note that the [Object] in the above nested objects will be an object with two properties: Value and Timestamps, e.g.:
+    type frontendMetricsObject = {
+      //ultimate type of finalResponse object sent to frontend. you should have 1 for each instance.
+      //These objects are what are ultimately leveraged to create the charts seen on the frontend.
+      [instanceId: string]: FrontendMetricsByInstance[]; //you will have an array of FrontendMetricsByInstance
+    };
 
-      for (let i = 0; i < response!.MetricDataResults!.length; i++) {
-        const labelArray = response!.MetricDataResults![i].Label!.split(' ');
+    for (let i = 0; i < response!.MetricDataResults!.length; i++) {
+      //Creation of finalResponse object
+      const labelArray = response!.MetricDataResults![i].Label!.split(' '); //Labels from AWS will be instance and metricsname, separated by a space.
 
-        const instanceId = labelArray[0];
+      const metricsObject: any = {};
+      metricsObject[labelArray[1]] = {
+        Timestamps: response.MetricDataResults[i].Timestamps,
+        Values: response.MetricDataResults[i].Values,
+      };
 
-        const metricsObject: any = {};
-        metricsObject[labelArray[1]] = {
-          Timestamps: response.MetricDataResults[i].Timestamps,
-          Values: response.MetricDataResults[i].Values,
-        };
+      const metricsObject: FrontendMetricsByInstance = {}; //the specific metric object we are creating
+      metricsObject[labelArray[1]] = {
+        Timestamps: response.MetricDataResults![i].Timestamps as Date[],
+        Values: response.MetricDataResults![i].Values as number[],
+      };
 
-        if (finalResponse[instanceId]) {
-          finalResponse[instanceId].push(metricsObject);
-        } else {
-          const instance = [];
-          instance.push(metricsObject);
-          finalResponse[instanceId] = instance;
-        }
+      if (finalResponse[instanceId]) {
+        //if instance is already in our finalResponse object, just push there. if not, create it.
+        finalResponse[instanceId].push(metricsObject);
+      } else {
+        const instance = [];
+        instance.push(metricsObject);
+        finalResponse[instanceId] = instance;
       }
-    } // console.log('finalresponse', finalResponse['i-0496221bea4f57fe4'][0].CPUUtilization);
+    }
 
     return NextResponse.json({ res: finalResponse }, { status: 200 }); //send created finalResponse object to frontEnd
   } catch (err) {
-    // console.log(err);
+    console.log('err', err);
     return NextResponse.json(
       //error on if the try above fails.
-      // Note that right now, really this is a very vague error message as it encompasses ALL the above steps. Might need to break up error sin the future.
+      // Note that right now, really this is a very vague error message as it encompasses ALL the above steps. Might need to break up errors in the future.
       { error: `${err} error in obtaining metrics from query` },
       { status: 500 }
     );
