@@ -153,12 +153,8 @@ export async function POST(request: NextRequest) {
     for (let i = 0; i < response!.MetricDataResults!.length; i++) {
       //Creation of finalResponse object
       const labelArray = response!.MetricDataResults![i].Label!.split(' '); //Labels from AWS will be instance and metricsname, separated by a space.
+      const instanceId=labelArray[0]
 
-      const metricsObject: any = {};
-      metricsObject[labelArray[1]] = {
-        Timestamps: response.MetricDataResults[i].Timestamps,
-        Values: response.MetricDataResults[i].Values,
-      };
 
       const metricsObject: FrontendMetricsByInstance = {}; //the specific metric object we are creating
       metricsObject[labelArray[1]] = {
