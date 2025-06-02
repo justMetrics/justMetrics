@@ -65,9 +65,7 @@ export async function POST(request: NextRequest) {
     const finalMetricQuery: MetricDataQuery[] = metricQueries.map(
       (elem, index) => {
         //the final transformation of the metricQueries object to finalMetricQuery.
-
-        //note that this is inefficient-we could merge the below query object into the function above to not have two separate functions required to 
-
+        //note that this is inefficient-we could merge the below query object into the work above to not have two separate functions required to
         // make the finalMetricQuery.
         //this was done primarily so we could test the two functions separately and confirm they were working as intended. A potential refactoring option.
 
@@ -153,8 +151,6 @@ export async function POST(request: NextRequest) {
     for (let i = 0; i < response!.MetricDataResults!.length; i++) {
       //Creation of finalResponse object
       const labelArray = response!.MetricDataResults![i].Label!.split(' '); //Labels from AWS will be instance and metricsname, separated by a space.
-      const instanceId=labelArray[0]
-
 
       const metricsObject: FrontendMetricsByInstance = {}; //the specific metric object we are creating
       metricsObject[labelArray[1]] = {
