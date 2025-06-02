@@ -176,6 +176,7 @@ describe('EC2 Client connection tests', () => {
                 },
               ],
               SourceDestCheck: true,
+              Tags: [ { Key: 'Name', Value: 'namegoeshere' } ],
               VirtualizationType: 'hvm',
               CpuOptions: { CoreCount: 1, ThreadsPerCore: 1 },
               CapacityReservationSpecification: {
@@ -302,6 +303,7 @@ describe('EC2 Client connection tests', () => {
                 },
               ],
               SourceDestCheck: true,
+              Tags: [ { Key: 'Name', Value: 'namegoeshere2' } ],
               VirtualizationType: 'hvm',
               CpuOptions: { CoreCount: 1, ThreadsPerCore: 1 },
               CapacityReservationSpecification: {
@@ -360,7 +362,7 @@ describe('EC2 Client connection tests', () => {
       {
         instanceId: 'i-1234566789',
         state: 'running',
-        name: undefined,
+        name: 'namegoeshere',
         type: 't2.micro',
         launchTime: '2025-05-26T15:18:07.000Z',
         SecurityGroups: [
@@ -375,7 +377,7 @@ describe('EC2 Client connection tests', () => {
       {
         instanceId: 'i-12340975980',
         state: 'running',
-        name: undefined,
+        name: 'namegoeshere2',
         type: 't2.micro',
         launchTime: '2025-05-26T15:18:07.000Z',
         SecurityGroups: [
@@ -394,7 +396,7 @@ describe('EC2 Client connection tests', () => {
       .mockResolvedValue(fakeResponse);
     // jest.spyOn()
 
-    const testInvoke = await POST(mockReq as any);
+    const testInvoke = await POST(mockReq);
     const body = await testInvoke.json();
 
     expect(body).toEqual({ res });
@@ -415,10 +417,9 @@ describe('EC2 Client connection tests', () => {
       }),
     };
 
-    const body = await POST(mockReq);
-    const body2 = await body.json();
-    console.log('BODY', body2);
+    const mockResponse = await POST(mockReq);
+    const body = await mockResponse.json();
 
-    expect(body2).toEqual({ error: '❌ Failed to fetch EC2 instances' });
+    expect(body).toEqual({ error: '❌ Failed to fetch EC2 instances' });
   });
 });

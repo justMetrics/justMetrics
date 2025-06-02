@@ -37,8 +37,6 @@ export async function POST(req: NextRequest) {
     // Fetch all EC2 instances
     const command: DescribeInstancesCommand = new DescribeInstancesCommand({});
     const result: DescribeInstancesCommandOutput = await ec2.send(command);
-    console.log('result')
-console.dir(result, { depth: null, colors: true })
     // Extract instance data from reservations
     const instances = result.Reservations?.flatMap((el) => el.Instances);
 
