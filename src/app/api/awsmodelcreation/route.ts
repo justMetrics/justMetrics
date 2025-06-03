@@ -10,6 +10,7 @@ import { awsModelCreationReq } from '../../../../types/apiTypes';
 
 export async function POST(req: NextRequest) {
   // Extract credentials and region from the request body
+  console.log('req stuff', req)
   const { accessKey, secretKey, region }: awsModelCreationReq =
     await req.json();
 

@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
 
     //  the structure of finalResponse:
     // {
-    // 'i-0496221beb4f27fe4': [
+    // 'i-1234567890abc': [
     //     { CPUUtilization: [Object] },
     //     { NetworkIn: [Object] },
     //     { NetworkOut: [Object] },
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
     //     { CPUCreditUsage: [Object] },
     //     { StatusCheckFailed: [Object] }
     //   ],
-    //   'i-025ef9fc42f692bc4': [
+    //   'i-abc0987654321': [
     //     { CPUUtilization: [Object] },
     //     { NetworkIn: [Object] },
     //     { NetworkOut: [Object] },

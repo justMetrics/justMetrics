@@ -2,36 +2,34 @@ import { NextRequest } from 'next/server';
 import { POST } from '../src/app/api/awsmodelcreation/route';
 import {
   EC2Client,
-  DescribeInstancesCommand,
-  DescribeInstancesCommandOutput,
 } from '@aws-sdk/client-ec2';
-// import { NextRequest, NextResponse } from 'next/server';
-
-// {
-//   accessKey: 'AKIASQVKXTE2JGCYRIXZ',
-//   secretKey: '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',
-//   region: 'us-west-2'
-// }
-// jest.mock('@aws-sdk/client-ec2')
-// jest.mock('next/server');
-//POST takes in API Details and Region
 
 describe('EC2 Client connection tests', () => {
+     const createMockRequest = (body: any) => {
+    return {
+      json:  async () => {
+        return body
+      } 
+    } as NextRequest;
+  } 
+
   it('EC2 Client receives access key credentials but no region', async () => {
-    const mockReq: Partial<NextRequest> = {
-      method: 'POST',
-      url: 'http://localhost/api/awsModelCreation',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-      }),
-      json: async () => ({
+
+  const mockReq = createMockRequest({
         accessKey: 'AKIA',
         secretKey: '123',
         region: '',
-      }),
-    };
+      })
 
-    const testInvoke = await POST(mockReq as any);
+    // const mockReq: Partial<NextRequest> = {
+    //   json: async () => ({
+    //     accessKey: 'AKIA',
+    //     secretKey: '123',
+    //     region: '',
+    //   }),
+    // };
+
+    const testInvoke = await POST(mockReq);
     const body = await testInvoke.json();
 
     expect(body).toEqual({
@@ -40,19 +38,14 @@ describe('EC2 Client connection tests', () => {
   });
 
   it('EC2 Client receives access key and region but no secret key', async () => {
-    const mockReq: Partial<NextRequest> = {
-      method: 'POST',
-      url: 'http://localhost/api/awsModelCreation',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-      }),
-      json: async () => ({
+
+  const mockReq = createMockRequest({
         accessKey: 'AKIA',
         secretKey: '',
         region: 'us-east-1',
-      }),
-    };
-    const testInvoke = await POST(mockReq as any);
+      })
+  
+    const testInvoke = await POST(mockReq);
     const body = await testInvoke.json();
 
     expect(body).toEqual({
@@ -69,7 +62,7 @@ describe('EC2 Client connection tests', () => {
       }),
     };
 
-    const testInvoke = await POST(mockReq as any);
+    const testInvoke = await POST(mockReq);
     const body = await testInvoke.json();
     expect(body).toEqual({
       error: 'Missing AWS AccessKey or SecretKey or Region',
@@ -85,14 +78,6 @@ describe('EC2 Client connection tests', () => {
       }),
     };
     const fakeResponse = {
-      $metadata: {
-        httpStatusCode: 200,
-        requestId: 'e17ef0c6-0a74-4603-9feb-626931939981',
-        extendedRequestId: undefined,
-        cfId: undefined,
-        attempts: 1,
-        totalRetryDelay: 0,
-      },
       Reservations: [
         {
           ReservationId: 'r-09aac1d744df206ea',
@@ -403,19 +388,13 @@ describe('EC2 Client connection tests', () => {
     spy1.mockRestore();
   });
 
-  it('EC2 Client receives access key credentials but no region', async () => {
-    const mockReq: Partial<NextRequest> = {
-      method: 'POST',
-      url: 'http://localhost/api/awsModelCreation',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-      }),
-      json: async () => ({
+  it('EC2 Client receives invalid access credentials', async () => {
+    const mockReq = createMockRequest({
         accessKey: 'AKIA',
         secretKey: '123',
         region: 'blarg',
-      }),
-    };
+      })
+    
 
     const mockResponse = await POST(mockReq);
     const body = await mockResponse.json();
