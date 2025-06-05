@@ -1,20 +1,24 @@
 import { useCallback, useState } from 'react';
 
-// create custom type
+//?  Custom hook for handling API key submission to AWS-related endpoints
 
-// api keys POST request
+//?  Return an object including:
+//?   - response: AWS API response data (null until request succeeds)
+//?   - error: Any error message (null until request fails)
+//?   - sendApiKeys: Function to trigger the API request
+
 const useApiKeysFetch = () => {
-  // create usestats
+  // State management for API response and errors
   const [response, setResponse] = useState(null);
   const [error, setError] = useState<string | null>(null);
 
-  // create POST request for api keys
+  // Sends credentialsm and region to the specified url - api/awsmodelcreation.ts
   const sendApiKeys = useCallback(
     async (
       url: string,
       awsAccessKey: string | number,
       secretAccessKey: string | number,
-      region:string,
+      region: string,
     ): Promise<void> => {
       try {
         const res = await fetch(url, {
@@ -25,12 +29,14 @@ const useApiKeysFetch = () => {
           body: JSON.stringify({
             accessKey: awsAccessKey,
             secretKey: secretAccessKey,
-            region:region
+            region: region,
           }),
         });
 
+        // Handle HTTP errors
         if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
 
+        // Process successful response
         const data = await res.json();
         setResponse(data.res);
       } catch (error: unknown) {
