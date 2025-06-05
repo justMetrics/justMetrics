@@ -1,20 +1,21 @@
 import { useCallback, useState } from 'react';
 
-// create custom type
+// import type
+import { instanceMetricbody } from '../types/componentsTypes'
 
 // api keys POST request
 const useMetricsFetch = () => {
   // create usestats
   const [response, setResponse] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<null | string>(null);
 
   // create POST request for api keys
   const sendMetricsRequest = useCallback(
     async (
       //!change out the async function to support metric request
       url: string,
-      instanceMetricbody: any
-    ): Promise<any> => {
+      instanceMetricbody: instanceMetricbody
+    ): Promise<void> => {
       try {
         // deconstruct instanceMetricBody
         const { metrics, instances, credentials, region } = instanceMetricbody;
@@ -39,8 +40,12 @@ const useMetricsFetch = () => {
         const data = await res.json();
 
         setResponse(data.res);
-      } catch (error: any) {
-        setError(error.message);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('An unkown error occured');
+        }  
       }
     },
     []

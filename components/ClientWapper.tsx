@@ -4,8 +4,11 @@ import React, { useState } from 'react';
 import KeyInPut from './KeyInPut';
 import Metrics from './Metrics';
 
+// import types
+import { insData } from '../types/componentsTypes';
+
 const ClientWapper = () => {
-  const [insData, setInsData] = useState<string[]>([]); //This state is set to the array of instances for the specified region/AWS keys in KeyInput.tsx
+  const [insData, setInsData] = useState<insData[]>([]); //This state is set to the array of instances for the specified region/AWS keys in KeyInput.tsx
   const [credentials, setCredentials] = useState<string[]>([]); //Holds the AWS Keys required for login. Note they are only set AFTER they have been validated
   //(by "validated" we mean returned a response that isn't null) see KeyInput and the useEffect function using setCredentials for further details
   const [selectedRegion, setSelectedRegion] = useState<string>('') //The region specified by the user on the login page.

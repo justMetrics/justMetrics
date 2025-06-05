@@ -8,7 +8,7 @@ import Select from 'react-select';
 import Sidebar from './Sidebar';
 
 // import custom types
-import { insData } from '../types/componentsTypes';
+import { insData, metricsProps, instanceMetricbody } from '../types/componentsTypes';
 
 /**
  * Metrics Component: Displays AWS EC2 instance meta data and their metrics with charts
@@ -20,24 +20,16 @@ import { insData } from '../types/componentsTypes';
  * setCredentials - Callback to update credentials
  */
 
-type insdataProps = {
-  insData: insData[];
-  credentials: string[];
-  selectedRegion: string;
-  setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
-};
-//credentials 0 access key 1 secret accesskey
-//!connect metricsFetch to here
-
+// create Metrics component
 const Metrics = ({
   insData,
   credentials,
   selectedRegion,
   setCredentials,
-}: insdataProps) => {
-  // State management
-  const [instanceMetaData, setInstanceMetaData] = useState();
-  const [instanceMetrics, setInstanceMetrics] = useState<insData | null>(null);
+}: metricsProps) => {
+  // create use states
+  const [instanceMetaData, setInstanceMetaData] =  useState<insData | null>(null);
+  const [instanceMetrics, setInstanceMetrics] = useState<insData[] | null>(null);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
 
   // Toggle sidebar visibility
@@ -64,7 +56,7 @@ const Metrics = ({
   const instanceIdList = insData.map((elem) => elem.instanceId);
 
   // Metrics request payload configuration
-  const instanceMetricbody = {
+  const instanceMetricbody: instanceMetricbody  = {
     metrics: [
       'CPUUtilization',
       'NetworkIn',

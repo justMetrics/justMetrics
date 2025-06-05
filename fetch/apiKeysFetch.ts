@@ -10,7 +10,7 @@ import { useCallback, useState } from 'react';
 const useApiKeysFetch = () => {
   // State management for API response and errors
   const [response, setResponse] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Sends credentialsm and region to the specified url - api/awsmodelcreation.ts
   const sendApiKeys = useCallback(
@@ -18,8 +18,8 @@ const useApiKeysFetch = () => {
       url: string,
       awsAccessKey: string | number,
       secretAccessKey: string | number,
-      region: string
-    ): Promise<any> => {
+      region: string,
+    ): Promise<void> => {
       try {
         const res = await fetch(url, {
           method: 'POST',
@@ -39,8 +39,12 @@ const useApiKeysFetch = () => {
         // Process successful response
         const data = await res.json();
         setResponse(data.res);
-      } catch (error: any) {
-        setError(error.message);
+      } catch (error: unknown) {
+         if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('An unknown error occurred');
+        }
       }
     },
     []

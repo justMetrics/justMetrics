@@ -7,12 +7,8 @@ import dynamic from 'next/dynamic';
 // Lazy load Select component to avoid SSR issues
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
-// type Credential = [accessKeyId: string, secretAccessKey: string];
-type KeyInPutProps = {
-  setInsData: React.Dispatch<React.SetStateAction<string[]>>;
-  setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
-  setSelectedRegion: React.Dispatch<React.SetStateAction<string>>;
-};
+// import types
+import { regions, KeyInPutProps } from '../types/componentsTypes';
 
 // KeyInPut Component: Handles AWS credential input and region selection
 
@@ -70,7 +66,7 @@ const KeyInPut = ({
   };
 
   // create an array with all us regions
-  const regions = [
+  const regions: regions = [
     { value: 'us-west-1', label: 'US West 1' },
     { value: 'us-west-2', label: 'US West 2' },
     { value: 'us-east-1', label: 'US East 1' },
