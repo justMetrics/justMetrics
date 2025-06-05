@@ -26,10 +26,6 @@ const Metrics = ({
   credentials,
   selectedRegion,
   setCredentials,
-}: insdataProps) => {
-  // State management
-  const [instanceMetaData, setInstanceMetaData] = useState<insData | null>();
-  const [instanceMetrics, setInstanceMetrics] = useState<insData | null>(null);
 }: metricsProps) => {
   // create use states
   const [instanceMetaData, setInstanceMetaData] =  useState<insData | null>(null);
