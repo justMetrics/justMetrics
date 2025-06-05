@@ -10,6 +10,7 @@ import { awsModelCreationReq } from '../../../../types/apiTypes';
 
 export async function POST(req: NextRequest) {
   // Extract credentials and region from the request body
+  console.log('req stuff', req)
   const { accessKey, secretKey, region }: awsModelCreationReq =
     await req.json();
 
@@ -37,7 +38,6 @@ export async function POST(req: NextRequest) {
     // Fetch all EC2 instances
     const command: DescribeInstancesCommand = new DescribeInstancesCommand({});
     const result: DescribeInstancesCommandOutput = await ec2.send(command);
-
     // Extract instance data from reservations
     const instances = result.Reservations?.flatMap((el) => el.Instances);
 
