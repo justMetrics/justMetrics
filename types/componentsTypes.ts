@@ -25,6 +25,11 @@ export type instanceMetricbody = {
     region: string;
 }
 
+export type instanceMetrics = Record<string, {
+  Timestamps: string[];
+  Values: number[];
+}>
+
 
 // keysInPut.tsx
 export type regions = Record<string, string>[];
@@ -49,3 +54,25 @@ export type KeyInPutProps = {
   setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
   setSelectedRegion: React.Dispatch<React.SetStateAction<string>>;
 };
+// chartCPU.tsx
+export type ChartCPUProps = {
+  metricData: instanceMetrics;
+}
+
+
+
+
+//  {cpu: {
+//     "Timestamps": [
+//         "2025-06-05T18:32:00.000Z",
+//         "2025-06-05T18:42:00.000Z",
+//         "2025-06-05T18:52:00.000Z",
+//         "2025-06-05T19:02:00.000Z"
+//     ],
+//     "Values": [
+//         3.6516708264913214,
+//         3.5868362826972,
+//         3.6531629661203824
+//     ]
+// }}
+
