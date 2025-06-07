@@ -21,14 +21,6 @@ describe('EC2 Client connection tests', () => {
         region: '',
       })
 
-    // const mockReq: Partial<NextRequest> = {
-    //   json: async () => ({
-    //     accessKey: 'AKIA',
-    //     secretKey: '123',
-    //     region: '',
-    //   }),
-    // };
-
     const testInvoke = await POST(mockReq);
     const body = await testInvoke.json();
 
