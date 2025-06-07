@@ -1,9 +1,9 @@
-import ClientWapper from '../../components/ClientWapper';
-
+import Link from 'next/link';
 export default function Home() {
   return (
     <section>
-      <ClientWapper />
+      <div>home page</div>
+      <Link href='/application'>Go to Application Page</Link>
     </section>
   );
 }
