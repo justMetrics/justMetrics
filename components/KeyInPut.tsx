@@ -4,17 +4,17 @@ import { useState, useEffect } from 'react';
 import useApiKeysFetch from '../fetch/apiKeysFetch';
 import dynamic from 'next/dynamic';
 
-// Lazy load Select component to avoid SSR issues
+// Dynamically import the Select component to prevent issues with server-side rendering (SSR)
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
-// type Credential = [accessKeyId: string, secretAccessKey: string];
+// Define Props type
 type KeyInPutProps = {
-  setInsData: React.Dispatch<React.SetStateAction<string[]>>;
-  setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
-  setSelectedRegion: React.Dispatch<React.SetStateAction<string>>;
+  setInsData: React.Dispatch<React.SetStateAction<string[]>>; // Sets instance data returned from backend
+  setCredentials: React.Dispatch<React.SetStateAction<string[]>>; // Sets stored AWS credentials
+  setSelectedRegion: React.Dispatch<React.SetStateAction<string>>; // Sets selected region
 };
 
-// KeyInPut Component: Handles AWS credential input and region selection
+// KeyInPut Component: Handles credential input, region selection, and initiates API request
 
 const KeyInPut = ({
   setInsData,
@@ -30,46 +30,45 @@ const KeyInPut = ({
   // Custom hook for API calls
   const { response, error, sendApiKeys } = useApiKeysFetch();
 
-  // Handle API response
+  // Update parent components with API response once available
   useEffect(() => {
     if (response) {
-      setInsData(response);
-      // save credentials to state
-      setCredentials([awsAccessKey, secretAccessKey]);
-      setSelectedRegion(testRegion);
+      setInsData(response); // set instance data
+      setCredentials([awsAccessKey, secretAccessKey]); // store credentials in parent state
+      setSelectedRegion(testRegion); // update selected region
     }
   }, [response]);
 
-  // Handle region selection from dropdown with arg = the selected region value
+  // Callback when a region is selected from dropdown
   const handleSelectRegion = (selectRegion: string) => {
     // * For debugging: Uncomment to verify selected Region from dropdown list
     // console.log('👀 👀 👀 👀 Select Region from dropdown list', selectRegion);
-    setTestRegion(selectRegion);
+    setTestRegion(selectRegion); // update state for selected region
   };
 
-  // Handle connect button click
+  // Validate input and trigger API request on Connect button click
   const sendApi = () => {
-    const url = '/api/awsmodelcreation';
+    const url = '/api/awsmodelcreation'; // backend route
 
-    // Reset previous errors
+    // clear any existing error
     setFetchError('');
 
-    // Validate inputs
+    // Check all fields are filled
     if (!awsAccessKey || !secretAccessKey || !testRegion) {
       setFetchError('Missing AWS Access Key or Secret Key or Region');
       return;
     }
 
-    // Call API
+    // Initiate request with provided input
     sendApiKeys(url, awsAccessKey, secretAccessKey, testRegion);
 
-    // if error is returned
+    // Handle any errors returned from the custom hook
     if (error) {
       setFetchError(error);
     }
   };
 
-  // create an array with all us regions
+  // AWS region options formatted for react-select
   const regions = [
     { value: 'us-west-1', label: 'US West 1' },
     { value: 'us-west-2', label: 'US West 2' },
@@ -122,7 +121,7 @@ const KeyInPut = ({
           </button>
         </main>
 
-        {/* Error Display */}
+        {/* Error message display */}
         {fetchError ? (
           <div className='missingParam-error flex items-center bg-red-500 p-4 rounded-2xl m-10'>
             {fetchError}

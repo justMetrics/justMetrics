@@ -1,10 +1,10 @@
 import '@testing-library/jest-dom';
 
 import { POST } from '../src/app/api/awsmetrics/route';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { CloudWatchClient } from '@aws-sdk/client-cloudwatch';
 
-// create a jest.mock for AWS API
-
+// Mock AWS SDK so we can simulate different AWS responses
 jest.mock('@aws-sdk/client-cloudwatch', () => {
   return {
     CloudWatchClient: jest.fn(() => ({
@@ -13,20 +13,21 @@ jest.mock('@aws-sdk/client-cloudwatch', () => {
     GetMetricDataCommand: jest.fn(),
   };
 });
-// beforeEach => create a mock request
 
+// Ensure mocks are reset before each test to avoid cross-test interference
 describe('AWS Metrics', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
+  // Helper function to simulate a Next.js API request with a given body
   const createMockRequest = (body: any) => {
     return {
       json: () => Promise.resolve(body),
     } as NextRequest;
   };
 
-  // it (should return right response if request is valid)
-
+  //Test a valid request flow
   it('should return correct response if request is valid', async () => {
     const mockAWSResponse = {
       MetricDataResults: [
@@ -40,11 +41,10 @@ describe('AWS Metrics', () => {
       ],
     };
 
-    require('@aws-sdk/client-cloudwatch').CloudWatchClient.mockImplementation(
-      () => ({
-        send: jest.fn().mockResolvedValue(mockAWSResponse),
-      })
-    );
+    // Mock AWS client to return expected metric data
+    CloudWatchClient.mockImplementation(() => ({
+      send: jest.fn().mockResolvedValue(mockAWSResponse),
+    }));
 
     const req = createMockRequest({
       requestedMetrics: ['CPUUtilization'],
@@ -56,14 +56,17 @@ describe('AWS Metrics', () => {
 
     const response = await POST(req);
     const data = await response.json();
+
+    // Verify API processes and formats response as expected
     expect(response.status).toBe(200);
     expect(data.res).toHaveProperty('i-03034239cc385e858');
     expect(data.res['i-03034239cc385e858'][0]).toHaveProperty('CPUUtilization');
   });
 
-  // it (should return error if request is not valid)
+  //Test invalid validation - missing required field
   it('should return error mentioning which field is missing if request is NOT valid', async () => {
     const badReq = createMockRequest({
+      //requestedMetrics is omitted here to simulate a bad request
       //requestedMetrics: ['CPUUtilization'],
       instanceIds: [{ instanceId: 'i-03034239cc385e858' }],
       awsAccessKey: 'test',
@@ -73,11 +76,12 @@ describe('AWS Metrics', () => {
     const response = await POST(badReq);
     const data = await response.json();
 
+    // Expect error to mention the missing field
     expect(response.status).toBe(500);
     expect(data.error).toContain('requestedMetrics');
   });
 
-  // Test transformation from original response to final response is working correctly
+  // Test transformation of original AWS response into frontend-friendly structure
   it('should transform orginal response correctly', async () => {
     const mockAWSResponse = {
       MetricDataResults: [
@@ -98,11 +102,9 @@ describe('AWS Metrics', () => {
       ],
     };
 
-    require('@aws-sdk/client-cloudwatch').CloudWatchClient.mockImplementation(
-      () => ({
-        send: jest.fn().mockResolvedValue(mockAWSResponse),
-      })
-    );
+    CloudWatchClient.mockImplementation(() => ({
+      send: jest.fn().mockResolvedValue(mockAWSResponse),
+    }));
 
     const request = createMockRequest({
       requestedMetrics: ['CPUUtilization', 'NetworkIn'],
@@ -113,12 +115,14 @@ describe('AWS Metrics', () => {
     });
     const response = await POST(request);
     const data = await response.json();
+
+    // Ensure final response is structure correctly for front-end consumption
     expect(data.res).toHaveProperty('i-03034239cc385e858');
     expect(data.res['i-03034239cc385e858'][0]).toHaveProperty('CPUUtilization');
     expect(data.res['i-03034239cc385e858'][1].NetworkIn.Values[0]).toBe(100);
   });
 
-  // Test error handler
+  // Test correct handling of multiple instances in one request
 
   it('should handle multiple instances correctly', async () => {
     const mockAWSResponse = {
@@ -140,11 +144,10 @@ describe('AWS Metrics', () => {
       ],
     };
 
-    require('@aws-sdk/client-cloudwatch').CloudWatchClient.mockImplementation(
-      () => ({
-        send: jest.fn().mockResolvedValue(mockAWSResponse),
-      })
-    );
+    CloudWatchClient.mockImplementation(() => ({
+      send: jest.fn().mockResolvedValue(mockAWSResponse),
+    }));
+
     const request = createMockRequest({
       requestedMetrics: ['NetworkIn'],
       instanceIds: [
@@ -158,16 +161,17 @@ describe('AWS Metrics', () => {
 
     const response = await POST(request);
     const data = await response.json();
+
+    // Ensure metrics are grouped by both instance IDs
     expect(data.res).toHaveProperty('i-03034239cc385e858');
     expect(data.res).toHaveProperty('i-03034239cc385e860');
   });
 
+  // Test AWS error is caught and reported correctly
   it('should handle AWS error', async () => {
-    require('@aws-sdk/client-cloudwatch').CloudWatchClient.mockImplementation(
-      () => ({
-        send: jest.fn().mockRejectedValue(new Error('testing')),
-      })
-    );
+    CloudWatchClient.mockImplementation(() => ({
+      send: jest.fn().mockRejectedValue(new Error('testing')),
+    }));
     const request = createMockRequest({
       requestedMetrics: ['NetworkIn'],
       instanceIds: [{ instanceId: 'i-03034239cc385e858' }],
@@ -178,6 +182,7 @@ describe('AWS Metrics', () => {
     const response = await POST(request);
     const data = await response.json();
 
+    // Expect status 500 and custom error message when AWS call fails
     expect(response.status).toBe(500);
     expect(data.error).toContain(
       'testing error in obtaining metrics from query'
