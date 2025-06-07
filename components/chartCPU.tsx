@@ -33,7 +33,7 @@ export function ChartCPU({ metricData }) {
 
   const metricKeyArr = Object.keys(metricData); 
   const metricKey = metricKeyArr[0];
-  //the following three objects contain necessary chart configuration details that are selected based on the metricKey ie metric name from AWS.
+  //the following three objects contain necessary chart configuration details that are selected based on the metricKey (ie metric name).
   //In practice we would want to have unique configuraitons for each metric instead of hardcoding them like this but this was judged to be the 
   //best compromise of reusability and modularity given available resources
   const metrics = {  //this maps axis titles to the relevant metric
