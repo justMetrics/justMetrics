@@ -10,7 +10,7 @@ const Select = dynamic(() => import('react-select'), {
 }) as unknown as select;
 
 // import types
-import { KeyInPutProps, select, OptionType } from '../types/componentsTypes';
+import { KeyInPutProps, select, OptionType } from '../../types/componentsTypes';
 
 // KeyInPut Component: Handles AWS credential input and region selection
 
