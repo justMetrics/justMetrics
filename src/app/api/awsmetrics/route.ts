@@ -6,20 +6,23 @@ import {
   MetricDataQuery,
 } from '@aws-sdk/client-cloudwatch';
 
+// import types
+import { body } from '../../../../types/apiTypes';
+
 export async function POST(request: NextRequest) {
   //function is triggered on POST request to /awsmetrics route
   try {
     const { requestedMetrics, instanceIds, awsAccessKey, secretKey, region } =
       await request.json(); //deconstructs request Object to get relevant variables for Cloduwatch Request
-
-    const body = {
+      
+    const body: body = {
       requestedMetrics,
       instanceIds,
       awsAccessKey,
       secretKey,
       region,
     };
-    const bodyList = [
+    const bodyList: (keyof body)[] = [
       'requestedMetrics',
       'instanceIds',
       'awsAccessKey',

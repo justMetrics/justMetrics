@@ -9,12 +9,14 @@ import {
   Title,
   TimeScale,
   Tooltip,
+  ChartOptions,
+  TooltipItem,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { Line } from 'react-chartjs-2';
 
 // import custom types
-import { } from '../types/componentsTypes';
+import { ChartCPUProps } from '../types/componentsTypes';
 
 ChartJS.register(
   CategoryScale,
@@ -26,14 +28,16 @@ ChartJS.register(
   Tooltip
 );
 
-export function ChartCPU({ metricData }) {
+export function ChartCPU({ metricData }: ChartCPUProps) {
+  console.log('metricData', metricData)
+
   if (!metricData) {
     return <p>Loading...</p>;
   }
 
   const metricKeyArr = Object.keys(metricData);
   const metricKey = metricKeyArr[0];
-  const metrics = {
+  const metrics: Record<string, string> = {
     CPUUtilization: '%',
     NetworkIn: 'Bytes',
     NetworkOut: 'Bytes',
@@ -43,7 +47,7 @@ export function ChartCPU({ metricData }) {
     StatusCheckFailed: 'Failed Checks',
   };
 
-  const chartTitles = {
+  const chartTitles: Record<string, string> = {
     CPUUtilization: 'CPU Utilization',
     NetworkIn: 'Network In',
     NetworkOut: 'Network Out',
@@ -53,7 +57,7 @@ export function ChartCPU({ metricData }) {
     StatusCheckFailed: 'Failed Status Checks',
   };
 
-  const roundY = {
+  const roundY: Record<string, number> = {
     CPUUtilization: 2,
     NetworkIn: 0,
     NetworkOut: 0,
@@ -62,8 +66,8 @@ export function ChartCPU({ metricData }) {
     StatusCheckFailed: 0,
   };
 
-  const yAxisTitle = metrics[metricKey] as string;
-  const chartTitle = chartTitles[metricKey] as string;
+  const yAxisTitle: string = metrics[metricKey];
+  const chartTitle = chartTitles[metricKey];
   const yAxisRounding = roundY[metricKey];
   // console.log(metricKey);
   // console.log (metricData[metricKey].Timestamps.reverse())
@@ -93,7 +97,7 @@ export function ChartCPU({ metricData }) {
 
   const precisionValue = chartTitle === 'Failed Status Checks' ? 0 : undefined;
 
-  const options = {
+  const options: ChartOptions<'line'> = {
     maintainAspectRatio: false,
     responsive: true,
     // hover: {
@@ -109,7 +113,7 @@ export function ChartCPU({ metricData }) {
         intersect: false,
         bodyColor: 'rgb(76, 204, 255)',
         callbacks: {
-          label: (context) => {
+          label: (context: TooltipItem<'line'>) => {
             return `Y: ${context.parsed.y.toFixed(
               yAxisRounding
             )} ${yAxisTitle}`;

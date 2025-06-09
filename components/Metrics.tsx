@@ -8,7 +8,7 @@ import Select from 'react-select';
 import Sidebar from './Sidebar';
 
 // import custom types
-import { insData, metricsProps, instanceMetricbody } from '../types/componentsTypes';
+import { insData, metricsProps, instanceMetricbody, instanceMetrics } from '../types/componentsTypes';
 
 /**
  * Metrics Component: Displays AWS EC2 instance meta data and their metrics with charts
@@ -29,9 +29,9 @@ const Metrics = ({
 }: metricsProps) => {
   // create use states
   const [instanceMetaData, setInstanceMetaData] =  useState<insData | null>(null);
-  const [instanceMetrics, setInstanceMetrics] = useState<insData[] | null>(null);
+  const [instanceMetrics, setInstanceMetrics] = useState<instanceMetrics[] | null>(null);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
-
+  console.log('instanceMetrics', instanceMetrics)
   // Toggle sidebar visibility
   const handleToggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
@@ -151,6 +151,7 @@ const Metrics = ({
           <section className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-10'>
             {instanceMetrics ? (
               instanceMetrics?.map((metricData, index: number) => {
+                
                 return (
                   <div
                     key={index}
@@ -171,3 +172,4 @@ const Metrics = ({
 };
 
 export default Metrics;
+
