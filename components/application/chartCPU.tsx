@@ -16,7 +16,7 @@ import 'chartjs-adapter-date-fns';
 import { Line } from 'react-chartjs-2';
 
 // import custom types
-import { ChartCPUProps } from '../types/componentsTypes';
+import { ChartCPUProps } from '../../types/componentsTypes';
 
 ChartJS.register(
   CategoryScale,
@@ -29,7 +29,7 @@ ChartJS.register(
 );
 
 export function ChartCPU({ metricData }: ChartCPUProps) {
-  console.log('metricData', metricData)
+  console.log('metricData', metricData);
 
   if (!metricData) {
     return <p>Loading...</p>;

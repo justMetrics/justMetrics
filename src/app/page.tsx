@@ -1,9 +1,8 @@
-import ClientWapper from '../../components/ClientWapper';
-
+import LandingClientWapper from '../../components/landing/LandingClientWapper';
 export default function Home() {
   return (
     <section>
-      <ClientWapper />
+      <LandingClientWapper />
     </section>
   );
 }

@@ -1,14 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import useApiKeysFetch from '../fetch/apiKeysFetch';
+import useApiKeysFetch from '../../fetch/apiKeysFetch';
 import dynamic from 'next/dynamic';
 
 // Lazy load Select component to avoid SSR issues
-const Select = dynamic(() => import('react-select'), { ssr: false }) as unknown as select;
+const Select = dynamic(() => import('react-select'), {
+  ssr: false,
+}) as unknown as select;
 
 // import types
-import { KeyInPutProps, select, OptionType } from '../types/componentsTypes';
+import { KeyInPutProps, select, OptionType } from '../../types/componentsTypes';
 
 // KeyInPut Component: Handles AWS credential input and region selection
 

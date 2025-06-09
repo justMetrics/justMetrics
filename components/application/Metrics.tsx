@@ -1,14 +1,19 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import useMetricsFetch from '../fetch/metricsFetch';
+import useMetricsFetch from '../../fetch/metricsFetch';
 import { ChartCPU } from './chartCPU';
 import InstanceMetaData from './InstanceMetaData';
 import Select from 'react-select';
 import Sidebar from './Sidebar';
 
 // import custom types
-import { insData, metricsProps, instanceMetricbody, instanceMetrics } from '../types/componentsTypes';
+import {
+  insData,
+  metricsProps,
+  instanceMetricbody,
+  instanceMetrics,
+} from '../../types/componentsTypes';
 
 /**
  * Metrics Component: Displays AWS EC2 instance meta data and their metrics with charts
@@ -28,10 +33,14 @@ const Metrics = ({
   setCredentials,
 }: metricsProps) => {
   // create use states
-  const [instanceMetaData, setInstanceMetaData] =  useState<insData | null>(null);
-  const [instanceMetrics, setInstanceMetrics] = useState<instanceMetrics[] | null>(null);
+  const [instanceMetaData, setInstanceMetaData] = useState<insData | null>(
+    null
+  );
+  const [instanceMetrics, setInstanceMetrics] = useState<
+    instanceMetrics[] | null
+  >(null);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
-  console.log('instanceMetrics', instanceMetrics)
+  console.log('instanceMetrics', instanceMetrics);
   // Toggle sidebar visibility
   const handleToggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
@@ -56,7 +65,7 @@ const Metrics = ({
   const instanceIdList = insData.map((elem) => elem.instanceId);
 
   // Metrics request payload configuration
-  const instanceMetricbody: instanceMetricbody  = {
+  const instanceMetricbody: instanceMetricbody = {
     metrics: [
       'CPUUtilization',
       'NetworkIn',
@@ -151,7 +160,6 @@ const Metrics = ({
           <section className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-10'>
             {instanceMetrics ? (
               instanceMetrics?.map((metricData, index: number) => {
-                
                 return (
                   <div
                     key={index}
@@ -172,4 +180,3 @@ const Metrics = ({
 };
 
 export default Metrics;
-
