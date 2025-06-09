@@ -33,14 +33,10 @@ const Metrics = ({
   setCredentials,
 }: metricsProps) => {
   // create use states
-  const [instanceMetaData, setInstanceMetaData] = useState<insData | null>(
-    null
-  );
-  const [instanceMetrics, setInstanceMetrics] = useState<
-    instanceMetrics[] | null
-  >(null);
+  const [instanceMetaData, setInstanceMetaData] = useState<insData | null>(null);
+  const [instanceMetrics, setInstanceMetrics] = useState<instanceMetrics[] | null>(null);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
-  console.log('instanceMetrics', instanceMetrics);
+  
   // Toggle sidebar visibility
   const handleToggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
@@ -158,7 +154,7 @@ const Metrics = ({
 
           {/* Metrics charts grid */}
           <section className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-10'>
-            {instanceMetrics ? (
+            {instanceMetrics ? ( 
               instanceMetrics?.map((metricData, index: number) => {
                 return (
                   <div

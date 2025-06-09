@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import useApiKeysFetch from '../../fetch/apiKeysFetch';
 import dynamic from 'next/dynamic';
+import { LoadingButton } from './LoadingButton';
 
 // Lazy load Select component to avoid SSR issues
 const Select = dynamic(() => import('react-select'), {
@@ -18,6 +19,8 @@ const KeyInPut = ({
   setInsData,
   setCredentials,
   setSelectedRegion,
+  setLoading,
+  loading
 }: KeyInPutProps) => {
   // Component state
   const [awsAccessKey, setAwsAccessKey] = useState('');
@@ -35,6 +38,7 @@ const KeyInPut = ({
       // save credentials to state
       setCredentials([awsAccessKey, secretAccessKey]);
       setSelectedRegion(testRegion);
+      setLoading(false);
     }
   }, [response]);
 
@@ -54,6 +58,7 @@ const KeyInPut = ({
 
     // Validate inputs
     if (!awsAccessKey || !secretAccessKey || !testRegion) {
+      setLoading(false);
       setFetchError('Missing AWS Access Key or Secret Key or Region');
       return;
     }
@@ -63,8 +68,12 @@ const KeyInPut = ({
 
     // if error is returned
     if (error) {
+      setLoading(false);
       setFetchError(error);
     }
+
+    // start the loading icon 
+    setLoading(true);
   };
 
   // create an array with all us regions
@@ -84,7 +93,7 @@ const KeyInPut = ({
         </header>
 
         {/* Main Form Section */}
-        <main className='h-[60vh] flex flex-col justify-end gap-8 p-7'>
+        <main className='h-[60vh] flex flex-col items-center justify-end gap-8 p-7'>
           {/* Access Key Input */}
           <input
             className='aws-access-key-input bg-white rounded-2xl p-3 w-[500px] shadow-md focus:outline-none'
@@ -112,13 +121,16 @@ const KeyInPut = ({
           />
 
           {/* Connect Button */}
-          <button
+          {/* <LoadingButton/>  */}
+          {loading ?
+           <LoadingButton/> 
+           : <button
             className='connect-button bg-white hover:bg-blue-300 rounded-2xl  p-1 w-[200px] h-[40px] shadow-md self-center m-10 transition-all cursor-pointer'
             onClick={sendApi}
           >
             Connect
-          </button>
-        </main>
+          </button>}
+        </main>        
 
         {/* Error Display */}
         {fetchError ? (

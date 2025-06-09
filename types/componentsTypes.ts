@@ -61,6 +61,8 @@ export type KeyInPutProps = {
   setInsData: React.Dispatch<React.SetStateAction<insData[]>>;
   setCredentials: React.Dispatch<React.SetStateAction<string[]>>;
   setSelectedRegion: React.Dispatch<React.SetStateAction<string>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
 };
 // chartCPU.tsx
 export type ChartCPUProps = {
