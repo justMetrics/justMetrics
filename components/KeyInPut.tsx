@@ -5,10 +5,10 @@ import useApiKeysFetch from '../fetch/apiKeysFetch';
 import dynamic from 'next/dynamic';
 
 // Lazy load Select component to avoid SSR issues
-const Select = dynamic(() => import('react-select'), { ssr: false });
+const Select = dynamic(() => import('react-select'), { ssr: false }) as unknown as select;
 
 // import types
-import { regions, KeyInPutProps } from '../types/componentsTypes';
+import { KeyInPutProps, select, OptionType } from '../types/componentsTypes';
 
 // KeyInPut Component: Handles AWS credential input and region selection
 
@@ -66,7 +66,7 @@ const KeyInPut = ({
   };
 
   // create an array with all us regions
-  const regions: regions = [
+  const regions: OptionType[] = [
     { value: 'us-west-1', label: 'US West 1' },
     { value: 'us-west-2', label: 'US West 2' },
     { value: 'us-east-1', label: 'US East 1' },
@@ -104,7 +104,7 @@ const KeyInPut = ({
           <Select
             classNamePrefix='regionLists'
             options={regions}
-            onChange={(selected) => handleSelectRegion(selected?.value)}
+            onChange={(selected) => handleSelectRegion(selected?.value ?? '')}
             placeholder='Select a region...'
             isSearchable={false}
           />

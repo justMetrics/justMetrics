@@ -1,4 +1,4 @@
-
+import { SingleValue } from 'react-select';
 
 
 // metrics.tsx types
@@ -35,10 +35,18 @@ export type instanceMetrics = Record<string, {
 export type regions = Record<string, string>[];
 
 export type OptionType = {
-    label: string;
-    value: string;
+  value: string;
+  label: string; 
 }
 
+export type select = React.ComponentType<{
+  options: OptionType[];
+  onChange: (selected: SingleValue<OptionType>) => void;
+  classNamePrefix?: string;
+  placeholder?: string;
+  isSearchable?: boolean;
+  value?: OptionType | null;
+}>;
 
 // create props types
 // Metrics.tsx 
