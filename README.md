@@ -1,6 +1,5 @@
 <p>justMetrics aims to provide a clean, minimalistic overview of key performance metrics for AWS virtual machines, specifically those provided under the AWS EC2 product.</p>
 
-<div align="center">
 
 <img src="./assets/readmeImages/logo_readme.png" height=300/>
 
