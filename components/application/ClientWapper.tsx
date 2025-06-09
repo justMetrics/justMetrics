@@ -13,7 +13,7 @@ const ClientWapper = () => {
   //(by "validated" we mean returned a response that isn't null) see KeyInput and the useEffect function using setCredentials for further details
   const [selectedRegion, setSelectedRegion] = useState<string>(''); //The region specified by the user on the login page.
   const [loading, setLoading] =useState<boolean>(false); // usestate for loading icon
-  console.log('loading', loading)
+
   return (
     <div>
       {credentials.length !== 0 ? ( //ternary operator. if credentials is an empty array, display KeyInput so the user can provide them.

@@ -6,6 +6,7 @@ import { ChartCPU } from './chartCPU';
 import InstanceMetaData from './InstanceMetaData';
 import Select from 'react-select';
 import Sidebar from './Sidebar';
+import { LoadingListIcon } from './LoadingListIcon';
 
 // import custom types
 import {
@@ -35,8 +36,10 @@ const Metrics = ({
   // create use states
   const [instanceMetaData, setInstanceMetaData] = useState<insData | null>(null);
   const [instanceMetrics, setInstanceMetrics] = useState<instanceMetrics[] | null>(null);
+  const [instanceMetricsLoading, setInstanceMetricsLoading] = useState<boolean>(false);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   
+  console.log('instanceMetricsLoading', instanceMetricsLoading)
   // Toggle sidebar visibility
   const handleToggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
@@ -78,13 +81,19 @@ const Metrics = ({
   // Custom hook for metrics fetching
   const { response, error, sendMetricsRequest } = useMetricsFetch();
 
-  // useEffect will fetch metrics data when the page loaded
+  // useEffect will fetch metrics data when the page loaded and set the icon for loading
   useEffect(() => {
     sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
-
+    console.log('hello people')
+    setInstanceMetricsLoading(true);
     if (response) console.log('metricResponse', response);
     if (error) console.log('metricError', error);
   }, []);
+
+  // stop loading once the response or error is in 
+  useEffect(() => {
+    if (response || error) setInstanceMetricsLoading(false);
+  }, [response, error]);
 
   // Format instance IDs for react-select dropdown
   const instancesList = instanceIdList.map((id) => ({
@@ -122,13 +131,15 @@ const Metrics = ({
 
           {/* Instance selection dropdown */}
           <div className='flex items-center mr-7'>
-            <Select
+            { instanceMetricsLoading ?
+              <LoadingListIcon/>
+            : <Select
               classNamePrefix='instancesList'
               options={instancesList}
               onChange={(selected) => handleSelectInstance(selected!.value)}
               placeholder='Select an instance...'
               isSearchable={false}
-            />
+            />}
           </div>
         </nav>
 

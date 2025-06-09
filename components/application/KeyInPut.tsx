@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import useApiKeysFetch from '../../fetch/apiKeysFetch';
 import dynamic from 'next/dynamic';
-import { LoadingButton } from './LoadingButton';
+import { LoadingButton } from './LoadingButtonIcon';
 
 // Lazy load Select component to avoid SSR issues
 const Select = dynamic(() => import('react-select'), {
@@ -121,7 +121,6 @@ const KeyInPut = ({
           />
 
           {/* Connect Button */}
-          {/* <LoadingButton/>  */}
           {loading ?
            <LoadingButton/> 
            : <button
