@@ -8,7 +8,7 @@ const Hero = () => {
       id='home'
       className='h-[800px] w-full bg-cover bg-center flex items-center justify-center text-white relative'
       style={{
-        backgroundImage: `url('/placeholder-hero.jpg')`,
+        backgroundImage: `url('./hero-bg-img.png')`,
       }}
     >
       <div className='absolute inset-0 bg-black/50' />
