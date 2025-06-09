@@ -9,9 +9,8 @@
 - [Application Architecture and Logic](#application-architecture-and-logic)
 - [Contributing](#contributing)
 - [Core Team](#core-team)
-- [License](#license)
 
-## Dev Dependencies and Technologies
+## Libraries and Technologies
 
 React
 
@@ -21,9 +20,11 @@ AWS SDK
 jest
 tailwind
 Chartjs
-
-
-- [Electron](https://www.electronjs.org/docs)
+- [Next.js](https://nextjs.org/docs)
+- [AWS SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/)
+- [jest](https://jestjs.io/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Chart.js](https://www.chartjs.org/)
 
 
 ## Overview
@@ -41,13 +42,15 @@ Chartjs
   
 ## User Guide
 
-To get started on contributing and editing databases to this project:
+1. Log into your AWS root account (or whichever user account can create new users/permissions) and create a new user.
+2. Assign this user two permissions: AmazonEC2ReadOnlyAccess and CloudWatchReadOnlyAccess. These are for querying the EC2 Client (for instance metadata) and the Cloudwatch Client (for instance metrics data) via the AWS SDK.
+3. For this user, click on create Access Keys in the AWS IAM manager. This should create two keys: Access key and Secret Access key (“AWS credentials”).
+4. Once the user has been set up with the appropriate read permissions in AWS and has created AWS credentials for that user, these credentials-in conjunction with the region the user’s instances are in-can be provided to the justMetrics login page.
+5. Upon provision of valid credentials, the page will automatically rerender to the Metrics component, where the user may now select an instance ID to visualize metrics for.
+6. The user may freely change between the instance IDs in the dropdown menu, with the respective data visualization components automatically updating on instance selection.
+7. To logout and select a new instance (or otherwise provide new AWS credentials), users may click on the justMetrics logo and select Log out.
 
-1. Download and install [Postgres](https://www.postgresql.org/download/) to access SeeQR's Postgres features and/or [MySQL](https://dev.mysql.com/downloads/mysql/) to access its MySQL features.
-2. Ensure that psql and/or mysql are available in the `$PATH`.
-3. Create users with passwords and permissions for both [PostgreSQL](https://phoenixnap.com/kb/postgres-create-user) and [MySQL](https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql). Linked are instructions for Mac (Homebrew) and Linux/WSL.
-4. Download the latest version of [SeeQR](https://github.com/open-source-labs/seeqr/releases/latest).
-
+A step-by-step tutorial on the above process can be found below.
 
 ## Contributing
 
@@ -59,7 +62,6 @@ justMetrics is happy to accept contributions for bug fixes as well as any additi
 - For current CIMs, expand options on visualization of that data 
 - Allow the user to select the timeframe for data to collect metrics for.
 - Alert flagging for basic KRIs, such as  stopped/terminated instances or high CPU usage.
-
 
 We encourage you to try the justMetrics application out for yourself and suggest any improvements that could interest you.
 
