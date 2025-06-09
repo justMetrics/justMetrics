@@ -5,27 +5,13 @@ import useApiKeysFetch from '../../fetch/apiKeysFetch';
 import dynamic from 'next/dynamic';
 import { SingleValue } from 'react-select';
 
-<<<<<<< HEAD:components/KeyInPut.tsx
 // Dynamically import the Select component to prevent issues with server-side rendering (SSR)
-const Select = dynamic(() => import('react-select'), { ssr: false });
-
-type selectedType = { value: string; label: string };
-
-// Define Props type
-type KeyInPutProps = {
-  setInsData: React.Dispatch<React.SetStateAction<string[]>>; // Sets instance data returned from backend
-  setCredentials: React.Dispatch<React.SetStateAction<string[]>>; // Sets stored AWS credentials
-  setSelectedRegion: React.Dispatch<React.SetStateAction<string>>; // Sets selected region
-};
-=======
-// Lazy load Select component to avoid SSR issues
 const Select = dynamic(() => import('react-select'), {
   ssr: false,
 }) as unknown as select;
 
 // import types
 import { KeyInPutProps, select, OptionType } from '../../types/componentsTypes';
->>>>>>> dfddea7d8d3e78549f7c0b761760b60e8a5311bd:components/application/KeyInPut.tsx
 
 // KeyInPut Component: Handles credential input, region selection, and initiates API request
 
@@ -81,13 +67,8 @@ const KeyInPut = ({
     }
   };
 
-<<<<<<< HEAD:components/KeyInPut.tsx
   // AWS region options formatted for react-select
-  const regions = [
-=======
-  // create an array with all us regions
   const regions: OptionType[] = [
->>>>>>> dfddea7d8d3e78549f7c0b761760b60e8a5311bd:components/application/KeyInPut.tsx
     { value: 'us-west-1', label: 'US West 1' },
     { value: 'us-west-2', label: 'US West 2' },
     { value: 'us-east-1', label: 'US East 1' },
