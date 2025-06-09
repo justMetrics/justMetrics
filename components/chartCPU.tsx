@@ -9,6 +9,7 @@ import {
   Title,
   TimeScale,
   Tooltip,
+  ChartOptions,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { Line } from 'react-chartjs-2';
@@ -35,7 +36,7 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
 
   const metricKeyArr = Object.keys(metricData);
   const metricKey = metricKeyArr[0];
-  const metrics = {
+  const metrics: Record<string, string> = {
     CPUUtilization: '%',
     NetworkIn: 'Bytes',
     NetworkOut: 'Bytes',
@@ -45,7 +46,7 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
     StatusCheckFailed: 'Failed Checks',
   };
 
-  const chartTitles = {
+  const chartTitles: Record<string, string> = {
     CPUUtilization: 'CPU Utilization',
     NetworkIn: 'Network In',
     NetworkOut: 'Network Out',
@@ -55,7 +56,7 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
     StatusCheckFailed: 'Failed Status Checks',
   };
 
-  const roundY = {
+  const roundY: Record<string, number> = {
     CPUUtilization: 2,
     NetworkIn: 0,
     NetworkOut: 0,
@@ -64,8 +65,8 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
     StatusCheckFailed: 0,
   };
 
-  const yAxisTitle = metrics[metricKey] as string;
-  const chartTitle = chartTitles[metricKey] as string;
+  const yAxisTitle: string = metrics[metricKey];
+  const chartTitle = chartTitles[metricKey];
   const yAxisRounding = roundY[metricKey];
   // console.log(metricKey);
   // console.log (metricData[metricKey].Timestamps.reverse())
@@ -95,7 +96,7 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
 
   const precisionValue = chartTitle === 'Failed Status Checks' ? 0 : undefined;
 
-  const options = {
+  const options: ChartOptions<'line'> = {
     maintainAspectRatio: false,
     responsive: true,
     // hover: {
@@ -111,7 +112,7 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
         intersect: false,
         bodyColor: 'rgb(76, 204, 255)',
         callbacks: {
-          label: (context) => {
+          label: (context: import('chart.js').TooltipItem<'line'>) => {
             return `Y: ${context.parsed.y.toFixed(
               yAxisRounding
             )} ${yAxisTitle}`;
