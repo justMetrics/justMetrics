@@ -10,6 +10,7 @@ import {
   TimeScale,
   Tooltip,
   ChartOptions,
+  TooltipItem,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { Line } from 'react-chartjs-2';
@@ -112,7 +113,7 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
         intersect: false,
         bodyColor: 'rgb(76, 204, 255)',
         callbacks: {
-          label: (context: import('chart.js').TooltipItem<'line'>) => {
+          label: (context: TooltipItem<'line'>) => {
             return `Y: ${context.parsed.y.toFixed(
               yAxisRounding
             )} ${yAxisTitle}`;
