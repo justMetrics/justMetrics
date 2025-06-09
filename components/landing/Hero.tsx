@@ -6,7 +6,7 @@ const Hero = () => {
   return (
     <section
       id='home'
-      className='h-[600px] w-full bg-cover bg-center flex items-center justify-center text-white relative'
+      className='h-[800px] w-full bg-cover bg-center flex items-center justify-center text-white relative'
       style={{
         backgroundImage: `url('/placeholder-hero.jpg')`,
       }}

@@ -1,12 +1,17 @@
 import React from 'react';
 import Navbar from './Navbar';
-import Link from 'next/link';
+import Hero from './Hero';
+import HowToUse from './HowToUse';
+import Features from './Feature';
+import Team from './Team';
 const LandingClientWapper = () => {
   return (
     <main>
       <Navbar />
-
-      <Link href='/application'>Go to Application Page</Link>
+      <Hero />
+      <Features />
+      <HowToUse />
+      <Team />
     </main>
   );
 };

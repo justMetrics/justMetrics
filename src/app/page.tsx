@@ -6,7 +6,6 @@ export default function Home() {
   return (
     <section>
       <LandingClientWapper />
-      <Hero />
     </section>
   );
 }
