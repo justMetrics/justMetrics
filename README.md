@@ -1,5 +1,18 @@
 <p>justMetrics aims to provide a clean, minimalistic overview of key performance metrics for AWS virtual machines, specifically those provided under the AWS EC2 product.</p>
 
+<div align="center">
+
+<img src="./assets/readmeImages/logo_readme.png" height=300/>
+
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/oslabs-beta/SeeQR)
+![Release: 1.0](https://img.shields.io/badge/Release-1.0.0-red)
+![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)
+![Contributions Welcome](https://img.shields.io/badge/Contributions-welcome-blue.svg)
+
+[justmetrics.app](https://justmetrics.app/)
+
+
+
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
