@@ -12,14 +12,8 @@
 
 ## Libraries and Technologies
 
-React
-
-Nextjs
-typescript
-AWS SDK
-jest
-tailwind
-Chartjs
+- [React](https://react.dev/)
+- [Typescript](https://www.typescriptlang.org/)
 - [Next.js](https://nextjs.org/docs)
 - [AWS SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/)
 - [jest](https://jestjs.io/)
