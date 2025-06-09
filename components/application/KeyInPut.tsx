@@ -20,7 +20,7 @@ const KeyInPut = ({
   setCredentials,
   setSelectedRegion,
   setLoading,
-  loading
+  loading,
 }: KeyInPutProps) => {
   // Component state
   const [awsAccessKey, setAwsAccessKey] = useState('');
@@ -34,17 +34,10 @@ const KeyInPut = ({
   // Update parent components with API response once available
   useEffect(() => {
     if (response) {
-<<<<<<< HEAD
       setInsData(response); // set instance data
       setCredentials([awsAccessKey, secretAccessKey]); // store credentials in parent state
       setSelectedRegion(testRegion); // update selected region
-=======
-      setInsData(response);
-      // save credentials to state
-      setCredentials([awsAccessKey, secretAccessKey]);
-      setSelectedRegion(testRegion);
       setLoading(false);
->>>>>>> 8c775e5b919073e5e40ab827c0060b619c334649
     }
   }, [response]);
 
@@ -78,7 +71,7 @@ const KeyInPut = ({
       setFetchError(error);
     }
 
-    // start the loading icon 
+    // start the loading icon
     setLoading(true);
   };
 
@@ -127,15 +120,17 @@ const KeyInPut = ({
           />
 
           {/* Connect Button */}
-          {loading ?
-           <LoadingButton/> 
-           : <button
-            className='connect-button bg-white hover:bg-blue-300 rounded-2xl  p-1 w-[200px] h-[40px] shadow-md self-center m-10 transition-all cursor-pointer'
-            onClick={sendApi}
-          >
-            Connect
-          </button>}
-        </main>        
+          {loading ? (
+            <LoadingButton />
+          ) : (
+            <button
+              className='connect-button bg-white hover:bg-blue-300 rounded-2xl  p-1 w-[200px] h-[40px] shadow-md self-center m-10 transition-all cursor-pointer'
+              onClick={sendApi}
+            >
+              Connect
+            </button>
+          )}
+        </main>
 
         {/* Error message display */}
         {fetchError ? (
