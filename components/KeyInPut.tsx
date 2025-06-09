@@ -3,9 +3,12 @@
 import { useState, useEffect } from 'react';
 import useApiKeysFetch from '../fetch/apiKeysFetch';
 import dynamic from 'next/dynamic';
+import { SingleValue } from 'react-select';
 
 // Dynamically import the Select component to prevent issues with server-side rendering (SSR)
 const Select = dynamic(() => import('react-select'), { ssr: false });
+
+type selectedType = { value: string; label: string };
 
 // Define Props type
 type KeyInPutProps = {
