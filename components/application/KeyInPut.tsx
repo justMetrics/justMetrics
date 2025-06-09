@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import useApiKeysFetch from '../../fetch/apiKeysFetch';
 import dynamic from 'next/dynamic';
-import { SingleValue } from 'react-select';
+import { LoadingButton } from './LoadingButtonIcon';
 
 // Dynamically import the Select component to prevent issues with server-side rendering (SSR)
 const Select = dynamic(() => import('react-select'), {
@@ -19,6 +19,8 @@ const KeyInPut = ({
   setInsData,
   setCredentials,
   setSelectedRegion,
+  setLoading,
+  loading
 }: KeyInPutProps) => {
   // Component state
   const [awsAccessKey, setAwsAccessKey] = useState('');
@@ -32,9 +34,17 @@ const KeyInPut = ({
   // Update parent components with API response once available
   useEffect(() => {
     if (response) {
+<<<<<<< HEAD
       setInsData(response); // set instance data
       setCredentials([awsAccessKey, secretAccessKey]); // store credentials in parent state
       setSelectedRegion(testRegion); // update selected region
+=======
+      setInsData(response);
+      // save credentials to state
+      setCredentials([awsAccessKey, secretAccessKey]);
+      setSelectedRegion(testRegion);
+      setLoading(false);
+>>>>>>> 8c775e5b919073e5e40ab827c0060b619c334649
     }
   }, [response]);
 
@@ -54,6 +64,7 @@ const KeyInPut = ({
 
     // Check all fields are filled
     if (!awsAccessKey || !secretAccessKey || !testRegion) {
+      setLoading(false);
       setFetchError('Missing AWS Access Key or Secret Key or Region');
       return;
     }
@@ -63,8 +74,12 @@ const KeyInPut = ({
 
     // Handle any errors returned from the custom hook
     if (error) {
+      setLoading(false);
       setFetchError(error);
     }
+
+    // start the loading icon 
+    setLoading(true);
   };
 
   // AWS region options formatted for react-select
@@ -84,7 +99,7 @@ const KeyInPut = ({
         </header>
 
         {/* Main Form Section */}
-        <main className='h-[60vh] flex flex-col justify-end gap-8 p-7'>
+        <main className='h-[60vh] flex flex-col items-center justify-end gap-8 p-7'>
           {/* Access Key Input */}
           <input
             className='aws-access-key-input bg-white rounded-2xl p-3 w-[500px] shadow-md focus:outline-none'
@@ -112,13 +127,15 @@ const KeyInPut = ({
           />
 
           {/* Connect Button */}
-          <button
+          {loading ?
+           <LoadingButton/> 
+           : <button
             className='connect-button bg-white hover:bg-blue-300 rounded-2xl  p-1 w-[200px] h-[40px] shadow-md self-center m-10 transition-all cursor-pointer'
             onClick={sendApi}
           >
             Connect
-          </button>
-        </main>
+          </button>}
+        </main>        
 
         {/* Error message display */}
         {fetchError ? (

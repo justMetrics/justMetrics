@@ -1,24 +1,30 @@
 'use client';
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faLock,
+  faMicrochip,
+  faChartLine,
+} from '@fortawesome/free-solid-svg-icons';
 
 const features = [
   {
-    icon: '⚡️',
-    title: 'Feature 1',
+    icon: faLock,
+    title: 'Connect to AWS Instantly',
     description:
-      'This is a placeholder description for the first feature. Fast and reliable.',
+      'Seamlessly authenticate and connect to your AWS infrastructure in seconds.',
   },
   {
-    icon: '🔒',
-    title: 'Feature 2',
+    icon: faMicrochip,
+    title: 'Real-time EC2 Metrics Dashboard',
     description:
-      'This is a placeholder description for the second feature. Secure and scalable.',
+      'Monitor key instance metrics like CPU, memory, and network usage—all in one visual dashboard.',
   },
   {
-    icon: '📊',
-    title: 'Feature 3',
+    icon: faChartLine,
+    title: 'Actionable Insights Made Simple',
     description:
-      'This is a placeholder description for the third feature. Insightful and detailed.',
+      'Understand trends over time and make smarter infrastructure decisions with built-in insights.',
   },
 ];
 
@@ -26,16 +32,19 @@ const Features = () => {
   return (
     <section
       id='features'
-      className='h-[600px] bg-white px-6 md:px-16 flex flex-col justify-center'
+      className='bg-white px-6 my-20 md:px-16 flex flex-col justify-center'
     >
       <h2 className='text-3xl font-bold text-center mb-12'>Key Features</h2>
       <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
         {features.map((feature, index) => (
           <div
             key={index}
-            className='bg-gray-100 p-6 rounded-xl shadow-md hover:shadow-lg transition'
+            className='bg-gray-100 p-10 rounded-xl shadow-md hover:shadow-lg transition text-center h-80 flex flex-col justify-center'
           >
-            <div className='text-4xl mb-4'>{feature.icon}</div>
+            <FontAwesomeIcon
+              icon={feature.icon}
+              className='text-blue-600 text-4xl mb-4'
+            />
             <h3 className='text-xl font-semibold mb-2'>{feature.title}</h3>
             <p className='text-gray-700'>{feature.description}</p>
           </div>
