@@ -42,9 +42,13 @@ const useApiKeysFetch = () => {
         // Parse the response and store the result in state for front end to use
         const data = await res.json();
         setResponse(data.res);
-      } catch (error: any) {
+      } catch (error: unknown) {
         // If any error occurs (e.g., network issues, bad credentials), store it in state
-        setError(error.message);
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('An unknown error occurred');
+        }
       }
     },
     [] // Dependencies are empty so the function identity remains stable across renders
