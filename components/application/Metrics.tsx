@@ -12,6 +12,7 @@ import {
   insData,
   metricsProps,
   instanceMetricbody,
+  instanceMetrics,
 } from '../../types/componentsTypes';
 
 /**
@@ -35,11 +36,11 @@ const Metrics = ({
   const [instanceMetaData, setInstanceMetaData] = useState<insData | null>(
     null
   );
-  const [instanceMetrics, setInstanceMetrics] = useState<insData[] | null>(
-    null
-  );
+  const [instanceMetrics, setInstanceMetrics] = useState<
+    instanceMetrics[] | null
+  >(null);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
-
+  console.log('instanceMetrics', instanceMetrics);
   // Toggle sidebar visibility
   const handleToggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
