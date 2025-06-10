@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import useApiKeysFetch from '../../fetch/apiKeysFetch';
 import dynamic from 'next/dynamic';
 import { LoadingButton } from './LoadingButtonIcon';
+import Link from 'next/link';
 
 // Dynamically import the Select component to prevent issues with server-side rendering (SSR)
 const Select = dynamic(() => import('react-select'), {
@@ -128,12 +129,16 @@ const KeyInPut = ({
             <LoadingButton />
           ) : (
             <button
-              className='connect-button bg-white hover:bg-blue-300 rounded-2xl p-1 w-full max-w-[200px] h-[40px] shadow-md self-center m-10 transition-all cursor-pointer'
+              className='connect-button bg-white hover:bg-blue-300 rounded-2xl p-1 w-full max-w-[200px] h-[40px] shadow-md self-center mt-10 transition-all cursor-pointer'
               onClick={sendApi}
             >
               Connect
             </button>
           )}
+
+          <button className='connect-button bg-white hover:bg-blue-300 rounded-2xl p-1 w-full max-w-[200px] h-[40px] shadow-md self-center transition-all cursor-pointer'>
+            <Link href='/'> Back to Home </Link>
+          </button>
         </main>
 
         {/* Error message display */}
