@@ -39,12 +39,15 @@ const KeyInPut = ({
       setSelectedRegion(testRegion);
       setLoading(false);
     }
-    // if theres an error stop loading and display error
+  }, [response]);
+  
+  // if theres an error stop loading and display error
+  useEffect(() => {
     if (error) {
       setFetchError('Incorrect AWS Access Key or Secret Key or Region');
       setLoading(false);
     } 
-  }, [response, error]);
+  }, [error])
 
   // Handle region selection from dropdown with arg = the selected region value
   const handleSelectRegion = (selectRegion: string) => {
