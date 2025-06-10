@@ -60,7 +60,8 @@ const InstanceMetaData: React.FC<Props> = ({
       </h2>
 
       {/* Display instance metadata in two-column layout */}
-      <div className='grid grid-cols-2 gap-8 text-sm text-gray-700'>
+
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-8 text-sm text-gray-700'>
         {/* Left column: identity and status info */}
         <ul className='space-y-3'>
           <li>
@@ -82,9 +83,20 @@ const InstanceMetaData: React.FC<Props> = ({
             <strong>Type:</strong> {type}
           </li>
           <li>
-            <FontAwesomeIcon icon={faCircle} className={
-              state === 'running' ? 'mr-2 text-green-500' : state === 'stopped' ? 'mr-2 text-red-500' :
-              state === 'pending' || state === 'stopping' || state === 'shutting-down' ? 'mr-2 text-yellow-500' : 'mr-2 text-gray-500'}  />
+            <FontAwesomeIcon
+              icon={faCircle}
+              className={
+                state === 'running'
+                  ? 'mr-2 text-green-500'
+                  : state === 'stopped'
+                  ? 'mr-2 text-red-500'
+                  : state === 'pending' ||
+                    state === 'stopping' ||
+                    state === 'shutting-down'
+                  ? 'mr-2 text-yellow-500'
+                  : 'mr-2 text-gray-500'
+              }
+            />
             <strong>State:</strong> {state}
           </li>
         </ul>
