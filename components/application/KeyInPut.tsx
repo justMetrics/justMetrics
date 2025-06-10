@@ -41,6 +41,14 @@ const KeyInPut = ({
     }
   }, [response]);
 
+  // if theres an error stop loading and display error
+  useEffect(() => {
+    if (error) {
+      setFetchError('Incorrect AWS Access Key or Secret Key or Region');
+      setLoading(false);
+    }
+  }, [error]);
+
   // Callback when a region is selected from dropdown
   const handleSelectRegion = (selectRegion: string) => {
     // * For debugging: Uncomment to verify selected Region from dropdown list
@@ -64,12 +72,6 @@ const KeyInPut = ({
 
     // Initiate request with provided input
     sendApiKeys(url, awsAccessKey, secretAccessKey, testRegion);
-
-    // Handle any errors returned from the custom hook
-    if (error) {
-      setLoading(false);
-      setFetchError(error);
-    }
 
     // start the loading icon
     setLoading(true);
