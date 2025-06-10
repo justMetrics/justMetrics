@@ -170,13 +170,13 @@ const Metrics = ({
           </section>
 
           {/* Metrics charts grid */}
-          <section className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 py-10 lg:p-10 lg:pt-10 lg:pb-10'>
+          <section className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 py-10 lg:p-10 lg:pt-10 lg:pb-10 '>
             {instanceMetrics ? (
               instanceMetrics?.map((metricData, index: number) => {
                 return (
                   <div
                     key={index}
-                    className=' w-full p-3 h-[400px] rounded-3xl bg-white/70 flex-wrap shadow-lg items-center justify-end'
+                    className='w-full p-3 aspect-[4/3] rounded-3xl bg-white/70 shadow-lg'
                   >
                     <ChartCPU key={index} metricData={metricData} />
                   </div>
