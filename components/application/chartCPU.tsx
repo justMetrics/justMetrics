@@ -18,7 +18,7 @@ import { Line } from 'react-chartjs-2';
 // import custom types
 import { ChartCPUProps } from '../../types/componentsTypes';
 
-ChartJS.register(
+ChartJS.register(//ChartJs register of imported modules for use below.
   CategoryScale,
   LinearScale,
   PointElement,
@@ -31,11 +31,16 @@ ChartJS.register(
 export function ChartCPU({ metricData }: ChartCPUProps) {
   
   if (!metricData) {
+    
     return <p>Loading...</p>;
   }
 
   const metricKeyArr = Object.keys(metricData);
   const metricKey = metricKeyArr[0];
+
+  //the following three objects contain necessary chart configuration details that are selected based on the metricKey (ie metric name).
+  //In practice we would want to have unique configuraitons for each metric instead of hardcoding them like this but this was judged to be the 
+  //best compromise of reusability and modularity given available resources
   const metrics: Record<string, string> = {
     CPUUtilization: '%',
     NetworkIn: 'Bytes',
@@ -46,7 +51,7 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
     StatusCheckFailed: 'Failed Checks',
   };
 
-  const chartTitles: Record<string, string> = {
+  const chartTitles: Record<string, string> = {//maps chart titles to relevant metric
     CPUUtilization: 'CPU Utilization',
     NetworkIn: 'Network In',
     NetworkOut: 'Network Out',
@@ -56,7 +61,7 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
     StatusCheckFailed: 'Failed Status Checks',
   };
 
-  const roundY: Record<string, number> = {
+  const roundY: Record<string, number> = {//rounding of decimals for the chart tooltips
     CPUUtilization: 2,
     NetworkIn: 0,
     NetworkOut: 0,
@@ -68,24 +73,18 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
   const yAxisTitle: string = metrics[metricKey];
   const chartTitle = chartTitles[metricKey];
   const yAxisRounding = roundY[metricKey];
-  // console.log(metricKey);
-  // console.log (metricData[metricKey].Timestamps.reverse())
-  const x = metricData[metricKey].Timestamps.reverse();
-  //   //   .filter((el) => el.CPUUtilization)[0]
-  //   //   .CPUUtilization.Timestamps.reverse();
-  //   // const y = metricData
-  //   //   .filter((el) => el.CPUUtilization)[0]
-  //   //   .CPUUtilization.Values.reverse();
+
+  const x = metricData[metricKey].Timestamps.reverse();//the incoming metricData object 
+  // has timestamps and values reversed because AWS provides the data most recent first which is the opposite of what we want
   const y = metricData[metricKey].Values.reverse();
-  // if yAxisTitle ===bytes
-  //transform axis for y
+
   const chart = {
     labels: x,
     datasets: [
       {
         label: chartTitle,
 
-        data: y, //if numers in y are greater than 100,000 change axis to 100k
+        data: y,
         borderColor: 'rgb(76, 139, 255)',
         fill: false,
         tension: 0.1,
@@ -94,9 +93,10 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
     ],
   };
 
-  const precisionValue = chartTitle === 'Failed Status Checks' ? 0 : undefined;
+  const precisionValue = chartTitle === 'Failed Status Checks' ? 0 : undefined;//this is a manual fix for changing the 
+  //chart ticks for the StatusCheckFailed chart only. all other charts use default ticks and hence dont need manual override.
 
-  const options: ChartOptions<'line'> = {
+  const options: ChartOptions<'line'> = {// chart configuration options
     maintainAspectRatio: false,
     responsive: true,
     // hover: {
@@ -107,12 +107,12 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
       legend: {
         position: 'top' as const,
       },
-      tooltip: {
+      tooltip: {//config for the datapoints shown on hover
         mode: 'nearest',
         intersect: false,
         bodyColor: 'rgb(76, 204, 255)',
         callbacks: {
-          label: (context: TooltipItem<'line'>) => {
+          label: (context: TooltipItem<'line'>) => { //this is using the previously established rounding points to round the data for the display tooltips shown on chart hover
             return `Y: ${context.parsed.y.toFixed(
               yAxisRounding
             )} ${yAxisTitle}`;
@@ -129,7 +129,7 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
         },
       },
     },
-    scales: {
+    scales: {//this transforms the AWS timestamps into a better date visualisation format
       x: {
         type: 'time' as const,
         // title:{
@@ -143,15 +143,11 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
         },
       },
       y: {
-        //   ticks: {
-        // callback: function(value) {
-
-        //   return String(value%1000) +'K';}},
-        ticks: {
+        ticks: {//y axis rounding based on the previously established precision value
           precision: precisionValue,
         },
 
-        title: {
+        title: { //title configuration options
           display: true,
           text: yAxisTitle,
           align: 'center',
@@ -164,5 +160,7 @@ export function ChartCPU({ metricData }: ChartCPUProps) {
     },
   };
 
-  return <Line data={chart} options={options} />;
+  return     <div className="w-full h-full">
+    <Line data={chart} options={options} />
+    </div>
 }
