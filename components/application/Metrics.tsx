@@ -39,7 +39,6 @@ const Metrics = ({
   const [instanceMetricsLoading, setInstanceMetricsLoading] = useState<boolean>(false);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   
-  console.log('instanceMetricsLoading', instanceMetricsLoading)
   // Toggle sidebar visibility
   const handleToggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
@@ -84,7 +83,6 @@ const Metrics = ({
   // useEffect will fetch metrics data when the page loaded and set the icon for loading
   useEffect(() => {
     sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
-    console.log('hello people')
     setInstanceMetricsLoading(true);
     if (response) console.log('metricResponse', response);
     if (error) console.log('metricError', error);
