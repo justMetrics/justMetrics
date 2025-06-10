@@ -20,6 +20,8 @@ const useApiKeysFetch = () => {
       secretAccessKey: string | number,
       region: string,
     ): Promise<void> => {
+      // reset error before each call
+      setError(null)
       try {
         const res = await fetch(url, {
           method: 'POST',
@@ -35,7 +37,6 @@ const useApiKeysFetch = () => {
 
         // Handle HTTP errors
         if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
-
         // Process successful response
         const data = await res.json();
         setResponse(data.res);

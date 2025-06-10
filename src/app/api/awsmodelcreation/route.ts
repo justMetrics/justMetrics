@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error('❌ AWS Error:', err);
     return NextResponse.json(
-      { error: '❌ Failed to fetch EC2 instances' },
+      { error: err },
       { status: 500 }
     );
   }
