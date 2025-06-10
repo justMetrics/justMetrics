@@ -30,7 +30,6 @@ const KeyInPut = ({
 
   // Custom hook for API calls
   const { response, error, sendApiKeys } = useApiKeysFetch();
-
   // Handle API response
   useEffect(() => {
     if (response) {
@@ -40,7 +39,12 @@ const KeyInPut = ({
       setSelectedRegion(testRegion);
       setLoading(false);
     }
-  }, [response]);
+    // if theres an error stop loading and display error
+    if (error) {
+      setFetchError('Incorrect AWS Access Key or Secret Key or Region');
+      setLoading(false);
+    } 
+  }, [response, error]);
 
   // Handle region selection from dropdown with arg = the selected region value
   const handleSelectRegion = (selectRegion: string) => {
@@ -65,12 +69,6 @@ const KeyInPut = ({
 
     // Call API
     sendApiKeys(url, awsAccessKey, secretAccessKey, testRegion);
-
-    // if error is returned
-    if (error) {
-      setLoading(false);
-      setFetchError(error);
-    }
 
     // start the loading icon
     setLoading(true);
