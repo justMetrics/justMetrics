@@ -45,7 +45,7 @@ const KeyInPut = ({
   // if theres an error stop loading and display error
   useEffect(() => {
     if (error) {
-      setFetchError('Incorrect AWS Access Key or Secret Key or Region');
+      setFetchError('Invalid Credentials');
       setLoading(false);
     }
   }, [error]);
@@ -67,7 +67,7 @@ const KeyInPut = ({
     // Check all fields are filled
     if (!awsAccessKey || !secretAccessKey || !testRegion) {
       setLoading(false);
-      setFetchError('Missing AWS Access Key or Secret Key or Region');
+      setFetchError('Invalid Credentials');
       return;
     }
 
