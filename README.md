@@ -1,26 +1,32 @@
 <p>justMetrics aims to provide a clean, minimalistic overview of key performance metrics for AWS virtual machines, specifically those provided under the AWS EC2 product.</p>
 
 
-<img src="./assets/readmeImages/logo_readme.png" height=300/>
+<p align="center">
+  <img src="JustMetricsBrand.png" width="400" alt="Logo"/>
+</p>
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/oslabs-beta/SeeQR)
-![Release: 1.0](https://img.shields.io/badge/Release-1.0.0-red)
-![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)
-![Contributions Welcome](https://img.shields.io/badge/Contributions-welcome-blue.svg)
+<p align="center">
+  <a href="https://github.com/oslabs-beta/SeeQR">
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"/>
+  </a>
+  <img src="https://img.shields.io/badge/Release-1.0.0-red" alt="Release: 1.0"/>
+  <img src="https://img.shields.io/badge/License-MIT-orange.svg" alt="License: MIT"/>
+  <img src="https://img.shields.io/badge/Contributions-welcome-blue.svg" alt="Contributions Welcome"/>
+</p>
 
-[justmetrics.app](https://justmetrics.app/)
-
-
+<p align="center">
+  <a href="https://justmetrics.app/">justmetrics.app</a>
+</p>
 
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
-- [Getting Started](#getting-started)
-- [Built With](#built-with)
-- [Interface \& Features](#interface--features)
-- [Application Architecture and Logic](#application-architecture-and-logic)
+- [Getting Started](#libraries-and-technologies)
+- [Built With](#overview)
+- [Interface \& Features](#application-benefits)
+- [Application Architecture and Logic](#user-guide)
 - [Contributing](#contributing)
-- [Core Team](#core-team)
+- [Core Team](#development-team)
 
 ## Libraries and Technologies
 
@@ -41,10 +47,10 @@
 
 ## Application Benefits
 
-- No Setup or Configuration: based on industry research, the justMetrics team has preselected several critical instrumentation metrics (CIMs) to present to developers on their EC2 instances. No need to manually configure and request every metric - individually-just providing AWS credentials is all that’s needed to be ready to go.
-- Seamless Regional Instance-by-Instance Comparison: Once a user provides the credentials required, the application will query and save all CIMs across all instances for that region for presentation to the user on their selection of an instance, - reducing the number of fetch requests required for the application to function.
-- No Database and Persistent Storage: the application stores sensitive user credentials and CIM data in-memory as opposed to in a persistent data store, as without appropriate security protocols in place this would be security risk. Users can access and analyse their data in the safety that no such data is being persistently stored that could remain accessible to malicious actors.
-- Updated Data, All the Time: the lack of persistent data store means all data presented to the user is sourced from queries done in real time as soon as the user provides valid AWS credentials. This guarantees no stale data and full transparency of where the data is being sourced from.
+- <b>No Setup or Configuration</b>: based on industry research, the justMetrics team has preselected several critical instrumentation metrics (CIMs) to present to developers on their EC2 instances. No need to manually configure and request every metric - individually-just providing AWS credentials is all that’s needed to be ready to go.
+- <b>Seamless Regional Instance-by-Instance Comparison</b>: Once a user provides the credentials required, the application will query and save all CIMs across all instances for that region for presentation to the user on their selection of an instance, - reducing the number of fetch requests required for the application to function.
+- <b>No Database and Persistent Storage</b>: the application stores sensitive user credentials and CIM data in-memory as opposed to in a persistent data store, as without appropriate security protocols in place this would be security risk. Users can access and analyse their data in the safety that no such data is being persistently stored that could remain accessible to malicious actors.
+- <b>Updated Data, All the Time</b>: the lack of persistent data store means all data presented to the user is sourced from queries done in real time as soon as the user provides valid AWS credentials. This guarantees no stale data and full transparency of where the data is being sourced from.
   
 ## User Guide
 
@@ -60,10 +66,9 @@ A step-by-step tutorial on the above process can be found [here.](https://scribe
 
 ## Contributing
 
-justMetrics is happy to accept contributions for bug fixes as well as any additional features, extensions or improvements that can further enhance the application. A few areas that we've already identified for further improvement are below.
-- Cross-regional dashboard to get information for all regions for a user’s credentials at once.
-- Implementing a secure, persistent data store for user credentials as well as user preferences and data as required.
-- A persistent data store could also allow the user customization options  on metrics they want to see.
+justMetrics is happy to accept contributions for bug fixes as well as any additional features, extensions or improvements that can further enhance the application. A few areas that we've already identified for further improvement are below:
+- A cross-regional dashboard, enabling the visualisation for instances across all regions for a user’s credentials at once.
+- Secure, persistent storage for user credentials as well as user preferences and data as required.
 - Expand suite of CIMs to display to the user.
 - For current CIMs, expand options on visualization of that data 
 - Allow the user to select the timeframe for data to collect metrics for.
