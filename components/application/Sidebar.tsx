@@ -1,11 +1,12 @@
 import React from 'react';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import Link from 'next/link';
 config.autoAddCss = false;
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faTachometerAlt,
+  faHouse,
   faCog,
   faUser,
   faArrowLeft,
@@ -49,10 +50,12 @@ const Sidebar = ({
         </h2>
 
         <ul className='text-black space-y-1'>
-          <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer'>
-            <FontAwesomeIcon icon={faTachometerAlt} className='w-4 h-4' />
-            <span>Dashboard</span>
-          </li>
+          <Link href='/'>
+            <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer'>
+              <FontAwesomeIcon icon={faHouse} className='w-4 h-4' />
+              <span>Home page</span>
+            </li>
+          </Link>
           <li className='flex items-center space-x-2 p-2 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer'>
             <FontAwesomeIcon icon={faCog} className='w-4 h-4' />
             <span>Settings</span>
