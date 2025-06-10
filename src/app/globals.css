@@ -26,7 +26,7 @@ body {
 }
 
 .instancesList__control {
-  border-radius: 1rem !important; /* rounded-3xl */
+  border-radius: 1rem !important;
   /* border: 1px solid black !important; */
   width: 240px;
   overflow: hidden; /* clip children */
@@ -44,7 +44,7 @@ body {
 
 .instancesList__menu {
   /* @apply bg-white border border-gray-200 rounded-xl shadow-md mt-1 z-20; */
-  border-radius: 1.5rem !important; /* rounded-3xl */
+  border-radius: 1.5rem !important;
   border: 1px solid black !important;
   overflow: hidden; /* clip children */
   padding: 0.5rem;
@@ -76,9 +76,6 @@ body {
 
 .regionLists__control {
   border-radius: 1rem !important;
-  /* width: 100%;
-  width: 500px; 
-  max-width: 500px;  */
   overflow: hidden;
   padding: 0.5rem;
   background-color: #f3f4f6;
@@ -90,7 +87,6 @@ body {
 .regionLists__menu {
   /* @apply bg-white border border-gray-200 rounded-3xl shadow-md mt-1 z-20; */
   border-radius: 1rem !important; /* rounded-3xl */
-  /* border: 1.5px solid black !important; */
   width: 500px;
   overflow: hidden; /* clip children */
   padding: 0.5rem;

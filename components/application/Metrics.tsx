@@ -34,11 +34,16 @@ const Metrics = ({
   setCredentials,
 }: metricsProps) => {
   // create use states
-  const [instanceMetaData, setInstanceMetaData] = useState<insData | null>(null);
-  const [instanceMetrics, setInstanceMetrics] = useState<instanceMetrics[] | null>(null);
-  const [instanceMetricsLoading, setInstanceMetricsLoading] = useState<boolean>(false);
+  const [instanceMetaData, setInstanceMetaData] = useState<insData | null>(
+    null
+  );
+  const [instanceMetrics, setInstanceMetrics] = useState<
+    instanceMetrics[] | null
+  >(null);
+  const [instanceMetricsLoading, setInstanceMetricsLoading] =
+    useState<boolean>(false);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
-  
+
   // Toggle sidebar visibility
   const handleToggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
@@ -88,7 +93,7 @@ const Metrics = ({
     if (error) console.log('metricError', error);
   }, []);
 
-  // stop loading once the response or error is in 
+  // stop loading once the response or error is in
   useEffect(() => {
     if (response || error) setInstanceMetricsLoading(false);
   }, [response, error]);
@@ -111,11 +116,11 @@ const Metrics = ({
         />
 
         {/* Navigation bar */}
-        <nav className='w-full h-20 flex items-center justify-between mb-10'>
+        <nav className='w-full h-auto flex flex-col lg:flex-row items-center justify-between mb-10 gap-4 px-4'>
+          {/* left logo and name */}
           <div className='flex items-center'>
-            {/* Logo with sidebar toggle */}
             <div
-              className='logo w-14 h-20 flex items-center ml-6 cursor-pointer hover:scale-110 transition-all'
+              className='logo w-14 h-20 flex items-center cursor-pointer hover:scale-110 transition-all'
               onClick={() => handleToggleSidebar()}
             >
               <img className='w-full' src='./logo.png' alt='' />
@@ -127,17 +132,20 @@ const Metrics = ({
             </div>
           </div>
 
-          {/* Instance selection dropdown */}
-          <div className='flex items-center mr-7'>
-            { instanceMetricsLoading ?
-              <LoadingListIcon/>
-            : <Select
-              classNamePrefix='instancesList'
-              options={instancesList}
-              onChange={(selected) => handleSelectInstance(selected!.value)}
-              placeholder='Select an instance...'
-              isSearchable={false}
-            />}
+          {/* right instances dropdown list */}
+          <div className='flex items-center lg:mr-7 w-full lg:w-auto justify-center'>
+            {instanceMetricsLoading ? (
+              <LoadingListIcon />
+            ) : (
+              <Select
+                classNamePrefix='instancesList'
+                options={instancesList}
+                onChange={(selected) => handleSelectInstance(selected!.value)}
+                placeholder='Select an instance...'
+                isSearchable={false}
+                className='w-full max-w-[240px]'
+              />
+            )}
           </div>
         </nav>
 
@@ -145,7 +153,7 @@ const Metrics = ({
         <main className=' w-full flex flex-col items-center'>
           {/* Instance metadata section */}
           {/* if instanceMetaData exists, display InstanceMetaData component, otherwise display default "Please select an instance" */}
-          <section className='h-[260px] w-[800px] rounded-3xl bg-white/70 flex flex-col shadow-lg mb-10 p-10'>
+          <section className='h-auto w-full max-w-[800px] rounded-3xl bg-white/70 flex flex-col shadow-lg mb-10 p-10'>
             {instanceMetaData ? (
               <InstanceMetaData
                 instanceMetaData={instanceMetaData}
@@ -162,8 +170,8 @@ const Metrics = ({
           </section>
 
           {/* Metrics charts grid */}
-          <section className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-10'>
-            {instanceMetrics ? ( 
+          <section className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 py-10 lg:p-10 lg:pt-10 lg:pb-10'>
+            {instanceMetrics ? (
               instanceMetrics?.map((metricData, index: number) => {
                 return (
                   <div
