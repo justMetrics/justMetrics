@@ -20,7 +20,7 @@ const KeyInPut = ({
   setCredentials,
   setSelectedRegion,
   setLoading,
-  loading
+  loading,
 }: KeyInPutProps) => {
   // Component state
   const [awsAccessKey, setAwsAccessKey] = useState('');
@@ -72,7 +72,7 @@ const KeyInPut = ({
       setFetchError(error);
     }
 
-    // start the loading icon 
+    // start the loading icon
     setLoading(true);
   };
 
@@ -93,10 +93,10 @@ const KeyInPut = ({
         </header>
 
         {/* Main Form Section */}
-        <main className='h-[60vh] flex flex-col items-center justify-end gap-8 p-7'>
+        <main className='h-[60vh] flex w-full flex-col items-center justify-end gap-8 p-7'>
           {/* Access Key Input */}
           <input
-            className='aws-access-key-input bg-white rounded-2xl p-3 w-[500px] shadow-md focus:outline-none'
+            className='aws-access-key-input bg-white rounded-2xl p-3 w-full max-w-[500px] shadow-md focus:outline-none'
             placeholder='AWS Access Key'
             value={awsAccessKey}
             onChange={(e) => setAwsAccessKey(e.target.value)}
@@ -104,7 +104,7 @@ const KeyInPut = ({
 
           {/* Secret Access Key Input */}
           <input
-            className='secret-access-key-input bg-white rounded-2xl p-3 w-[500px] shadow-md focus:outline-none'
+            className='secret-access-key-input bg-white rounded-2xl p-3 w-full max-w-[500px] shadow-md focus:outline-none'
             placeholder='Secret Access Key'
             type='password'
             value={secretAccessKey}
@@ -112,24 +112,28 @@ const KeyInPut = ({
           ></input>
 
           {/* Region Selection Dropdown */}
-          <Select
-            classNamePrefix='regionLists'
-            options={regions}
-            onChange={(selected) => handleSelectRegion(selected?.value ?? '')}
-            placeholder='Select a region...'
-            isSearchable={false}
-          />
+          <div className='w-full max-w-[500px]'>
+            <Select
+              classNamePrefix='regionLists'
+              options={regions}
+              onChange={(selected) => handleSelectRegion(selected?.value ?? '')}
+              placeholder='Select a region...'
+              isSearchable={false}
+            />
+          </div>
 
           {/* Connect Button */}
-          {loading ?
-           <LoadingButton/> 
-           : <button
-            className='connect-button bg-white hover:bg-blue-300 rounded-2xl  p-1 w-[200px] h-[40px] shadow-md self-center m-10 transition-all cursor-pointer'
-            onClick={sendApi}
-          >
-            Connect
-          </button>}
-        </main>        
+          {loading ? (
+            <LoadingButton />
+          ) : (
+            <button
+              className='connect-button bg-white hover:bg-blue-300 rounded-2xl p-1 w-full max-w-[200px] h-[40px] shadow-md self-center m-10 transition-all cursor-pointer'
+              onClick={sendApi}
+            >
+              Connect
+            </button>
+          )}
+        </main>
 
         {/* Error Display */}
         {fetchError ? (

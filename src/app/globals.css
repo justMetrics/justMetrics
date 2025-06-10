@@ -76,17 +76,15 @@ body {
 
 .regionLists__control {
   border-radius: 1rem !important;
-  /* rounded-3xl */
-  /* border: 1.5px solid black !important; */
-  width: 500px;
+  /* width: 100%;
+  width: 500px; 
+  max-width: 500px;  */
   overflow: hidden;
   padding: 0.5rem;
   background-color: #f3f4f6;
-  /* border: 1px solid #d1d5db; */
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   min-height: 20px;
   cursor: pointer;
-  /* transition: border-color 0.2s ease; */
 }
 
 .regionLists__menu {
