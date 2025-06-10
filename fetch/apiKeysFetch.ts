@@ -11,7 +11,7 @@ const useApiKeysFetch = () => {
   // State to store successful response data
   const [response, setResponse] = useState(null);
   // State to capture error
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   // A function to send credentialsm and region to the backend
   const sendApiKeys = useCallback(
@@ -22,7 +22,7 @@ const useApiKeysFetch = () => {
       region: string
     ): Promise<void> => {
       setError(null); // reset error before each call
-      setError(null);
+
       try {
         // Perform the POST request with the user's AWS credentials and selected region
         const res = await fetch(url, {
