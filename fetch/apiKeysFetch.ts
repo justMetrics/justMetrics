@@ -1,28 +1,30 @@
 import { useCallback, useState } from 'react';
 
-//?  Custom hook for handling API key submission to AWS-related endpoints
+// Custom hook to handle API requests for submitting AWS credentials and region
 
-//?  Return an object including:
-//?   - response: AWS API response data (null until request succeeds)
-//?   - error: Any error message (null until request fails)
-//?   - sendApiKeys: Function to trigger the API request
+// The hook returns:
+// - response: the result of a successful API call (or null before success)
+// - error: error message from a failed request (or null before failure)
+// - sendApiKeys: the function to perform the POST request with given credentials and region
 
 const useApiKeysFetch = () => {
-  // State management for API response and errors
+  // State to store successful response data
   const [response, setResponse] = useState(null);
+  // State to capture error
   const [error, setError] = useState<string | null>(null);
 
-  // Sends credentialsm and region to the specified url - api/awsmodelcreation.ts
+  // A function to send credentialsm and region to the backend
   const sendApiKeys = useCallback(
     async (
       url: string,
       awsAccessKey: string | number,
       secretAccessKey: string | number,
-      region: string,
+      region: string
     ): Promise<void> => {
-      // reset error before each call
-      setError(null)
+      setError(null); // reset error before each call
+
       try {
+        // Perform the POST request with the user's AWS credentials and selected region
         const res = await fetch(url, {
           method: 'POST',
           headers: {
@@ -36,21 +38,25 @@ const useApiKeysFetch = () => {
         });
 
         // Handle HTTP errors
+        // If the server responds is not ok, throw an error
         if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
-        // Process successful response
+
+        // Parse the response and store the result in state for front end to use
         const data = await res.json();
         setResponse(data.res);
       } catch (error: unknown) {
-         if (error instanceof Error) {
+        // If any error occurs (e.g., network issues, bad credentials), store it in state
+        if (error instanceof Error) {
           setError(error.message);
         } else {
           setError('An unknown error occurred');
         }
       }
     },
-    []
+    [] // Dependencies are empty so the function identity remains stable across renders
   );
 
+  // Return the response, error, and the callback function to frontend components using this hook
   return { response, error, sendApiKeys };
 };
 
