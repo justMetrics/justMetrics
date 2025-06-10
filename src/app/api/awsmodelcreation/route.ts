@@ -65,11 +65,14 @@ export async function POST(req: NextRequest) {
     // console.log('👀 👀 👀 👀 formatted/final instance data:', res);
 
     // Return formatted instance data
+
     return NextResponse.json({ res }, { status: 200 });
   } catch (err) {
+
     console.error('❌ AWS Error:', err);
+
     return NextResponse.json(
-      { error: err },
+      { statusText:'error'},
       { status: 500 }
     );
   }

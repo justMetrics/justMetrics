@@ -39,7 +39,11 @@ const useApiKeysFetch = () => {
 
         // Handle HTTP errors
         // If the server responds is not ok, throw an error
-        if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
+        if (!res.ok){
+
+throw new Error(`Error ${res.status}: ${res.statusText}`);
+
+        } 
 
         // Parse the response and store the result in state for front end to use
         const data = await res.json();
