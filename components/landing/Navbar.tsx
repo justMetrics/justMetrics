@@ -23,7 +23,7 @@ const Navbar = () => {
         {/* Logo + Title */}
         <div className='flex items-center space-x-2'>
           <img className='w-8' src='./logo.png' alt='Logo' />
-          <div className='text-xl font-semibold'>Just Metrics</div>
+          <div className='text-xl font-semibold'>JustMetrics</div>
         </div>
 
         {/* Hamburger Button (mobile only) */}
