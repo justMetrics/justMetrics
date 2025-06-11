@@ -59,10 +59,14 @@
 - For this user, click on create Access Keys in the AWS IAM manager. This should create two keys: <b>Access key</b> and <b>Secret Access key</b> (“AWS credentials”).
 
 ### Product Walkthrough
-1. Once the user has been set up with the appropriate read permissions in AWS and AWS credentials have been created for that user, these credentials-in conjunction with the region with instances for monitoring-can be provided to the justMetrics application page found <a href="https://justmetrics.app/">here.</a>
+1. Once the user has valid AWS credentials, these details, alongside the respective region with instances for monitoring, may be provided to the justMetrics application page found <a href="https://justmetrics.app/">here.</a>
 2. Upon provision of valid credentials, the page will automatically rerender to the Metrics component, where the user may now select an instance ID to visualize metrics for.
 3. The user may freely change between the instance IDs in the dropdown menu, with the respective data visualization components automatically updating on instance selection.
 4. To logout and select a new instance (or otherwise provide new AWS credentials), users may click on the justMetrics logo and select Log out.
+
+![justmetricsWalkthrough](https://github.com/user-attachments/assets/47b487a9-b12e-436f-b6c5-a0e2ab272ab7)
+
+
 
 A step-by-step tutorial on the above process can be found [here.](https://scribehow.com/viewer/JustMetrics_Walkthrough__3zVqIDawQ5KZCPyZlC1DgA?referrer=documents&pdfPreview=false)
 
