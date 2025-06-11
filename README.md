@@ -53,14 +53,16 @@
 - <b>Updated Data, All the Time</b>: the lack of persistent data store means all data presented to the user is sourced from queries done in real time as soon as the user provides valid AWS credentials. This guarantees no stale data and full transparency of where the data is being sourced from.
   
 ## User Guide
+### AWS User Setup
+- Log into your AWS root account (or whichever user account can create new users/permissions) and create a new user.-
+- Assign this user two permissions: <b>AmazonEC2ReadOnlyAccess</b> and <b>CloudWatchReadOnlyAccess</b>. These are for querying the EC2 Client (for instance metadata) and the Cloudwatch Client (for instance metrics data) via the AWS SDK.
+- For this user, click on create Access Keys in the AWS IAM manager. This should create two keys: <b>Access key</b> and <b>Secret Access key</b> (“AWS credentials”).
 
-1. Log into your AWS root account (or whichever user account can create new users/permissions) and create a new user.
-2. Assign this user two permissions: <b>AmazonEC2ReadOnlyAccess</b> and <b>CloudWatchReadOnlyAccess</b>. These are for querying the EC2 Client (for instance metadata) and the Cloudwatch Client (for instance metrics data) via the AWS SDK.
-3. For this user, click on create Access Keys in the AWS IAM manager. This should create two keys: <b>Access key</b> and <b>Secret Access key</b> (“AWS credentials”).
-4. Once the user has been set up with the appropriate read permissions in AWS and AWS credentials have been created for that user, these credentials-in conjunction with the region with instances for monitoring-can be provided to the justMetrics application page found <a href="https://justmetrics.app/">here.</a>
-5. Upon provision of valid credentials, the page will automatically rerender to the Metrics component, where the user may now select an instance ID to visualize metrics for.
-6. The user may freely change between the instance IDs in the dropdown menu, with the respective data visualization components automatically updating on instance selection.
-7. To logout and select a new instance (or otherwise provide new AWS credentials), users may click on the justMetrics logo and select Log out.
+### Product Walkthrough
+1. Once the user has been set up with the appropriate read permissions in AWS and AWS credentials have been created for that user, these credentials-in conjunction with the region with instances for monitoring-can be provided to the justMetrics application page found <a href="https://justmetrics.app/">here.</a>
+2. Upon provision of valid credentials, the page will automatically rerender to the Metrics component, where the user may now select an instance ID to visualize metrics for.
+3. The user may freely change between the instance IDs in the dropdown menu, with the respective data visualization components automatically updating on instance selection.
+4. To logout and select a new instance (or otherwise provide new AWS credentials), users may click on the justMetrics logo and select Log out.
 
 A step-by-step tutorial on the above process can be found [here.](https://scribehow.com/viewer/JustMetrics_Walkthrough__3zVqIDawQ5KZCPyZlC1DgA?referrer=documents&pdfPreview=false)
 
