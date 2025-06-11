@@ -54,7 +54,7 @@
   
 ## User Guide
 ### AWS User Setup
-- Log into your AWS root account (or whichever user account can create new users/permissions) and create a new user.-
+- Log into your AWS root account (or whichever user account can create new users/permissions) and create a new user.
 - Assign this user two permissions: <b>AmazonEC2ReadOnlyAccess</b> and <b>CloudWatchReadOnlyAccess</b>. These are for querying the EC2 Client (for instance metadata) and the Cloudwatch Client (for instance metrics data) via the AWS SDK.
 - For this user, click on create Access Keys in the AWS IAM manager. This should create two keys: <b>Access key</b> and <b>Secret Access key</b> (“AWS credentials”).
 
