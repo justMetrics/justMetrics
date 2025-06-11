@@ -39,17 +39,17 @@ const useApiKeysFetch = () => {
 
         // Handle HTTP errors
         // If the server responds is not ok, throw an error
-        if (!res.ok){
-          const parsed = await res.json()
-throw new Error(`Error ${res.status}: ${res.statusText}`);
-
-        } 
+        if (!res.ok) {
+          const parsed = await res.json();
+          throw new Error(`Error ${res.status}: ${parsed.statusText}`);
+        }
 
         // Parse the response and store the result in state for front end to use
         const data = await res.json();
         setResponse(data.res);
       } catch (error: unknown) {
         // If any error occurs (e.g., network issues, bad credentials), store it in state
+
         if (error instanceof Error) {
           setError(error.message);
         } else {
