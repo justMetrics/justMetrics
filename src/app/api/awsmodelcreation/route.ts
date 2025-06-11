@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
     console.error('❌ AWS Error:', err);
 
     return NextResponse.json(
-      { statusText:'error'},
+      { statusText:'error: invalid credentials'},
       { status: 500 }
     );
   }

@@ -399,6 +399,6 @@ describe('EC2 Client connection tests', () => {
     const mockResponse = await POST(mockReq);
     const body = await mockResponse.json();
 
-    expect(body).toEqual({ error: '❌ Failed to fetch EC2 instances' });
+    expect(body).toEqual({ statusText: 'error: invalid credentials' });
   });
 });

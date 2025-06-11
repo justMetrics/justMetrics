@@ -40,7 +40,7 @@ const useApiKeysFetch = () => {
         // Handle HTTP errors
         // If the server responds is not ok, throw an error
         if (!res.ok){
-
+          const parsed = await res.json()
 throw new Error(`Error ${res.status}: ${res.statusText}`);
 
         } 
