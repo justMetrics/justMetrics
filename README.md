@@ -64,9 +64,9 @@
 3. The user may freely change between the instance IDs in the dropdown menu, with the respective data visualization components automatically updating on instance selection.
 4. To logout and select a new instance (or otherwise provide new AWS credentials), users may click on the justMetrics logo and select Log out.
 
-![justmetricsWalkthrough](https://github.com/user-attachments/assets/47b487a9-b12e-436f-b6c5-a0e2ab272ab7)
-
-
+<p align="center">
+  <img src="https://github.com/justMetrics/justMetrics/blob/62db52279c1ba203f79746cd2486dc7c60abec39/justmetricstutorial.gif" />
+</p>
 
 A step-by-step tutorial on the above process can be found [here.](https://scribehow.com/viewer/JustMetrics_Walkthrough__3zVqIDawQ5KZCPyZlC1DgA?referrer=documents&pdfPreview=false)
 
