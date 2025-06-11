@@ -91,7 +91,7 @@ const KeyInPut = ({
       <div className='min-h-full flex flex-col items-center rounded-3xl bg-gradient-to-br from-gray-200 to-blue-200  shadow-2xl'>
         {/* Header Section */}
         <header className='h-[25vh] flex flex-row items-center text-5xl  p-7'>
-          <h1 className=' font-thin'>Just Metrics</h1>
+          <h1 className=' font-thin'>JustMetrics</h1>
         </header>
 
         {/* Main Form Section */}

@@ -46,7 +46,7 @@ const Sidebar = ({
           onClick={() => handleToggleSidebar()}
         >
           <FontAwesomeIcon icon={faArrowLeft} className='w-4 h-4' />
-          <span>Just Metrics</span>
+          <span>JustMetrics</span>
         </h2>
 
         <ul className='text-black space-y-1'>
