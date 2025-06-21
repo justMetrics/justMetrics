@@ -86,12 +86,20 @@ const Metrics = ({
   const { response, error, sendMetricsRequest } = useMetricsFetch();
 
   // useEffect will fetch metrics data when the page loaded and set the icon for loading
-  useEffect(() => {
+useEffect(() => {
+  const fetchMetrics = () => {
     sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
     setInstanceMetricsLoading(true);
-    if (response) console.log('metricResponse', response);
-    if (error) console.log('metricError', error);
-  }, []);
+    const x = 0
+    console.log(`reloaded ${x} times`)
+  };
+
+  fetchMetrics(); // Initial fetch
+
+  const interval = setInterval(fetchMetrics, 60000); // Fetch every 60 seconds
+
+  return () => clearInterval(interval); // Cleanup on unmount
+}, []);
 
   // stop loading once the response or error is in
   useEffect(() => {
