@@ -90,13 +90,12 @@ useEffect(() => {
   const fetchMetrics = () => {
     sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
     setInstanceMetricsLoading(true);
-    const x = 0
-    console.log(`reloaded ${x} times`)
+    
   };
 
   fetchMetrics(); // Initial fetch
 
-  const interval = setInterval(fetchMetrics, 60000); // Fetch every 60 seconds
+  const interval = setInterval(fetchMetrics, 60000);
 
   return () => clearInterval(interval); // Cleanup on unmount
 }, []);
