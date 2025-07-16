@@ -114,6 +114,7 @@ useEffect(() => {
   return (
     <div className=' min-h-screen max-w-screen p-10 box-border flex flex-col'>
       {/* Main dashboard container */}
+      
       <div className='flex-1 min-w-full flex flex-col items-center rounded-3xl  bg-gradient-to-br from-gray-200 to-blue-200  shadow-2xl relative overflow-hidden p-5'>
         {/* Sidebar component */}
         <Sidebar
@@ -195,6 +196,7 @@ useEffect(() => {
           </section>
         </main>
       </div>
+      
     </div>
   );
 };
