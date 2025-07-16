@@ -86,19 +86,18 @@ const Metrics = ({
   const { response, error, sendMetricsRequest } = useMetricsFetch();
 
   // useEffect will fetch metrics data when the page loaded and set the icon for loading
-useEffect(() => {
-  const fetchMetrics = () => {
-    sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
-    setInstanceMetricsLoading(true);
-    
-  };
+  useEffect(() => {
+    const fetchMetrics = () => {
+      sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
+      setInstanceMetricsLoading(true);
+    };
 
-  fetchMetrics(); // Initial fetch
+    fetchMetrics(); // Initial fetch
 
-  const interval = setInterval(fetchMetrics, 60000);
+    const interval = setInterval(fetchMetrics, 60000);
 
-  return () => clearInterval(interval); // Cleanup on unmount
-}, []);
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
 
   // stop loading once the response or error is in
   useEffect(() => {
@@ -114,7 +113,7 @@ useEffect(() => {
   return (
     <div className=' min-h-screen max-w-screen p-10 box-border flex flex-col'>
       {/* Main dashboard container */}
-      
+
       <div className='flex-1 min-w-full flex flex-col items-center rounded-3xl  bg-gradient-to-br from-gray-200 to-blue-200  shadow-2xl relative overflow-hidden p-5'>
         {/* Sidebar component */}
         <Sidebar
@@ -196,7 +195,25 @@ useEffect(() => {
           </section>
         </main>
       </div>
-      
+      <button
+        type='button'
+        onClick={async () => {
+          try {
+            const res = await fetch('/api/metriccompute', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({insData}), // pass insData directly, not as { insData }
+            });
+            const data = await res.json();
+            // handle response, e.g. set state or display metrics
+            console.log('Metrics response:', data);
+          } catch (error) {
+            console.error('Error fetching metrics:', error);
+          }
+        }}
+      >
+        Compute Metrics
+      </button>
     </div>
   );
 };
