@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
               MetricName: elem.metricName,
               Dimensions: elem.dimensions,
             },
-            Period: 300 * 2, //this is the time period for which a metric is provided (without paying, the shortest frequency possible is 300 or 5 minutes)
+            Period: 300, //this is the time period for which a metric is provided (without paying, the shortest frequency possible is 300 or 5 minutes)
             Stat: bestStatType(elem.metricName), //this is the statistic we have selected as most appropriate for that metric in the table above.
           },
           ReturnData: true, // this option indicates whether to return the timestamps and raw data values of this metric.
@@ -193,7 +193,14 @@ export async function POST(request: NextRequest) {
         finalResponse[instanceId] = instance;
       }
     }
+  
+      //     const sizesenttoFront = Buffer.byteLength(JSON.stringify(finalResponse), 'utf8');
+      // console.log('responsetoFrontend', sizesenttoFront)
 
+
+      // const sizeFromAWS = Buffer.byteLength(JSON.stringify(response), 'utf8');
+      // console.log('response from aws', sizeFromAWS)
+      console.log('testresponse tfor reload',response)
     return NextResponse.json({ res: finalResponse }, { status: 200 }); //send created finalResponse object to frontEnd
   } catch (err) {
     console.log('err', err);

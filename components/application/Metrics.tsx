@@ -86,12 +86,19 @@ const Metrics = ({
   const { response, error, sendMetricsRequest } = useMetricsFetch();
 
   // useEffect will fetch metrics data when the page loaded and set the icon for loading
-  useEffect(() => {
+useEffect(() => {
+  const fetchMetrics = () => {
     sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
     setInstanceMetricsLoading(true);
-    if (response) console.log('metricResponse', response);
-    if (error) console.log('metricError', error);
-  }, []);
+    
+  };
+
+  fetchMetrics(); // Initial fetch
+
+  const interval = setInterval(fetchMetrics, 60000);
+
+  return () => clearInterval(interval); // Cleanup on unmount
+}, []);
 
   // stop loading once the response or error is in
   useEffect(() => {
@@ -107,6 +114,7 @@ const Metrics = ({
   return (
     <div className=' min-h-screen max-w-screen p-10 box-border flex flex-col'>
       {/* Main dashboard container */}
+      
       <div className='flex-1 min-w-full flex flex-col items-center rounded-3xl  bg-gradient-to-br from-gray-200 to-blue-200  shadow-2xl relative overflow-hidden p-5'>
         {/* Sidebar component */}
         <Sidebar
@@ -188,6 +196,7 @@ const Metrics = ({
           </section>
         </main>
       </div>
+      
     </div>
   );
 };
