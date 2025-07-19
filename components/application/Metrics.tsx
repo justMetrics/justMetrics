@@ -53,6 +53,7 @@ const Metrics = ({
    * Handles instance selection from dropdown
    * @param instanceId - selected instance ID
    */
+
   const handleSelectInstance = (instanceId: string) => {
     //match selected instanceID with one of the element in recieved insData
     const selectedInstanceMetaData = insData.filter(
@@ -109,7 +110,7 @@ const Metrics = ({
     value: id,
     label: id,
   }));
-
+  console.log('instancemetrics', instanceMetrics)
   return (
     <div className=' min-h-screen max-w-screen p-10 box-border flex flex-col'>
       {/* Main dashboard container */}
@@ -202,11 +203,12 @@ const Metrics = ({
             const res = await fetch('/api/metriccompute', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({insData}), // pass insData directly, not as { insData }
+              body: JSON.stringify({instanceMetrics}), // pass insData directly, not as { insData }
             });
             const data = await res.json();
+            console.log('metric modelling', data)
             // handle response, e.g. set state or display metrics
-            console.log('Metrics response:', data);
+            // console.log('Metrics response:', data);
           } catch (error) {
             console.error('Error fetching metrics:', error);
           }
