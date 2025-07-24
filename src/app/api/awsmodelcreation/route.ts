@@ -64,17 +64,6 @@ export async function POST(req: NextRequest) {
     //* For debugging: Uncomment to check formatted/final instanece data
     // console.log('👀 👀 👀 👀 formatted/final instance data:', res);
 
-    // Return formatted instance data
-          const sizesenttoFront = Buffer.byteLength(JSON.stringify(res), 'utf8');
-      // console.log('responsetoFrontend', sizesenttoFront)
-
-
-      const sizeFromAWS = Buffer.byteLength(JSON.stringify(result), 'utf8');
-
-      // console.log('size of Raw AWS object', sizeFromAWS)
-
-      const reduction = (sizeFromAWS-sizesenttoFront)/sizeFromAWS
-      // console.log('% reduction in size bc of our formatting', reduction)
     return NextResponse.json({ res }, { status: 200 });
   } catch (err) {
 
