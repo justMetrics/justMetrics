@@ -205,6 +205,7 @@ const Metrics = ({
               body: JSON.stringify({instanceMetrics})
             });
             const data = await res.json();
+            console.log('data', data)
           } catch (error) {
             console.error('Error fetching metrics:', error);
           }
