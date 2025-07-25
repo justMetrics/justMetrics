@@ -110,7 +110,6 @@ const Metrics = ({
     value: id,
     label: id,
   }));
-  console.log('instancemetrics', instanceMetrics)
   return (
     <div className=' min-h-screen max-w-screen p-10 box-border flex flex-col'>
       {/* Main dashboard container */}
@@ -203,12 +202,9 @@ const Metrics = ({
             const res = await fetch('/api/metriccompute', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({instanceMetrics}), // pass insData directly, not as { insData }
+              body: JSON.stringify({instanceMetrics})
             });
             const data = await res.json();
-            console.log('metric modelling', data)
-            // handle response, e.g. set state or display metrics
-            // console.log('Metrics response:', data);
           } catch (error) {
             console.error('Error fetching metrics:', error);
           }
