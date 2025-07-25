@@ -1,21 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-  // Extract credentials and region from the request body
   const data = await req.json();
-
-  const getAnalysis = await fetch('http://18.207.127.145:5050/analysis', {
-    //move to backend, then make backend connect
+  const getAnalysis = await fetch('http://54.234.40.140//python/analysis', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      data: data.data,
+      data: data.instanceMetrics,
     }),
   });
-  const res = await getAnalysis.json()
-  console.log(res);
+  const res = await getAnalysis.json();
 
-  return NextResponse.json({ res:res }, { status: 200 });
+  return NextResponse.json({ res: res }, { status: 200 });
 }

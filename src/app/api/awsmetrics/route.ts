@@ -200,7 +200,7 @@ export async function POST(request: NextRequest) {
 
       // const sizeFromAWS = Buffer.byteLength(JSON.stringify(response), 'utf8');
       // console.log('response from aws', sizeFromAWS)
-      console.log('testresponse tfor reload',response)
+
     return NextResponse.json({ res: finalResponse }, { status: 200 }); //send created finalResponse object to frontEnd
   } catch (err) {
     console.log('err', err);

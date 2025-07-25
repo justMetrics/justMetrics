@@ -53,6 +53,7 @@ const Metrics = ({
    * Handles instance selection from dropdown
    * @param instanceId - selected instance ID
    */
+
   const handleSelectInstance = (instanceId: string) => {
     //match selected instanceID with one of the element in recieved insData
     const selectedInstanceMetaData = insData.filter(
@@ -86,19 +87,18 @@ const Metrics = ({
   const { response, error, sendMetricsRequest } = useMetricsFetch();
 
   // useEffect will fetch metrics data when the page loaded and set the icon for loading
-useEffect(() => {
-  const fetchMetrics = () => {
-    sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
-    setInstanceMetricsLoading(true);
-    
-  };
+  useEffect(() => {
+    const fetchMetrics = () => {
+      sendMetricsRequest('/api/awsmetrics', instanceMetricbody);
+      setInstanceMetricsLoading(true);
+    };
 
-  fetchMetrics(); // Initial fetch
+    fetchMetrics(); // Initial fetch
 
-  const interval = setInterval(fetchMetrics, 60000);
+    const interval = setInterval(fetchMetrics, 60000);
 
-  return () => clearInterval(interval); // Cleanup on unmount
-}, []);
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
 
   // stop loading once the response or error is in
   useEffect(() => {
@@ -110,11 +110,10 @@ useEffect(() => {
     value: id,
     label: id,
   }));
-
   return (
     <div className=' min-h-screen max-w-screen p-10 box-border flex flex-col'>
       {/* Main dashboard container */}
-      
+
       <div className='flex-1 min-w-full flex flex-col items-center rounded-3xl  bg-gradient-to-br from-gray-200 to-blue-200  shadow-2xl relative overflow-hidden p-5'>
         {/* Sidebar component */}
         <Sidebar
@@ -196,7 +195,24 @@ useEffect(() => {
           </section>
         </main>
       </div>
-      
+      <button
+        type='button'
+        onClick={async () => {
+          try {
+            const res = await fetch('/api/metriccompute', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({instanceMetrics})
+            });
+            const data = await res.json();
+            console.log('data', data)
+          } catch (error) {
+            console.error('Error fetching metrics:', error);
+          }
+        }}
+      >
+        Compute Metrics
+      </button>
     </div>
   );
 };
